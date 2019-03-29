@@ -1,0 +1,230 @@
+
+<!DOCTYPE html>
+<head>
+      <link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400" rel="stylesheet">
+   <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/foundation/5.5.3/css/foundation.css">
+   <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js'></script>
+   <script src='https://cdnjs.cloudflare.com/ajax/libs/foundation/6.5.3/js/foundation.js'></script>
+   <script src='https://cdnjs.cloudflare.com/ajax/libs/foundation/6.5.3/js/plugins/foundation.core.js'></script>
+   <script src='https://cdnjs.cloudflare.com/ajax/libs/foundation/6.5.3/js/plugins/foundation.reveal.js'></script>
+</head>
+
+<style>
+
+   body{
+      color:#454544;
+      font-family: 'Roboto', sans-serif;
+      background-color:whitesmoke;
+   }
+
+   .top-bar{
+      padding:20px;
+      height:80px;
+      line-height: 2.8125rem;
+      margin-bottom: 0;
+      overflow: hidden;
+      position: relative;
+      background-color:white;
+      color:#454544;
+      border-bottom-style:solid; border-width:.6px; border-color:rgb(219, 219, 219); 
+   }
+
+   .top-bar-section li:not(.has-form) a:not(.button){
+      background: white;
+      line-height: 2.8125rem;
+      padding: 0 0.9375rem;
+      font-size:17px;
+      font-weight:400;
+   }
+
+   
+   .top-bar .name h1 a, .top-bar .name h2 a, .top-bar .name h3 a, .top-bar .name h4 a, .top-bar .name p a, .top-bar .name span a 
+   {
+      color:#454544;
+   }
+
+   .top-bar-section ul li > a {
+      color:#454544;
+   }
+
+   button.success, .button.success, .label.success {
+			background-color: #7161EF;
+			border-color: rgb(59, 43, 173);
+			color: #fff;
+		}
+
+   .top-bar-section li:not(.has-form) a:not(.button):hover{
+      background-color:white;
+      color:blueviolet;
+   }
+
+   .left > li{
+      background-color:white;
+   }
+
+   .new_serise_wrapper{
+      background-color: #1fc8db;
+    background-image: linear-gradient(141deg, #9fb8ad 0%, #1fc8db 51%, #2cb5e8 75%);
+    color: white;
+    opacity: 0.95;
+    width:100%;
+    height:500px;
+    padding:40px;
+   }
+
+   .banner{
+      background-color:white;
+      border-radius:5px;
+      background-image: url('https://mangahelpers.com/forum/media/wsj-cover-issue-9-2016.19683/full?d=1454154995');
+      background-size:cover;
+      background-position-y: 20%;
+      -webkit-box-shadow: 10px 10px 58px -6px rgba(38,83,173,1);
+-moz-box-shadow: 10px 10px 58px -6px rgba(38,83,173,1);
+box-shadow: 10px 10px 58px -6px rgba(38,83,173,1);
+
+   }
+
+   .comic_banner{
+      height:160px;
+      width:160px;
+      background-color:white;
+      border-radius:5px;
+      background-image: url('https://i.ytimg.com/vi/msz83crkI1A/maxresdefault.jpg');
+      background-size:cover;
+      background-position-y: 20%;
+      padding:14px;
+      border-style:solid; border-width:.6px; border-color:rgb(219, 219, 219); 
+   }
+
+   .sub-nav dt.active a, .sub-nav dd.active a, .sub-nav li.active a {
+      padding:40px;
+      height:40px;
+      font-size:20px;
+      text-align:center;
+      background:  #7161EF;
+   }
+   
+   .sub-nav {
+    display: block;
+    margin: -0.25rem 0 1.125rem;
+    overflow: hidden;
+    padding-top: 0.25rem;
+    width: auto;
+    margin-left:auto;
+    margin-right:auto;
+    text-align:center;
+   }
+   ul, ol, dl {
+    font-family: inherit;
+    font-size: 1rem;
+    line-height: 2.6;
+    list-style-position: outside;
+    margin-bottom: 1.25rem;
+}
+dd{
+   padding:5px;
+   text-align:center;
+   color:black;
+}
+
+.sub-nav dt a, .sub-nav dd a, .sub-nav li a {
+    color:#454544;
+    padding: 0.1875rem 1rem;
+    text-decoration: none;
+    font-size:20px;
+}
+.small-3.columns{
+margin-bottom:30px;
+
+}
+</style>
+
+<body>
+   <div class='main_wrapper'>
+
+         <div class='top_nav_wrapper'>
+               <nav class="top-bar" data-topbar role="navigation">
+                  <ul class="title-area">
+                    <li class="name button success small" style='position:relative; margin-right:20px; text-align:left; top:-20px; height: 400px; font-size:20px; padding:20px;'>
+                        OVERDRIVE<br/>
+                        COMICS
+                    </li>
+                     <!-- Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone -->
+                    <li class="toggle-topbar menu-icon"><a href="#"><span>Menu</span></a></li>
+                  </ul>
+                
+                  <section class="top-bar-section">
+                    <!-- Right Nav Section -->
+                    <ul class="right">
+                      <li style='position:relative; left:-20px;' class="active button success radius small">Create</li>
+                      <li class="active button secondary radius small">Login</li>
+                    </ul>
+                
+                    <!-- Left Nav Section -->
+                    <ul class="left">
+                      <li><a href="#">Genres</a></li>
+                      <li><a href="#"><b style='color:#7161EF'>Popular</b></a></li>
+                      <li><a href="#">Discover</a></li>
+                    </ul>
+                  </section>
+                </nav>
+            </div>
+      
+      <div class='weekly_nav' style='background-color:white; border-bottom-style:solid; border-width:.6px; border-color:rgb(219, 219, 219); margin-top:4px; margin-left:auto; margin-right:auto'>
+           <div class='row'>
+               <div class='small-12 columns small-offset-0' style='height:62px'>
+                     <dl class="sub-nav">
+                           <dd class="active"><a href="#">ALL</a></dd>
+                           <dd><a href="#">ACTION/FANTASY</a></dd>
+                           <dd><a href="#">DRAMA</a></dd>
+                           <dd><a href="#">COMEDY</a></dd>
+                           <dd><a href="#">SPORTS</a></dd>
+                           <dd><a href="#">HORROR</a></dd>
+                         </dl>
+               </div>
+           </div>
+      </div>
+
+      <div class='comics' style='padding:40px;'>
+         
+       <div class='row'>
+          <div class='small-9 columns'>
+               <p>Most Popular by Genre</p>
+               <div class='row banner'>
+                     <div class='small-3 columns'>
+                        <div class=''>
+                           <button class='button small success' style='font-size:40px;'>1</button>
+                        </div>
+                     </div>
+                     <div class='small-6 columns' style='background-color:white; color:black; padding:20px; border-radius:0px 5px 5px 0px'>
+                           <span class='label tiny success radius'>Action, Fantasy</span>
+                        <h1>Naruto</h1>   
+                        <h4>artvegas</h4>
+                        Naruto is a superhero manga series written and illustrated by Kōhei Horikoshi. It has been serialized in Weekly Overdrive Comics since July 2014, and 20 volumes have been collected in tankōbon format.
+                        <br/>
+                        <br/>
+                        <button class='button success expand radius'>View Series</button>
+                     </div>
+             </div>
+             <br/>
+             <div class='row banner' style='background-image:url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRwi2sbSyrv0VI9aj4ITnPLsKBWqywzk0xDOelz1_ewwFYl_P_gng")'>
+                  <div class='small-3 columns'>
+                     <div class=''>
+                        <button class='button small success' style='font-size:40px;'>2</button>
+                     </div>
+                  </div>
+                  <div class='small-6 columns' style='background-color:white; color:black; padding:20px; border-radius:0px 5px 5px 0px'>
+                        <span class='label tiny success radius'>Comedy</span>
+                     <h1>JoJo!</h1>   
+                     <h4>artvegas</h4>
+                     Naruto is a superhero manga series written and illustrated by Kōhei Horikoshi. It has been serialized in Weekly Overdrive Comics since July 2014, and 20 volumes have been collected in tankōbon format.
+                     <br/><br/>
+                     <button class='button success expand radius'>View Series</button>
+                  </div>
+          </div>
+          </div>
+       </div>
+      </div>
+
+   </div>
+</body>

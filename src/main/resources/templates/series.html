@@ -1,0 +1,326 @@
+
+<!DOCTYPE html>
+<head>
+      <link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400" rel="stylesheet">
+   <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/foundation/5.5.3/css/foundation.css">
+   <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js'></script>
+   <script src='https://cdnjs.cloudflare.com/ajax/libs/foundation/6.5.3/js/foundation.js'></script>
+   <script src='https://cdnjs.cloudflare.com/ajax/libs/foundation/6.5.3/js/plugins/foundation.core.js'></script>
+   <script src='https://cdnjs.cloudflare.com/ajax/libs/foundation/6.5.3/js/plugins/foundation.reveal.js'></script>
+</head>
+
+<style>
+
+   body{
+      color:#454544;
+      font-family: 'Roboto', sans-serif;
+      background-color:whitesmoke;
+   }
+
+   .top-bar{
+      padding:20px;
+      height:80px;
+      line-height: 2.8125rem;
+      margin-bottom: 0;
+      overflow: hidden;
+      position: relative;
+      background-color:white;
+      color:#454544;
+   }
+
+   .top-bar-section li:not(.has-form) a:not(.button){
+      background: white;
+      line-height: 2.8125rem;
+      padding: 0 0.9375rem;
+      font-size:17px;
+      font-weight:400;
+   }
+
+   
+   .top-bar .name h1 a, .top-bar .name h2 a, .top-bar .name h3 a, .top-bar .name h4 a, .top-bar .name p a, .top-bar .name span a 
+   {
+      color:#454544;
+   }
+
+   .top-bar-section ul li > a {
+      color:#454544;
+   }
+
+   button.success, .button.success, .label.success {
+			background-color: #7161EF;
+			border-color: rgb(59, 43, 173);
+			color: #fff;
+		}
+
+   .top-bar-section li:not(.has-form) a:not(.button):hover{
+      background-color:white;
+      color:blueviolet;
+   }
+
+   .left > li{
+      background-color:white;
+   }
+
+   .new_serise_wrapper{
+      background-color: #1fc8db;
+    background-image: url('https://i.ytimg.com/vi/EeYmciIz96M/maxresdefault.jpg');
+    color: white;
+    opacity: 0.95;
+    width:100%;
+    height:260px;
+    padding:40px;
+    background-size:cover;
+    text-shadow: 2px 2px 4px #000000;
+   }
+
+   .banner{
+      height:400px;
+      background-color:white;
+      border-radius:5px;
+      background-image: url('https://mangahelpers.com/forum/media/wsj-cover-issue-9-2016.19683/full?d=1454154995');
+      background-size:cover;
+      background-position-y: 20%;
+      -webkit-box-shadow: 10px 10px 58px -6px rgba(38,83,173,1);
+-moz-box-shadow: 10px 10px 58px -6px rgba(38,83,173,1);
+box-shadow: 10px 10px 58px -6px rgba(38,83,173,1);
+   }
+
+   .comic_banner{
+      height:80px;
+      width:80px;
+      background-color:white;
+      border-radius:2px;
+      background-image: url('https://i.ytimg.com/vi/msz83crkI1A/maxresdefault.jpg');
+      background-size:cover;
+      background-position-y: 20%;
+      padding:14px;
+   }
+
+   .sub-nav dt.active a, .sub-nav dd.active a, .sub-nav li.active a {
+      padding:40px;
+      height:40px;
+      font-size:20px;
+      text-align:center;
+      background:  #7161EF;
+   }
+   
+   .sub-nav {
+    display: block;
+    margin: -0.25rem 0 1.125rem;
+    overflow: hidden;
+    padding-top: 0.25rem;
+    width: auto;
+    margin-left:auto;
+    margin-right:auto;
+    text-align:center;
+   }
+   ul, ol, dl {
+    font-family: inherit;
+    font-size: 1rem;
+    line-height: 2.6;
+    list-style-position: outside;
+    margin-bottom: 1.25rem;
+}
+dd{
+   padding:5px;
+   text-align:center;
+   color:black;
+}
+
+.sub-nav dt a, .sub-nav dd a, .sub-nav li a {
+    color:#454544;
+    padding: 0.1875rem 1rem;
+    text-decoration: none;
+    font-size:20px;
+}
+.small-3.columns{
+margin-bottom:30px;
+
+}
+</style>
+
+<body>
+   <div class='main_wrapper'>
+
+      <div class='top_nav_wrapper'>
+         <nav class="top-bar" data-topbar role="navigation">
+            <ul class="title-area">
+              <li class="name button success small" style='position:relative; margin-right:20px; text-align:left; top:-20px; height: 400px; font-size:20px; padding:20px;'>
+                  OVERDRIVE<br/>
+                  COMICS
+              </li>
+               <!-- Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone -->
+              <li class="toggle-topbar menu-icon"><a href="#"><span>Menu</span></a></li>
+            </ul>
+          
+            <section class="top-bar-section">
+              <!-- Right Nav Section -->
+              <ul class="right">
+                <li style='position:relative; left:-20px;' class="active button success radius small">Create</li>
+                <li class="active button secondary radius small">Login</li>
+              </ul>
+          
+              <!-- Left Nav Section -->
+              <ul class="left">
+                <li><a href="#">Genres</a></li>
+                <li><a href="#">Popular</a></li>
+                <li><a href="#">Discover</a></li>
+              </ul>
+            </section>
+          </nav>
+      </div>
+
+      <div class='new_serise_wrapper' style='z-index:-1;'>
+         <div class='row'>
+            <div class='small-12 columns'>
+              <div class='row'>
+                 <div class='small-12 columns' style='text-align:center; padding:10px; border-radius:4px;'>
+                     <p style='font-size:18px'>Action</p>  
+                  <p style='font-size:40px; position:relative; top:-20px;'> My Hero Academia</p>
+                     <p style='font-size:24px; position:relative; top:-45px'> artvegas</p>
+                     <button style='position:relative;  font-size:17px; top:-55px' class='small button radius success'>+ Subscribe</button>
+                 </div>
+              </div>
+            </div>
+         </div>
+      </div>
+   
+
+      <div class='comics' style='z-index:4; border-radius:5px; margin-top:0px; background-color:white; width:90%; margin-left:auto; margin-right:auto; padding:10px;'>
+       <div class='row'>
+          <br/>
+          <div class='small-8 columns'>
+            <div class='row'>
+               <div class='small-12 columns' style='height:82px; border-style:solid; border-width:1px; border-color:rgb(199, 198, 198)'>
+                  <div class='row'>
+                     <div class='small-3 columns'>
+                        <div class="comic_banner" style='position:relative; left:-15px; display:inline-block'>
+
+                        </div>
+                        
+                     </div>
+                     <div class='small-2 columns '>
+                          <span style='position:relative; top:30px; left:-70px'> Chapter 10</span>
+                     </div>
+                     <div class='small-5 columns'>
+                           <span style='position:relative; font-size:15px; top:30px; left:10px'> March 15, 2018 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp 123,539 Likes</span>
+                     </div>
+                     <div class='small-2 columns'>
+                           <span style='position:relative; top:30px; left:20px'> #10 </span>
+                     </div>
+                  </div>
+               </div>
+               <div class='small-12 columns' style=' height:82px; border-bottom-style:solid; border-right-style:solid; border-left-style:solid; border-width:1px; border-color:rgb(199, 198, 198)'>
+                     <div class='row'>
+                        <div class='small-3 columns'>
+                           <div class="comic_banner" style='position:relative; left:-15px; display:inline-block'>
+   
+                           </div>
+                           
+                        </div>
+                        <div class='small-2 columns '>
+                             <span style='position:relative; top:30px; left:-70px'> Chapter 9</span>
+                        </div>
+                        <div class='small-5 columns'>
+                              <span style='position:relative; font-size:15px; top:30px; left:10px'> March 15, 2018 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp 123,539 Likes</span>
+                        </div>
+                        <div class='small-2 columns'>
+                              <span style='position:relative; top:30px; left:20px'> #9 </span>
+                        </div>
+                     </div>
+                  </div>
+                  <div class='small-12 columns' style=' height:82px; border-bottom-style:solid; border-right-style:solid; border-left-style:solid; border-width:1px; border-color:rgb(199, 198, 198)'>
+                        <div class='row'>
+                           <div class='small-3 columns'>
+                              <div class="comic_banner" style='position:relative; left:-15px; display:inline-block'>
+      
+                              </div>
+                              
+                           </div>
+                           <div class='small-2 columns '>
+                                <span style='position:relative; top:30px; left:-70px'> Chapter 8</span>
+                           </div>
+                           <div class='small-5 columns'>
+                                 <span style='position:relative; font-size:15px; top:30px; left:10px'> March 15, 2018 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp 123,539 Likes</span>
+                           </div>
+                           <div class='small-2 columns'>
+                                 <span style='position:relative; top:30px; left:20px'> #8 </span>
+                           </div>
+                        </div>
+                     </div>
+                     <div class='small-12 columns' style=' height:82px; border-bottom-style:solid; border-right-style:solid; border-left-style:solid; border-width:1px; border-color:rgb(199, 198, 198)'>
+                           <div class='row'>
+                              <div class='small-3 columns'>
+                                 <div class="comic_banner" style='position:relative; left:-15px; display:inline-block'>
+         
+                                 </div>
+                                 
+                              </div>
+                              <div class='small-2 columns '>
+                                   <span style='position:relative; top:30px; left:-70px'> Chapter 8</span>
+                              </div>
+                              <div class='small-5 columns'>
+                                    <span style='position:relative; font-size:15px; top:30px; left:10px'> March 15, 2018 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp 123,539 Likes</span>
+                              </div>
+                              <div class='small-2 columns'>
+                                    <span style='position:relative; top:30px; left:20px'> #8 </span>
+                              </div>
+                           </div>
+                        </div>
+                        <div class='small-12 columns' style=' height:82px; border-bottom-style:solid; border-right-style:solid; border-left-style:solid; border-width:1px; border-color:rgb(199, 198, 198)'>
+                              <div class='row'>
+                                 <div class='small-3 columns'>
+                                    <div class="comic_banner" style='position:relative; left:-15px; display:inline-block'>
+            
+                                    </div>
+                                    
+                                 </div>
+                                 <div class='small-2 columns '>
+                                      <span style='position:relative; top:30px; left:-70px'> Chapter 8</span>
+                                 </div>
+                                 <div class='small-5 columns'>
+                                       <span style='position:relative; font-size:15px; top:30px; left:10px'> March 15, 2018 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp 123,539 Likes</span>
+                                 </div>
+                                 <div class='small-2 columns'>
+                                       <span style='position:relative; top:30px; left:20px'> #8 </span>
+                                 </div>
+                              </div>
+                           </div>
+                           <div class='small-12 columns' style=' height:82px; border-bottom-style:solid; border-right-style:solid; border-left-style:solid; border-width:1px; border-color:rgb(199, 198, 198)'>
+                                 <div class='row'>
+                                    <div class='small-3 columns'>
+                                       <div class="comic_banner" style='position:relative; left:-15px; display:inline-block'>
+               
+                                       </div>
+                                       
+                                    </div>
+                                    <div class='small-2 columns '>
+                                         <span style='position:relative; top:30px; left:-70px'> Chapter 8</span>
+                                    </div>
+                                    <div class='small-5 columns'>
+                                          <span style='position:relative; font-size:15px; top:30px; left:10px'> March 15, 2018 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp 123,539 Likes</span>
+                                    </div>
+                                    <div class='small-2 columns'>
+                                          <span style='position:relative; top:30px; left:20px'> #8 </span>
+                                    </div>
+                                 </div>
+                              </div>
+          </div>
+          </div>
+          <div class='small-4 columns' style='padding-left:50px;'>
+
+               <span>9.78 &nbsp</span><span class='tiny label radius success' style='font-size:14px;'>Rate</span>
+               <br/><br/>
+               <h4 style='font-weight:bold'>UP EVERY WEDNESDAY</h4>
+               <br/>
+               My Hero Academia is a superhero manga series written and illustrated by Kōhei Horikoshi. It has been serialized in Weekly Overdrive Comics since July 2014, and 20 volumes have been collected in tankōbon format.
+               <br/>
+               <br/>
+               <button class='small button expand radius secondary'>Continue Reading</button>
+               <button class='small button expand radius secondary'>First Chapter</button>
+            </div>
+       </div>
+      </div>
+
+   </div>
+</body>
