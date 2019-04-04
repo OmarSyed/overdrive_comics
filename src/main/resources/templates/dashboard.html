@@ -7,8 +7,8 @@
 	<script src='https://cdnjs.cloudflare.com/ajax/libs/foundation/6.5.3/js/plugins/foundation.core.js'></script>
 	<script src='https://cdnjs.cloudflare.com/ajax/libs/foundation/6.5.3/js/plugins/foundation.reveal.js'></script>
 	<link rel="stylesheet" type="text/css" href="/assets/foundation-icons/foundation-icons.css">
-	<script src='./js/main.js'></script>
-	<link href="./css/main.css" rel="stylesheet">
+	<script src='localhost:8080/mainjs'></script>
+	<link href="localhost:8080/maincss" rel="stylesheet">
 </head>
 
 <style>
@@ -69,10 +69,10 @@
 
 				<!-- Left Nav Section -->
 				<ul class="left">
-					<li><a href="/genres.html">Genres</a></li>
-					<li><a href="/popular.html">Popular</a></li>
-					<li><a href="/discover.html">Discover</a></li>
-					<li><a href="/dashboard.html"><span class='active_cus'>Dashboard</span></a></li>
+					<li><a href="localhost:8080/genres">Genres</a></li>
+					<li><a href="localhost:8080/popular">Popular</a></li>
+					<li><a href="localhost:8080/discover">Discover</a></li>
+					<li><a href="localhost:8080/dashboard"><span class="active_cus">Dashboard</span></a></li>
 					<li onclick='expand_search()'><a href="#"><i id='search_icon' class='fi-magnifying-glass'></i></a></li>
 					<li id='search_input_box' style='display:none; background: white; margin-left:40px; width:400px;'><input id='search_input' style='padding:0px; position:relative; left:-16px; font-size:16px; box-shadow: 0px; box-shadow: inset 0 0px 0px rgba(0, 0, 0, 0.0);  border-style:none;
  							border-style:none; border-bottom-style:solid;' type='text' placeholder='Search for comics or authors'></li>
