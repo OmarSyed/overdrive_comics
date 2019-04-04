@@ -9,70 +9,70 @@ public class TemplateController {
 	
 	@RequestMapping("/")
 	public String home() {
-		return "index";
+		return "views/index";
 	}
 	
 	@RequestMapping("/popular")
 	public String popular() {
-		return "popular";
+		return "views/popular";
 	}
 	
 	@RequestMapping("/series")
 	public String series() {
-		return "series";
+		return "views/series";
 	}
 	
 	@RequestMapping("/create")
 	public String create() {
-		return "create";
+		return "views/create";
 	}
 	
 	@RequestMapping("/dashboard")
 	public String dashboard() {
-		return "dashboard";
+		return "views/dashboard";
 	}
 	
 	@RequestMapping("/discover")
 	public String discover() {
-		return "discover";
+		return "views/discover";
 	}
 	
 	@RequestMapping("/editor")
 	public String editor() {
-		return "editor";
+		return "views/editor";
 	}
 	
 	@RequestMapping("/genres")
 	public String genres() {
-		return "genres";
+		return "views/genres";
 	}
 	
 	@RequestMapping("/profile")
 	public String profile() {
-		return "profile";
+		return "views/profile";
 	}
 	
 	@RequestMapping("/search")
 	public String search() {
-		return "search";
+		return "views/search";
 	}
 	
 	@RequestMapping("/settings")
 	public String settings() {
-		return "settings";
+		return "views/settings";
 	}
 	
 	@RequestMapping("/signup")
 	public String signup() {
-		return "signup";
+		return "views/signup";
 	}
 	/*
 	 * Below list of css files 
 	 * that will be served
 	 */
-	@RequestMapping("/maincss")
+	@RequestMapping( value= "/maincss")
 	public String mainCSS() {
-		return "./css/main.css";
+		return "./static/css/main.css";
 	}
 	
 	@RequestMapping("/literallycanvascss")
