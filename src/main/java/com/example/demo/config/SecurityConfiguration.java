@@ -29,6 +29,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
       .antMatchers("/series").permitAll()
       .antMatchers("/search").permitAll()
       .antMatchers("/profile").permitAll()
+      .antMatchers("/api/register").permitAll()
       .antMatchers(
     		  		"/css/**",
     		  		"/js/**",
@@ -40,9 +41,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
       .defaultSuccessUrl("/")
       .usernameParameter("username")
       .passwordParameter("password")
-      .permitAll();
+      .permitAll()
       //.httpBasic()
-      //.and().sessionManagement().disable();
+      .and().sessionManagement().disable();
   }
   
   @Bean
