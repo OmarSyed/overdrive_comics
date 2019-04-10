@@ -66,6 +66,11 @@ public class TemplateController {
 	public String signup() {
 		return "views/signup";
 	}
+	
+	@RequestMapping("/login")
+	public String login() {
+		return "views/login";
+	}
 	/*
 	 * Below list of css files 
 	 * that will be served

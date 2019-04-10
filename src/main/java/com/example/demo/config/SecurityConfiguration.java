@@ -29,7 +29,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
       .antMatchers("/series").permitAll()
       .antMatchers("/search").permitAll()
       .antMatchers("/profile").permitAll()
+      .antMatchers("/login").permitAll()
       .antMatchers("/api/register").permitAll()
+      .antMatchers("/api/getuser").permitAll()
       .antMatchers(
     		  		"/css/**",
     		  		"/js/**",
@@ -37,7 +39,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
       .anyRequest().authenticated()
       .and()
       .formLogin()
-      .loginPage("/signup")
+      .loginPage("/login")
       .defaultSuccessUrl("/")
       .usernameParameter("username")
       .passwordParameter("password")
@@ -47,7 +49,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
   }
   
   @Bean
-  public PasswordEncoder passwordEncoder() {
+  public BCryptPasswordEncoder passwordEncoder() {
     return new BCryptPasswordEncoder();
   }
   

@@ -1,6 +1,7 @@
 package com.example.demo.services;
 
 import java.util.Arrays;
+
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import com.example.demo.entity.Users;
@@ -18,6 +20,8 @@ import com.example.demo.repository.UserRepository;
 public class MongoUserDetailsService implements UserDetailsService{
   @Autowired
   private UserRepository repository;
+  @Autowired
+  private BCryptPasswordEncoder bCryptPasswordEncoder;
 
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -32,8 +36,10 @@ public class MongoUserDetailsService implements UserDetailsService{
     return new User(user.getUsername(), user.getPassword(), authorities);
   }
   
-  public void saveUser(Users userModel)
+  public void save(Users user)
   {
-      repository.save(userModel);
+	user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+	repository.save(user);
+	//return "success";
   }
 }

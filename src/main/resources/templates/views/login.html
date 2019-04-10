@@ -77,37 +77,9 @@
 	<br/>
 	<div>
 		<div class='row'>
-			<p style='font-size:40px; position:relative; left:0px;'><span id='signup_title' class='active_cus'>Sign up</span></p>
+			<p style='font-size:40px; position:relative; left:0px;'><span id='signup_title' class='active_cus'>Login</span></p>
 			<div style='width:100%; margin-left:auto; margin-right:auto;  background:white; padding:40px;'>
 				<div class='row' style='width:80%; margin-left:auto; margin-right:auto; '>
-					<p style='font-size:20px;'>Email Address *</p>
-					<div class='small-12 columns'>
-						<input id="e-mail" style='padding:0px; position:relative; left:-16px; font-size:20px; box-shadow: 0px; box-shadow: inset 0 0px 0px rgba(0, 0, 0, 0.0);  border-style:none; border-bottom-style:solid;'
-								 type='text' placeholder='Enter Email Address' name="email" required>
-					</div>
-				</div>
-
-				<br/>
-				<div class='row' style='width:80%; margin-left:auto; margin-right:auto; '>
-					<p style='font-size:20px; font-weight:bold'>Password *</p>
-					<div class='small-12 columns'>
-						<input id="password" style='padding:0px; position:relative; left:-16px; font-size:20px; box-shadow: 0px; box-shadow: inset 0 0px 0px rgba(0, 0, 0, 0.0);  border-style:none; border-bottom-style:solid;'
-								 type='text' placeholder='Enter Password' name="pwd" required>
-					</div>
-				</div>
-
-				<br/>
-				<div id='signup_extra'>
-					<div class='row' style='width:80%; margin-left:auto; margin-right:auto; '>
-						<p style='font-size:20px; font-weight:bold'>Re-type Password *</p>
-						<div class='small-12 columns'>
-							<input id="rpassword" style='padding:0px; position:relative; left:-16px; font-size:20px; box-shadow: 0px; box-shadow: inset 0 0px 0px rgba(0, 0, 0, 0.0);  border-style:none; border-bottom-style:solid;'
-									 type='text' placeholder='Enter Password' name="rpwd" required>
-						</div>
-					</div>
-
-					<br/>
-					<div class='row' style='width:80%; margin-left:auto; margin-right:auto; '>
 						<p style='font-size:20px; font-weight:bold'>Display Name *</p>
 						<div class='small-12 columns'>
 							<input id="uname" style='padding:0px; position:relative; left:-16px; font-size:20px; box-shadow: 0px; box-shadow: inset 0 0px 0px rgba(0, 0, 0, 0.0);  border-style:none; border-bottom-style:solid;'
@@ -115,11 +87,20 @@
 						</div>
 					</div>
 
-					<br/>
+				<div class='row' style='width:80%; margin-left:auto; margin-right:auto; '>
+					<p style='font-size:20px; font-weight:bold'>Password *</p>
+					<div class='small-12 columns'>
+						<input id="password" style='padding:0px; position:relative; left:-16px; font-size:20px; box-shadow: 0px; box-shadow: inset 0 0px 0px rgba(0, 0, 0, 0.0);  border-style:none; border-bottom-style:solid;'
+								 type='text' placeholder='Enter Password' name="pwd" required>
+					</div>
+				</div>					
 				</div>
 
 				<div style='text-align:center'>
-					<button onclick="registerUser()" id='login_btn' class='button small black publish' style='font-size:20px'>Sign up NOW</button>
+					<button onclick="registerUser()" id='login_btn' class='button small black publish' style='font-size:20px'>LOGIN</button>
+				</div>
+				<div style='text-align:center'>
+					<button onclick="goToSignUp()" id='sign_up_btn' class='button small black publish' style='font-size:15px'>Sign Up</button>
 				</div>
 			</div>
 		</div>
@@ -155,42 +136,9 @@
 //         toggle_login(false);
 //     }
     
-    function registerUser(){
-    	console.log("in response");
-    	var uname  = document.getElementById("uname").value;
-    	var password  = document.getElementById("password").value;
-    	var repPassword = document.getElementById("rpassword".value);
-    	var email = document.getElementById("e-mail").value;
-    	
-    	if(document.getElementById("password").value === document.getElementById("rpassword").value){
-    		axios.post('http://localhost:8080/api/register',{
-				username: uname,
-				password: password,
-				email: email
-			})
-			.then(function(response){
-    			console.log(response.data);
-				if(response.data == "Duplicate"){
-					check = 1;
-					document.getElementById("uname").value = '';
-		    		document.getElementById("passwordd").value = '';
-		    		document.getElementById("rpassword").value = '';
-		    		document.getElementById("e-mail").value = '';					
-		    		alert("Username needs to be UNIQUE");
-				}else{
-					console.log("registered");
-					window.location = "http://localhost:8080/login";
-				}	
-    		})
-    	}else{
-    		console.log("wrong");
-    		document.getElementById("uname").value = '';
-    		document.getElementById("password").value = '';
-    		document.getElementById("rpassword").value = '';
-    		document.getElementById("e-mail").value = '';
-    		alert("passwords dont match");
-    	}	
-    }
+function goToSignUp(){
+	window.location = "http://localhost:8080/signup";
+}
     
 
 </script>
