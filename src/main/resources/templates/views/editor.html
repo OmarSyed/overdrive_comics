@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
 	<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400" rel="stylesheet">
 	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/foundation/5.5.3/css/foundation.css">
@@ -18,7 +19,7 @@
 	<script src="http://ec2-18-191-228-30.us-east-2.compute.amazonaws.com:8080/literallycanvasjs"></script>
 
 	<script src='localhost:8080/mainjs'></script>
-	<link href="localhost:8080/maincss" rel="stylesheet">
+	<link th:href='@{/assets/css/main.css}' type="text/css" rel="stylesheet">
 </head>
 
 <style>
@@ -313,3 +314,4 @@
 <script>
 
 </script>
+</html>

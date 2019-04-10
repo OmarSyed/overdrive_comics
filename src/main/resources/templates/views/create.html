@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
 	<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400" rel="stylesheet">
 	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/foundation/5.5.3/css/foundation.css">
@@ -8,7 +9,7 @@
 	<script src='https://cdnjs.cloudflare.com/ajax/libs/foundation/6.5.3/js/plugins/foundation.reveal.js'></script>
 	<link rel="stylesheet" type="text/css" href="/assets/foundation-icons/foundation-icons.css">
 	<script src='localhost:8080/mainjs'></script>
-	<link href="localhost:8080/maincss" rel="stylesheet">
+	<link th:href='@{/assets/css/main.css}' type="text/css" rel="stylesheet">
 </head>
 
 <style>
@@ -62,10 +63,10 @@
 
 				<!-- Left Nav Section -->
 				<ul class="left">
-					<li><a href="http://ec2-18-191-228-30.us-east-2.compute.amazonaws.com:8080/genres">Genres</a></li>
-					<li><a href="http://ec2-18-191-228-30.us-east-2.compute.amazonaws.com:8080/popular">Popular</a></li>
-					<li><a href="http://ec2-18-191-228-30.us-east-2.compute.amazonaws.com:8080/discover">Discover</a></li>
-					<li><a href="http://ec2-18-191-228-30.us-east-2.compute.amazonaws.com:8080/dashboard">Dashboard</a></li>
+					<li><a href="http://localhost:8080/genres">Genres</a></li>
+					<li><a href="http://localhost:8080/popular">Popular</a></li>
+					<li><a href="http://localhost:8080/discover">Discover</a></li>
+					<li><a href="http://localhost:8080/dashboard">Dashboard</a></li>
 					<li onclick='expand_search()'><a href="#"><i id='search_icon' class='fi-magnifying-glass'></i></a></li>
 					<li id='search_input_box' style='display:none; background: white; margin-left:40px; width:400px;'><input id='search_input' style='padding:0px; position:relative; left:-16px; font-size:16px; box-shadow: 0px; box-shadow: inset 0 0px 0px rgba(0, 0, 0, 0.0);  border-style:none;
  							border-style:none; border-bottom-style:solid;' type='text' placeholder='Search for comics or authors'></li>
@@ -143,3 +144,4 @@
 
 
 </script>
+</html>
