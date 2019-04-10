@@ -62,10 +62,10 @@ public class TemplateController {
 		return "views/settings";
 	}
 	
-	@RequestMapping("/signup")
-	public String signup() {
-		return "views/signup";
-	}
+//	@RequestMapping("/signup")
+//	public String signup() {
+//		return "views/signup";
+//	}
 	/*
 	 * Below list of css files 
 	 * that will be served

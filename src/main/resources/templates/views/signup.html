@@ -82,7 +82,7 @@
 					<p style='font-size:20px;'>Email Address *</p>
 					<div class='small-12 columns'>
 						<input style='padding:0px; position:relative; left:-16px; font-size:20px; box-shadow: 0px; box-shadow: inset 0 0px 0px rgba(0, 0, 0, 0.0);  border-style:none; border-bottom-style:solid;'
-								 type='text' placeholder='Enter Email Address'>
+								 type='text' placeholder='Enter Email Address' name="email" required>
 					</div>
 				</div>
 
@@ -91,7 +91,7 @@
 					<p style='font-size:20px; font-weight:bold'>Password *</p>
 					<div class='small-12 columns'>
 						<input style='padding:0px; position:relative; left:-16px; font-size:20px; box-shadow: 0px; box-shadow: inset 0 0px 0px rgba(0, 0, 0, 0.0);  border-style:none; border-bottom-style:solid;'
-								 type='text' placeholder='Enter Password'>
+								 type='text' placeholder='Enter Password' name="pwd" required>
 					</div>
 				</div>
 
@@ -101,7 +101,7 @@
 						<p style='font-size:20px; font-weight:bold'>Re-type Password *</p>
 						<div class='small-12 columns'>
 							<input style='padding:0px; position:relative; left:-16px; font-size:20px; box-shadow: 0px; box-shadow: inset 0 0px 0px rgba(0, 0, 0, 0.0);  border-style:none; border-bottom-style:solid;'
-									 type='text' placeholder='Enter Password'>
+									 type='text' placeholder='Enter Password' name="rpwd" required>
 						</div>
 					</div>
 
@@ -110,7 +110,7 @@
 						<p style='font-size:20px; font-weight:bold'>Display Name *</p>
 						<div class='small-12 columns'>
 							<input style='padding:0px; position:relative; left:-16px; font-size:20px; box-shadow: 0px; box-shadow: inset 0 0px 0px rgba(0, 0, 0, 0.0);  border-style:none; border-bottom-style:solid;'
-									 type='text' placeholder='Enter Display Name'>
+									 type='text' placeholder='Enter Display Name' name = "username" required>
 						</div>
 					</div>
 
@@ -118,7 +118,7 @@
 				</div>
 
 				<div style='text-align:center'>
-					<button id='login_btn' class='button small black publish' style='font-size:20px'>Sign up NOW</button>
+					<button onclick="RegisterUser()" id='login_btn' class='button small black publish' style='font-size:20px'>Sign up NOW</button>
 				</div>
 			</div>
 		</div>
@@ -153,5 +153,41 @@
     }else {
         toggle_login(false);
     }
+    
+//     function registerUser(){
+//     	var uname  = document.getElementById("username").value;
+//     	var passwd  = document.getElementById("pwd").value;
+//     	var repPassword = document.getElementById("rpwd".value);
+//     	var email = document.getElementById("email").value;
+    	
+//     	if(password === repPassword){
+//     		axios.post('http://localhost:8080/register',{
+// 				username: uname,
+// 				password: passwd,
+// 				email: email
+// 			})
+// 			.then(function(response)){
+//     			console.log(response.data);
+// 				if(response.data == "Duplicate"){
+// 					check = 1;
+// 					document.getElementById("username").value = '';
+// 		    		document.getElementById("pwd").value = '';
+// 		    		document.getElementById("rpwd").value = '';
+// 		    		document.getElementById("email").value = '';
+// 					alert("Username needs to be UNIQUE");
+// 				}else{
+// 					console.log("registered");
+// 					window.location = "http://localhost:8080/signup";
+// 				}	
+//     		})
+//     	}else{
+//     		document.getElementById("username").value = '';
+//     		document.getElementById("pwd").value = '';
+//     		document.getElementById("rpwd").value = '';
+//     		document.getElementById("email").value = '';
+//     		alert("passwords dont match");
+//     	}	
+//     }
+    
 
 </script>
