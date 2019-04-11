@@ -55,6 +55,12 @@ public class UsersController {
 		}	
 	}
 	
+	@RequestMapping(value="/profile", method = RequestMethod.GET)
+	public String showUser() {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		return auth.getName(); 
+	}
+	
 //	@RequestMapping(value = "/getuser", method = RequestMethod.POST)
 //	public String getUser(@Valid @RequestBody Users user){
 //		Users check = repository.findByUsername(user.getUsername());

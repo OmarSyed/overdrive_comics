@@ -50,10 +50,9 @@ public class TemplateController {
 		return "views/genres";
 	}
 	
-	@RequestMapping(value="/profile", method = RequestMethod.GET)
-	public String showUser() {
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		return auth.getName(); 
+	@RequestMapping("/profile")
+	public String profile() {
+		return "views/profile";
 	}
 	
 	@RequestMapping("/search")
