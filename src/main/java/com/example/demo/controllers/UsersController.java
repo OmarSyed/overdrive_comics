@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -53,12 +55,18 @@ public class UsersController {
 		}	
 	}
 	
+	@RequestMapping(value="/profile", method = RequestMethod.GET)
+	public String showUser() {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		return auth.getName(); 
+	}
 //	@RequestMapping(value = "/getuser", method = RequestMethod.POST)
 //	public String getUser(@Valid @RequestBody Users user){
 //		Users check = repository.findByUsername(user.getUsername());
 //		//Users check  = repository.findByUsername(user.getUsername());
 //		//user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-//		
+//		if (check == null)
+//			
 //		UserDetails test  = service.loadUserByUsername(user.getUsername());
 //		if(repository.findByUsername(user.getUsername())!= null) {
 //			return "success";
@@ -66,7 +74,7 @@ public class UsersController {
 //			return "error";
 //		}
 //	}
-//	
+	
 	
 	
 	
