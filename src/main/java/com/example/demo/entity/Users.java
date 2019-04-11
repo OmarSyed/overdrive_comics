@@ -26,10 +26,6 @@ public class Users {
 		this.username = username;
 		this.password = password;
 		this.email  = email;
-		this.profilePic = profilePic;
-		this.bio = bio;
-		this.followedSeries = this.followedSeries;
-		this.producedSeries = producedSeries;
 	}
 	
 	public Blob getProfilePic() {

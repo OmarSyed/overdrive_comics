@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<head>
+	<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/foundation/5.5.3/css/foundation.css">
+	<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js'></script>
+	<script src='https://cdnjs.cloudflare.com/ajax/libs/foundation/6.5.3/js/foundation.js'></script>
+	<script src='https://cdnjs.cloudflare.com/ajax/libs/foundation/6.5.3/js/plugins/foundation.core.js'></script>
+	<script src='https://cdnjs.cloudflare.com/ajax/libs/foundation/6.5.3/js/plugins/foundation.reveal.js'></script>
+	<link rel="stylesheet" type="text/css" href="./assets/foundation-icons/foundation-icons.css">
+	<link href="localhost:8080/maincss" rel="stylesheet">
+</head>
+
+<style>
+
+
+	.new_serise_wrapper{
+		background-color: #1fc8db;
+		background-image: url('https://i.ytimg.com/vi/EeYmciIz96M/maxresdefault.jpg');
+		color: white;
+		opacity: 0.95;
+		width:100%;
+		height:260px;
+		padding:40px;
+		background-size:cover;
+		text-shadow: 2px 2px 4px #000000;
+	}
+
+	.comic_banner {
+		height: 80px;
+		width: 80px;
+		background-color: white;
+		border-radius: 2px;
+		background-image: url('https://i.ytimg.com/vi/msz83crkI1A/maxresdefault.jpg');
+		background-size: cover;
+		background-position-y: 20%;
+		padding: 14px;
+		-webkit-box-shadow: 0px 0px 0px;
+		-moz-box-shadow: 0px 0px 0px;
+		box-shadow: 0px 0px 0px;
+	}
+
+	span:hover {
+		color:blueviolet;
+		cursor:pointer;
+	}
+</style>
+
+<body>
+<div class='main_wrapper'>
+
+	<!-- TOP NAV BAR -->
+	<div class='top_nav_wrapper'>
+		<nav class="top-bar" data-topbar role="navigation">
+			<ul class="title-area">
+				<li class="name button success small" style='position:relative; margin-right:20px; text-align:left; top:-20px; height: 400px; font-size:20px; padding:20px;'>
+					<a href="/index.html">OVERDRIVE<br/> COMICS</a>
+				</li>
+				<!-- Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone -->
+				<li class="toggle-topbar menu-icon"><a href="#"><span>Menu</span></a></li>
+			</ul>
+
+			<section class="top-bar-section">
+				<!-- Right Nav Section -->
+				<ul class="right">
+					<!--<li style='position:relative; left:-25px; background-color:white; color:black; border: 1px solid #b4b4b4; color: #838383;' onclick='window.location.href="/profile.html"' class="publish active button small">--> 						<!--<i class='fi-torso'></i>&nbsp; Profile</li>-->
+					<li style='position:relative; left:-20px;' onclick='window.location.href="/create.html"' class="publish active button small">Create</li>
+					<li style='background-color:white; color:black; border: 1px solid #b4b4b4; color: #838383;' onclick='go_to_login()' class="button login publish small">Login</li>
+				</ul>
+
+				<!-- Left Nav Section -->
+				<ul class="left">
+					<li><a href="http://ec2-18-191-228-30.us-east-2.compute.amazonaws.com:8080/genres">Genres</a></li>
+					<li><a href="http://ec2-18-191-228-30.us-east-2.compute.amazonaws.com:8080/popular">Popular</a></li>
+					<li><a href="http://ec2-18-191-228-30.us-east-2.compute.amazonaws.com:8080/discover">Discover</a></li>
+					<li><a href="http://ec2-18-191-228-30.us-east-2.compute.amazonaws.com:8080/dashboard">Dashboard</a></li>
+					<li onclick='expand_search()'><a href="#"><i id='search_icon' class='fi-magnifying-glass'></i></a></li>
+					<li id='search_input_box' style='display:none; background: white; margin-left:40px; width:400px;'><input id='search_input' style='padding:0px; position:relative; left:-16px; font-size:16px; box-shadow: 0px; box-shadow: inset 0 0px 0px rgba(0, 0, 0, 0.0);  border-style:none;
+ 							border-style:none; border-bottom-style:solid;' type='text' placeholder='Search for comics or authors'></li>
+				</ul>
+			</section>
+		</nav>
+	</div>
+
+	<div class='new_serise_wrapper' style='z-index:-1;'>
+		<div class='row'>
+			<div class='small-12 columns'>
+				<div class='row'>
+					<div class='small-12 columns' style='text-align:center; padding:10px; border-radius:4px;'>
+						<p style='font-size:18px'>Action</p>
+						<p style='font-size:40px; position:relative; top:-20px;'> My Hero Academia</p>
+						<p style='font-size:24px; position:relative; top:-45px' onclick='window.location.href="/profile.html"'> artvegas</p>
+						<button style='position:relative;  font-size:17px; top:-55px' class='small button radius success'>+ Subscribe</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<div class='chap_row comics' style='z-index:4; border-radius:5px; margin-top:10px; background-color:white; width:80%; margin-left:auto; margin-right:auto; padding:0px;'>
+		<div class='row'>
+			<br/>
+			<div class='small-8 columns'>
+				<div class='row'  style='height:110px'>
+					<div class='small-12 columns' style='height:82px; border-top: 1px solid #f5f5f5;'>
+						<div class='row'>
+							<div class='small-3 columns'>
+								<div class="comic_banner" style='position:relative; left:-15px; display:inline-block'>
+								</div>
+
+							</div>
+							<div class='small-2 columns '>
+								<span style='position:relative; top:20px; left:-70px'> Chap. 10</span>
+							</div>
+							<div class='small-5 columns'>
+								<span style='position:relative; font-size:15px; top:30px; left:100px; color:#c4c4c4;'> March 15, 2018 <span style='position:relative;left:20px;'> <i class='fi-heart'></i> 123,539 </span></span>
+							</div>
+							<div class='small-2 columns'>
+								<span style='position:relative; top:30px; left:50px'> #10 </span>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class='row' style='height:110px'>
+					<div class='small-12 columns' style='height:82px; border-top: 1px solid #f5f5f5;'>
+						<div class='row'>
+							<div class='small-3 columns'>
+								<div class="comic_banner" style='position:relative; left:-15px; display:inline-block'>
+								</div>
+
+							</div>
+							<div class='small-2 columns '>
+								<span style='position:relative; top:30px; left:-70px'> Chap. 9</span>
+							</div>
+							<div class='small-5 columns'>
+								<span style='position:relative; font-size:15px; top:30px; left:100px; color:#c4c4c4;'> March 15, 2018 <span style='position:relative;left:20px;'> <i class='fi-heart'></i> 123,539 </span></span>
+							</div>
+							<div class='small-2 columns'>
+								<span style='position:relative; top:30px; left:50px'> #9 </span>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class='row' style='height:110px'>
+					<div class='small-12 columns' style='height:82px; padding-bottom:110px; border-top: 1px solid #f5f5f5; border-bottom: 1px solid #f5f5f5;'>
+						<div class='row'>
+							<div class='small-3 columns'>
+								<div class="comic_banner" style='position:relative; left:-15px; display:inline-block'>
+								</div>
+
+							</div>
+							<div class='small-2 columns '>
+								<span style='position:relative; top:30px; left:-70px'> Chap. 8</span>
+							</div>
+							<div class='small-5 columns'>
+								<span style='position:relative; font-size:15px; top:30px; left:100px; color:#c4c4c4;'> March 15, 2018 <span style='position:relative;left:20px;'> <i class='fi-heart'></i> 123,539 </span></span>
+							</div>
+							<div class='small-2 columns'>
+								<span style='position:relative; top:30px; left:50px'> #8 </span>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+			<div class='small-4 columns' style='padding-left:50px; border-left:2px solid #f5f5f5;'>
+
+				<span><i class='fi-star'></i>&nbsp 9.78 &nbsp</span><span class='tiny label rate publish success' style='font-size:14px;'>Rate</span>
+				<br/><br/>
+				<h4 style='font-weight:bold'>UP EVERY WEDNESDAY</h4>
+				<br/> My Hero Academia is a superhero manga series written and illustrated by KÅ�hei Horikoshi. It has been serialized in Weekly Overdrive Comics since July 2014, and 20 volumes have been collected in tankÅ�bon format.
+				<br/> <br/>
+				<button class='small button expand radius secondary'>Continue Reading</button>
+				<li class='small button expand radius black'>First Chapter</li>
+			</div>
+		</div>
+	</div>
+
+</div>
+</body>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<head>
+	<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/foundation/5.5.3/css/foundation.css">
+	<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js'></script>
+	<script src='https://cdnjs.cloudflare.com/ajax/libs/foundation/6.5.3/js/foundation.js'></script>
+	<script src='https://cdnjs.cloudflare.com/ajax/libs/foundation/6.5.3/js/plugins/foundation.core.js'></script>
+	<script src='https://cdnjs.cloudflare.com/ajax/libs/foundation/6.5.3/js/plugins/foundation.reveal.js'></script>
+	<link rel="stylesheet" type="text/css" href="/assets/foundation-icons/foundation-icons.css">
+	<script src='localhost:8080/mainjs'></script>
+	<link href="localhost:8080/maincss" rel="stylesheet">
+</head>
+
+<style>
+
+</style>
+
+<body>
+<div class='main_wrapper'>
+
+	<!-- TOP NAV BAR -->
+	<div class='top_nav_wrapper'>
+		<nav class="top-bar" data-topbar role="navigation">
+			<ul class="title-area">
+				<li class="name button success small" style='position:relative; margin-right:20px; text-align:left; top:-20px; height: 400px; font-size:20px; padding:20px;'>
+					<a href="/index.html">OVERDRIVE<br/> COMICS</a>
+				</li>
+				<!-- Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone -->
+				<li class="toggle-topbar menu-icon"><a href="#"><span>Menu</span></a></li>
+			</ul>
+
+			<section class="top-bar-section">
+				<!-- Right Nav Section -->
+				<ul class="right">
+					<!--<li style='position:relative; left:-25px; background-color:white; color:black; border: 1px solid #b4b4b4; color: #838383;' onclick='window.location.href="/profile.html"' class="publish active button small">--> 						<!--<i class='fi-torso'></i>&nbsp; Profile</li>-->
+					<li style='position:relative; left:-20px;' onclick='window.location.href="/create.html"' class="publish active button small">Create</li>
+					<li style='background-color:white; color:black; border: 1px solid #b4b4b4; color: #838383;' onclick='go_to_login()' class="button login publish small">Login</li>
+				</ul>
+
+				<!-- Left Nav Section -->
+				<ul class="left">
+					<li><a href="http://ec2-18-191-228-30.us-east-2.compute.amazonaws.com:8080/genres">Genres</a></li>
+					<li><a href="http://ec2-18-191-228-30.us-east-2.compute.amazonaws.com:8080/popular"><span class="active_cus">Popular</span></a></li>
+					<li><a href="http://ec2-18-191-228-30.us-east-2.compute.amazonaws.com:8080/discover">Discover</a></li>
+					<li><a href="http://ec2-18-191-228-30.us-east-2.compute.amazonaws.com:8080/dashboard">Dashboard</a></li>
+					<li onclick='expand_search()'><a href="#"><i id='search_icon' class='fi-magnifying-glass'></i></a></li>
+					<li id='search_input_box' style='display:none; background: white; margin-left:40px; width:400px;'><input id='search_input' style='padding:0px; position:relative; left:-16px; font-size:16px; box-shadow: 0px; box-shadow: inset 0 0px 0px rgba(0, 0, 0, 0.0);  border-style:none;
+ 							border-style:none; border-bottom-style:solid;' type='text' placeholder='Search for comics or authors'></li>
+				</ul>
+			</section>
+		</nav>
+	</div>
+
+	<div class='weekly_nav' style='background-color:white; border-bottom-style:solid; border-width:.6px; border-color:rgb(219, 219, 219); margin-top:0px; margin-left:auto; margin-right:auto; border-top: 1px solid #eaeaea;'>
+		<div class='row'>
+			<div class='small-12 columns small-offset-0' style='height:50px'>
+				<dl class="sub-nav">
+					<dd onclick='select_option_popular(this)' class="pop_btn active"><a href="#">ALL</a></dd>
+					<dd onclick='select_option_popular(this)' class="pop_btn"><a href="#">ACTION/FANTASY</a></dd>
+					<dd onclick='select_option_popular(this)' class="pop_btn"><a href="#">DRAMA</a></dd>
+					<dd onclick='select_option_popular(this)' class="pop_btn"><a href="#">COMEDY</a></dd>
+					<dd onclick='select_option_popular(this)' class="pop_btn"><a href="#">SPORTS</a></dd>
+					<dd onclick='select_option_popular(this)' class="pop_btn"><a href="#">HORROR</a></dd>
+				</dl>
+			</div>
+		</div>
+	</div>
+
+	<div class='comics' style='padding:40px;'>
+
+		<div class='row'>
+			<div class='small-9 columns'>
+				<p style='font-size:40px; position:relative; left:-20px;'>Most Popular by Genre</p>
+				<div class='row banner'>
+					<div class='small-3 columns'>
+						<div class=''>
+							<button class='button small success' style='font-size:40px;'>1</button>
+						</div>
+					</div>
+					<div class='small-6 columns' style='background-color:white; color:black; padding:20px; border-radius:0px 5px 5px 0px'>
+						<span class='label tiny success radius'>Action, Fantasy</span>
+						<h1>Naruto</h1>
+						<h4>artvegas</h4>
+						Naruto is a superhero manga series written and illustrated by KÅ�hei Horikoshi. It has been serialized in Weekly Overdrive Comics since July 2014, and 20 volumes have been collected in tankÅ�bon format.
+						<br/> <br/>
+						<button class='button success expand radius'><a href='/series.html'>View Series</a></button>
+					</div>
+				</div>
+				<br/>
+				<div class='row banner' style='background-image:url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRwi2sbSyrv0VI9aj4ITnPLsKBWqywzk0xDOelz1_ewwFYl_P_gng")'>
+					<div class='small-3 columns'>
+						<div class=''>
+							<button class='button small success' style='font-size:40px;'>2</button>
+						</div>
+					</div>
+					<div class='small-6 columns' style='background-color:white; color:black; padding:20px; border-radius:0px 5px 5px 0px'>
+						<span class='label tiny success radius'>Comedy</span>
+						<h1>JoJo!</h1>
+						<h4>artvegas</h4>
+						Naruto is a superhero manga series written and illustrated by KÅ�hei Horikoshi. It has been serialized in Weekly Overdrive Comics since July 2014, and 20 volumes have been collected in tankÅ�bon format.
+						<br/><br/>
+						<button class='button success expand radius'><a href='/series.html'>View Series</a></button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- FOOTER -->
+	<div class='top_nav_wrapper'>
+		<nav class="top-bar" data-topbar role="navigation">
+
+			<section class="top-bar-section">
+				<!-- Right Nav Section -->
+				<ul class="right">
+					<li style='position:relative; left:-20px;' onclick='window.location.href="/create.html"' class="publish active button small">
+					<a href="http://ec2-18-191-228-30.us-east-2.compute.amazonaws.com:8080/create">Create</a>
+					</li>
+					<li style='background-color:white; color:black; border: 1px solid #b4b4b4; color: #838383;' class="button login publish small">Login</li>
+				</ul>
+
+				<!-- Left Nav Section -->
+				<ul class="left">
+					<li><a href="/">Â© SUNLIGHT YELLOW</a></li>
+					<li><a style='font-size:12px' href="#">Made with <i class='fi-heart' style='color:blueviolet'></i></a></li>
+					<li><a style='font-size:12px' href="#">John Richu Aritra Omar <i class='fi-star'></i></a></li>
+				</ul>
+			</section>
+		</nav>
+	</div>
+</div>
+</body>

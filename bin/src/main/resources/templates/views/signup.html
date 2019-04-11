@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<head>
+	<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/foundation/5.5.3/css/foundation.css">
+	<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js'></script>
+	<script src='https://cdnjs.cloudflare.com/ajax/libs/foundation/6.5.3/js/foundation.js'></script>
+	<script src='https://cdnjs.cloudflare.com/ajax/libs/foundation/6.5.3/js/plugins/foundation.core.js'></script>
+	<script src='https://cdnjs.cloudflare.com/ajax/libs/foundation/6.5.3/js/plugins/foundation.reveal.js'></script>
+	<script src = "https://unpkg.com/axios/dist/axios.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="./assets/foundation-icons/foundation-icons.css">
+	<script src='localhost:8080/mainjs'></script>
+	<link href="localhost:8080/maincss" rel="stylesheet">
+</head>
+
+<style>
+	.sub-nav dt.active a, .sub-nav dd.active a, .sub-nav li.active a {
+		padding: 16px;
+		height: 40px;
+		text-align: center;
+		background: #7161EF;
+		border-radius:0px;
+	}
+
+	sub-nav li a {
+		line-height: 10;
+	}
+
+	dd a:hover {
+		padding: 16px;
+		height: 40px;
+		text-align: center;
+		background: #7161EF;
+		border-radius:0px;
+	}
+
+	.sub-nav dd a:hover {
+		color:white;
+	}
+
+</style>
+
+<body>
+<div class='main_wrapper'>
+
+	<!-- TOP NAV BAR -->
+	<div class='top_nav_wrapper'>
+		<nav class="top-bar" data-topbar role="navigation">
+			<ul class="title-area">
+				<li class="name button success small" style='position:relative; margin-right:20px; text-align:left; top:-20px; height: 400px; font-size:20px; padding:20px;'>
+					<a href="/index.html">OVERDRIVE<br/> COMICS</a>
+				</li>
+				<!-- Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone -->
+				<li class="toggle-topbar menu-icon"><a href="#"><span>Menu</span></a></li>
+			</ul>
+
+			<section class="top-bar-section">
+				<!-- Right Nav Section -->
+				<ul class="right">
+					<!--<li style='position:relative; left:-25px; background-color:white; color:black; border: 1px solid #b4b4b4; color: #838383;' onclick='window.location.href="/profile.html"' class="publish active button small">--> 						<!--<i class='fi-torso'></i>&nbsp; Profile</li>-->
+					<li style='position:relative; left:-20px;' onclick='window.location.href="/create.html"' class="publish active button small">Create</li>
+					<li style='background-color:white; color:black; border: 1px solid #b4b4b4; color: #838383;' onclick='go_to_login()' class="button login publish small">Login</li>
+				</ul>
+
+				<!-- Left Nav Section -->
+				<ul class="left">
+					<li><a href="http://ec2-18-191-228-30.us-east-2.compute.amazonaws.com:8080/genres">Genres</a></li>
+					<li><a href="http://ec2-18-191-228-30.us-east-2.compute.amazonaws.com:8080/popular">Popular</a></li>
+					<li><a href="http://ec2-18-191-228-30.us-east-2.compute.amazonaws.com:8080/discover">Discover</a></li>
+					<li><a href="http://ec2-18-191-228-30.us-east-2.compute.amazonaws.com:8080/dashboard">Dashboard</a></li>
+					<li onclick='expand_search()'><a href="#"><i id='search_icon' class='fi-magnifying-glass'></i></a></li>
+					<li id='search_input_box' style='display:none; background: white; margin-left:40px; width:400px;'><input id='search_input' style='padding:0px; position:relative; left:-16px; font-size:16px; box-shadow: 0px; box-shadow: inset 0 0px 0px rgba(0, 0, 0, 0.0);  border-style:none;
+ 							border-style:none; border-bottom-style:solid;' type='text' placeholder='Search for comics or authors'></li>
+				</ul>
+			</section>
+		</nav>
+	</div>
+	<br/>
+	<div>
+		<div class='row'>
+			<p style='font-size:40px; position:relative; left:0px;'><span id='signup_title' class='active_cus'>Sign up</span></p>
+			<div style='width:100%; margin-left:auto; margin-right:auto;  background:white; padding:40px;'>
+				<div class='row' style='width:80%; margin-left:auto; margin-right:auto; '>
+					<p style='font-size:20px;'>Email Address *</p>
+					<div class='small-12 columns'>
+						<input id="e-mail" style='padding:0px; position:relative; left:-16px; font-size:20px; box-shadow: 0px; box-shadow: inset 0 0px 0px rgba(0, 0, 0, 0.0);  border-style:none; border-bottom-style:solid;'
+								 type='text' placeholder='Enter Email Address' name="email" required>
+					</div>
+				</div>
+
+				<br/>
+				<div class='row' style='width:80%; margin-left:auto; margin-right:auto; '>
+					<p style='font-size:20px; font-weight:bold'>Password *</p>
+					<div class='small-12 columns'>
+						<input id="password" style='padding:0px; position:relative; left:-16px; font-size:20px; box-shadow: 0px; box-shadow: inset 0 0px 0px rgba(0, 0, 0, 0.0);  border-style:none; border-bottom-style:solid;'
+								 type='text' placeholder='Enter Password' name="pwd" required>
+					</div>
+				</div>
+
+				<br/>
+				<div id='signup_extra'>
+					<div class='row' style='width:80%; margin-left:auto; margin-right:auto; '>
+						<p style='font-size:20px; font-weight:bold'>Re-type Password *</p>
+						<div class='small-12 columns'>
+							<input id="rpassword" style='padding:0px; position:relative; left:-16px; font-size:20px; box-shadow: 0px; box-shadow: inset 0 0px 0px rgba(0, 0, 0, 0.0);  border-style:none; border-bottom-style:solid;'
+									 type='text' placeholder='Enter Password' name="rpwd" required>
+						</div>
+					</div>
+
+					<br/>
+					<div class='row' style='width:80%; margin-left:auto; margin-right:auto; '>
+						<p style='font-size:20px; font-weight:bold'>Display Name *</p>
+						<div class='small-12 columns'>
+							<input id="uname" style='padding:0px; position:relative; left:-16px; font-size:20px; box-shadow: 0px; box-shadow: inset 0 0px 0px rgba(0, 0, 0, 0.0);  border-style:none; border-bottom-style:solid;'
+									 type='text' placeholder='Enter Display Name' name = "username" required>
+						</div>
+					</div>
+
+					<br/>
+				</div>
+
+				<div style='text-align:center'>
+					<button onclick="registerUser()" id='login_btn' class='button small black publish' style='font-size:20px'>Sign up NOW</button>
+				</div>
+			</div>
+		</div>
+
+		<br/>
+	</div>
+</div>
+
+<!-- FOOTER -->
+<div class='top_nav_wrapper'>
+	<nav class="top-bar" data-topbar role="navigation">
+
+		<section class="top-bar-section">
+			<!-- Left Nav Section -->
+			<ul class="left">
+				<li><a href="/">© SUNLIGHT YELLOW</a></li>
+				<li><a style='font-size:12px' href="#">Made with <i class='fi-heart' style='color:blueviolet'></i></a></li>
+				<li><a style='font-size:12px' href="#">John Richu Aritra Omar <i class='fi-star'></i></a></li>
+			</ul>
+		</section>
+	</nav>
+</div>
+
+</div>
+</body>
+
+<script>
+//     var login_check = getUrlParam('login','Empty');
+
+//     if(login_check == 'true') {
+// 		  toggle_login(true);
+//     }else {
+//         toggle_login(false);
+//     }
+    
+    function registerUser(){
+    	console.log("in response");
+    	var uname  = document.getElementById("uname").value;
+    	var password  = document.getElementById("password").value;
+    	var repPassword = document.getElementById("rpassword".value);
+    	var email = document.getElementById("e-mail").value;
+    	
+    	if(document.getElementById("password").value === document.getElementById("rpassword").value){
+    		axios.post('http://localhost:8080/api/register',{
+				username: uname,
+				password: password,
+				email: email
+			})
+			.then(function(response){
+    			console.log(response.data);
+				if(response.data == "Duplicate"){
+					check = 1;
+					document.getElementById("uname").value = '';
+		    		document.getElementById("passwordd").value = '';
+		    		document.getElementById("rpassword").value = '';
+		    		document.getElementById("e-mail").value = '';					
+		    		alert("Username needs to be UNIQUE");
+				}else{
+					console.log("registered");
+					window.location = "http://localhost:8080/login";
+				}	
+    		})
+    	}else{
+    		console.log("wrong");
+    		document.getElementById("uname").value = '';
+    		document.getElementById("password").value = '';
+    		document.getElementById("rpassword").value = '';
+    		document.getElementById("e-mail").value = '';
+    		alert("passwords dont match");
+    	}	
+    }
+    
+
+</script>

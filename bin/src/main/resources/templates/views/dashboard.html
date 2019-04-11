@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<head>
+	<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/foundation/5.5.3/css/foundation.css">
+	<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js'></script>
+	<script src='https://cdnjs.cloudflare.com/ajax/libs/foundation/6.5.3/js/foundation.js'></script>
+	<script src='https://cdnjs.cloudflare.com/ajax/libs/foundation/6.5.3/js/plugins/foundation.core.js'></script>
+	<script src='https://cdnjs.cloudflare.com/ajax/libs/foundation/6.5.3/js/plugins/foundation.reveal.js'></script>
+	<link rel="stylesheet" type="text/css" href="/assets/foundation-icons/foundation-icons.css">
+	<script src='localhost:8080/mainjs'></script>
+	<link href="localhost:8080/maincss" rel="stylesheet">
+</head>
+
+<style>
+	.sub-nav dt.active a, .sub-nav dd.active a, .sub-nav li.active a {
+		padding: 16px;
+		height: 40px;
+		text-align: center;
+		background: #7161EF;
+		border-radius:0px;
+	}
+
+	sub-nav li a {
+		line-height: 10;
+	}
+
+	dd a:hover {
+		padding: 16px;
+		height: 40px;
+		text-align: center;
+		background: #7161EF;
+		border-radius:0px;
+	}
+
+	.sub-nav dd a:hover {
+		color:white;
+	}
+
+	.title {
+		font-size:20px;
+	}
+
+	.reg {
+		font-size:18px;
+	}
+
+</style>
+
+<body>
+<div class='main_wrapper'>
+
+	<!-- TOP NAV BAR -->
+	<div class='top_nav_wrapper'>
+		<nav class="top-bar" data-topbar role="navigation">
+			<ul class="title-area">
+				<li class="name button success small" style='position:relative; margin-right:20px; text-align:left; top:-20px; height: 400px; font-size:20px; padding:20px;'>
+					<a href="/index.html">OVERDRIVE<br/> COMICS</a>
+				</li>
+				<!-- Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone -->
+				<li class="toggle-topbar menu-icon"><a href="#"><span>Menu</span></a></li>
+			</ul>
+
+			<section class="top-bar-section">
+				<!-- Right Nav Section -->
+				<ul class="right">
+					<!--<li style='position:relative; left:-25px; background-color:white; color:black; border: 1px solid #b4b4b4; color: #838383;' onclick='window.location.href="/profile.html"' class="publish active button small">--> 						<!--<i class='fi-torso'></i>&nbsp; Profile</li>-->
+					<li style='position:relative; left:-20px;' onclick='window.location.href="/create.html"' class="publish active button small">Create</li>
+					<li style='background-color:white; color:black; border: 1px solid #b4b4b4; color: #838383;' onclick='go_to_login()' class="button login publish small">Login</li>
+				</ul>
+
+				<!-- Left Nav Section -->
+				<ul class="left">
+					<li><a href="http://ec2-18-191-228-30.us-east-2.compute.amazonaws.com:8080/genres">Genres</a></li>
+					<li><a href="http://ec2-18-191-228-30.us-east-2.compute.amazonaws.com:8080/popular">Popular</a></li>
+					<li><a href="http://ec2-18-191-228-30.us-east-2.compute.amazonaws.com:8080/discover">Discover</a></li>
+					<li><a href="http://ec2-18-191-228-30.us-east-2.compute.amazonaws.com:8080/dashboard"><span class="active_cus">Dashboard</span></a></li>
+					<li onclick='expand_search()'><a href="#"><i id='search_icon' class='fi-magnifying-glass'></i></a></li>
+					<li id='search_input_box' style='display:none; background: white; margin-left:40px; width:400px;'><input id='search_input' style='padding:0px; position:relative; left:-16px; font-size:16px; box-shadow: 0px; box-shadow: inset 0 0px 0px rgba(0, 0, 0, 0.0);  border-style:none;
+ 							border-style:none; border-bottom-style:solid;' type='text' placeholder='Search for comics or authors'></li>
+				</ul>
+			</section>
+		</nav>
+	</div>
+	<br/>
+	<div>
+		<div class='row' id='all_comics' style='display:block'>
+			<p style='font-size:40px; position:relative; left:0px;'>My Comics</p>
+			<div class="row_comic" style='width:100%; position:relative; left:0px;'>
+				<div class="column_comic" onclick='select_comic()'>
+					<div class='comic_banner'>
+						<span class='title' style='font-size:22px; color:black'>Naruto</span><br/>
+						<span class='title label tiny success radius' style='font-size:12px; color:white'><i class='fi-heart'></i> 100</span><br/>
+						<p class='title label tiny success radius' style='position:relative; top:111px; font-size:12px; color:white'>Comedy</p>
+					</div>
+				</div>
+				<div class="column_comic">
+					<div class='comic_banner' style="background-image:url('https://i.ytimg.com/vi/45KSweu1lpg/maxresdefault.jpg')">
+						<span class='title' style='font-size:22px; color:black'>Bleach</span><br/>
+						<span class='title label tiny success radius' style='font-size:12px; color:white'><i class='fi-heart'></i>  1.M</span><br/>
+						<p class='title label tiny success radius' style='position:relative; top:111px; font-size:12px; color:white'>Action, Romance</p>
+					</div>
+				</div>
+				<div class="column_comic">
+					<div class='comic_banner' style="background-image:url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS7Lzo0IZm2I-KSUus7bm3p9LA0mbakS51o_ffl2GmvBBxnjJFk') ">
+						<span class='title' style='font-size:22px; color:black'>Adventure Time</span><br/>
+						<span class='title label tiny success radius' style='font-size:12px; color:white'><i class='fi-heart'></i>  1.2</span><br/>
+						<p class='title label tiny success radius' style='position:relative; top:111px; font-size:12px; color:white'>Action, Comedy</p>
+					</div>
+				</div>
+				<div class="column_comic">
+					<div class='comic_banner' style="background-image:url('https://media.entertainmentearth.com/assets/images/dedf7df39ed6426f877137fe45b1e8eflg.jpg')">
+						<span class='title' style='font-size:22px; color:black'>Spongebob</span><br/>
+						<span class='title label tiny success radius' style='font-size:12px; color:white'><i class='fi-heart'></i>  100M </span><br/>
+						<p class='title label tiny success radius' style='position:relative; top:111px; font-size:12px; color:white'>Life, Comedy</p>
+					</div>
+				</div>
+				<div class="column_comic">
+					<div class='comic_banner' style="background-image:url('https://media.entertainmentearth.com/assets/images/dedf7df39ed6426f877137fe45b1e8eflg.jpg')">
+						<span class='title' style='font-size:22px; color:black'>Spongebob</span><br/>
+						<span class='title label tiny success radius' style='font-size:12px; color:white'><i class='fi-heart'></i>  100M </span><br/>
+						<p class='title label tiny success radius' style='position:relative; top:111px; font-size:12px; color:white'>Life, Comedy</p>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class='row' id='current_comic' style='display:none'>
+			<div class='small-12 columns'>
+				<div class='row'>
+					<div class='small-6 columns'>
+						<p style='font-size:40px; position:relative; left:0px;'>Naruto <span style='font-size:16px; color:darkgray'>Last Updated 5 days ago</span></p>
+					</div>
+					<div class='small-2 columns right'>
+						<p onclick='show_all()' style='font-size:25px; position:relative; top:20px; left:50px'>View All</p>
+					</div>
+				</div>
+				<div class='row'>
+					<div class='small-12 columns'>
+						<div class='small-3 columns title'><i class='fi-star'></i> 9.2 Rating</div>
+						<div class='small-3 columns title'><i class='fi-torso purple'></i> 1M followers</div>
+						<div class='small-3 columns title'><i class='fi-heart purple'></i> 10M likes</div>
+						<div class='small-3 columns title'><i class='fi-book purple'></i> 12 Chapters</div>
+					</div>
+					<div class='small-12 columns'>
+						<div class='small-3 columns title'><i class='fi-folder purple'></i> Action Genre</div>
+						<div class='small-3 columns title left'><i class='fi-clock purple'></i> Every Monday</div>
+					</div>
+				</div>
+				<br/>
+				<p style='font-size:40px; position:relative; left:0px;'>Chapters</p>
+				<div class='small-12 columns'>
+					<div class='row' style='padding:50px; background:white'>
+						<div class='small-12 columns'>
+							<div class="row_comic" style='width:100%; position:relative; left:0px;'>
+								<div class="column_comic">
+									<div class='comic_banner no_shadow' style="background:black">
+										<span class='title' style='font-size:22px; color:black'>
+										<a href="http://ec2-18-191-228-30.us-east-2.compute.amazonaws.com:8080/create">Create New Chapter</a></span><br/>
+									</div>
+								</div>
+								<div class="column_comic">
+									<div class='comic_banner no_shadow'>
+										<span class='title' style='font-size:22px; color:black'>Chapter 1</span><br/>
+										<span class='title label tiny success radius' style='font-size:12px; color:white'><i class='fi-heart'></i> 100</span><br/>
+										<p class='title label tiny success radius' style='position:relative; top:111px; font-size:12px; color:white'>Published</p>
+									</div>
+								</div>
+								<div class="column_comic">
+									<div class='comic_banner no_shadow'>
+										<span class='title' style='font-size:22px; color:black'>Chapter 2</span><br/>
+										<span class='title label tiny success radius' style='font-size:12px; color:white'><i class='fi-heart'></i>  1.M</span><br/>
+										<p class='title label tiny success radius' style='position:relative; top:111px; font-size:12px; color:white'>Published</p>
+									</div>
+								</div>
+								<div class="column_comic">
+									<div class='comic_banner no_shadow'>
+										<span class='title' style='font-size:22px; color:black'>Chapter 3</span><br/>
+										<span class='title label tiny success radius' style='font-size:12px; color:white'><i class='fi-heart'></i> 100</span><br/>
+										<p class='title label tiny success radius' style='position:relative; top:111px; font-size:12px; color:white'>Published</p>
+									</div>
+								</div>
+								<div class="column_comic">
+									<div class='comic_banner no_shadow'>
+										<span class='title' style='font-size:22px; color:black'>Chapter 4</span><br/>
+										<span class='title label tiny success radius' style='font-size:12px; color:white'><i class='fi-heart'></i>  1.M</span><br/>
+										<p class='title label tiny success radius' style='position:relative; top:111px; font-size:12px; color:white'>Published</p>
+									</div>
+								</div>
+								<div class="column_comic">
+									<div class='comic_banner no_shadow' >
+										<span class='title' style='font-size:22px; color:black'>Chapter 3</span><br/>
+										<p class='title label tiny black radius' style='position:relative; top:134px; font-size:12px; color:white'>Draft</p>
+									</div>
+								</div>
+
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+			<div class='small-12 columns'>
+				<div style='margin-top:40px'>
+					<p style='font-size:40px; position:relative; left:0px;'>Settings</p>
+					<div class='row' style='padding:50px; background:white'>
+						<div class='small-12 columns'>
+							<div class='row' style='width:80%; margin-left:auto; margin-right:auto; '>
+								<p style='font-size:20px; font-weight:bold'>Cover Picture </p>
+								<div class='small-12 columns'>
+									<input style='padding:0px; position:relative; left:-16px; font-size:20px; box-shadow: 0px; box-shadow: inset 0 0px 0px rgba(0, 0, 0, 0.0);  border-style:none; border-bottom-style:solid;'
+											 type="file" name="pic" accept="image/*" placeholder='Enter New Display Name'>
+								</div>
+							</div>
+							<div class='row' style='width:80%; margin-left:auto; margin-right:auto; '>
+								<p style='font-size:20px; font-weight:bold'>Release </p>
+								<div class='small-12 columns'>
+									<select style='padding:0px; position:relative; left:-16px; font-size:20px; box-shadow: 0px; box-shadow: inset 0 0px 0px rgba(0, 0, 0, 0.0);  border-style:none; border-bottom-style:solid;'>
+										<option value="volvo">Monday</option>
+										<option value="saab">Tuesday</option>
+										<option value="mercedes">Wednesday</option>
+										<option value="audi">Thursday</option>
+										<option value="audi">Friday</option>
+										<option value="audi">Saturday</option>
+										<option value="audi">Sunday</option>
+									</select>
+								</div>
+							</div>
+
+							<br/>
+							<div class='row' style='width:80%; margin-left:auto; margin-right:auto; '>
+								<p style='font-size:20px; font-weight:bold'>Genre </p>
+								<div class='small-12 columns'>
+									<select style='padding:0px; position:relative; left:-16px; font-size:20px; box-shadow: 0px; box-shadow: inset 0 0px 0px rgba(0, 0, 0, 0.0);  border-style:none; border-bottom-style:solid;'>
+										<option value="volvo">Action</option>
+										<option value="saab">Fantasy</option>
+										<option value="mercedes">Comedy</option>
+										<option value="audi">Drama</option>
+										<option value="audi">Sports</option>
+										<option value="audi">Horror</option>
+									</select>
+								</div>
+							</div>
+
+							<br/>
+							<div class='row' style='width:80%; margin-left:auto; margin-right:auto; '>
+								<p style='font-size:20px; font-weight:bold'>About </p>
+								<div class='small-12 columns'>
+								<textarea style='padding:0px; position:relative; min-height:100px; left:-16px; font-size:20px; box-shadow: 0px; box-shadow: inset 0 0px 0px rgba(0, 0, 0, 0.0);  border-style:none; border-bottom-style:solid;'
+									 value='' placeholder='Enter About'></textarea>
+								</div>
+							</div>
+
+							<br/>
+							<div style='text-align:center'>
+								<button id='login_btn' class='button small black publish' style='font-size:20px'>Update Details</button>
+							</div>
+						</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<br/>
+	</div>
+</div>
+
+<br/>
+<br/>
+
+<!-- FOOTER -->
+<div class='top_nav_wrapper'>
+	<nav class="top-bar" data-topbar role="navigation">
+
+		<section class="top-bar-section">
+			<!-- Left Nav Section -->
+			<ul class="left">
+				<li><a href="/">© SUNLIGHT YELLOW</a></li>
+				<li><a style='font-size:12px' href="#">Made with <i class='fi-heart' style='color:blueviolet'></i></a></li>
+				<li><a style='font-size:12px' href="#">John Richu Aritra Omar <i class='fi-star'></i></a></li>
+			</ul>
+		</section>
+	</nav>
+</div>
+
+</div>
+</body>
+
+<script>
+
+	function select_comic() {
+		$('#current_comic').slideDown();
+		$('#all_comics').slideUp();
+   }
+
+   function show_all() {
+       $('#current_comic').slideUp();
+       $('#all_comics').slideDown();
+   }
+
+</script>
