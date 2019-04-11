@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
 	<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400" rel="stylesheet">
 	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/foundation/5.5.3/css/foundation.css">
@@ -78,11 +79,18 @@
 	<div>
 		<div class='row'>
 			<p style='font-size:40px; position:relative; left:0px;'><span id='signup_title' class='active_cus'>Login</span></p>
+			<form th:action="@{/login}" method="post">
 			<div style='width:100%; margin-left:auto; margin-right:auto;  background:white; padding:40px;'>
+				<div th:if="${param.error}" class="alert alert-error">    
+                    Invalid username and password.
+                </div>
+                <div th:if="${param.logout}" class="alert alert-success"> 
+                    You have been logged out.
+                </div>
 				<div class='row' style='width:80%; margin-left:auto; margin-right:auto; '>
 						<p style='font-size:20px; font-weight:bold'>Display Name *</p>
 						<div class='small-12 columns'>
-							<input id="uname" style='padding:0px; position:relative; left:-16px; font-size:20px; box-shadow: 0px; box-shadow: inset 0 0px 0px rgba(0, 0, 0, 0.0);  border-style:none; border-bottom-style:solid;'
+							<input id="username" style='padding:0px; position:relative; left:-16px; font-size:20px; box-shadow: 0px; box-shadow: inset 0 0px 0px rgba(0, 0, 0, 0.0);  border-style:none; border-bottom-style:solid;'
 									 type='text' placeholder='Enter Display Name' name = "username" required>
 						</div>
 					</div>
@@ -91,14 +99,16 @@
 					<p style='font-size:20px; font-weight:bold'>Password *</p>
 					<div class='small-12 columns'>
 						<input id="password" style='padding:0px; position:relative; left:-16px; font-size:20px; box-shadow: 0px; box-shadow: inset 0 0px 0px rgba(0, 0, 0, 0.0);  border-style:none; border-bottom-style:solid;'
-								 type='text' placeholder='Enter Password' name="pwd" required>
+								 type='text' placeholder='Enter Password' name="password" required>
 					</div>
 				</div>					
 				</div>
+			
 
 				<div style='text-align:center'>
-					<button onclick="loginUser()" id='login_btn' class='button small black publish' style='font-size:20px'>LOGIN</button>
+					<button type="submit" id='login_btn' class='button small black publish' style='font-size:20px'>LOGIN</button>
 				</div>
+				</form>
 				<div style='text-align:center'>
 					<button onclick="goToSignUp()" id='sign_up_btn' class='button small black publish' style='font-size:15px'>Sign Up</button>
 				</div>
@@ -142,3 +152,5 @@ function goToSignUp(){
     
 
 </script>
+
+</html>
