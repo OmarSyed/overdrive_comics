@@ -4,6 +4,7 @@ import java.sql.Blob;
 
 import java.util.List;
 
+import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 
@@ -15,7 +16,7 @@ public class Users {
 	private String username;
 	private String password;
 	private String email;
-	private Blob profilePic;
+	private Bson profilePic;
 	private String bio;
 	private List<String> followedSeries;
 	private List<String> producedSeries;
@@ -28,11 +29,11 @@ public class Users {
 		this.email  = email;
 	}
 	
-	public Blob getProfilePic() {
+	public Bson getProfilePic() {
 		return profilePic;
 	}
 
-	public void setProfilePic(Blob profilePic) {
+	public void setProfilePic(Bson profilePic) {
 		this.profilePic = profilePic;
 	}
 

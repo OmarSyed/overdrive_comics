@@ -46,6 +46,8 @@ public class UsersController {
 		//service.saveUser(grr);
 		if(repository.findByUsername(user.getUsername())!= null) {
 			return "Duplicate";
+		}else if(repository.findByEmail(user.getEmail())!= null){
+			return "Duplicate";
 		}else {
 			//repository.save(user);
 			user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
@@ -58,8 +60,23 @@ public class UsersController {
 	@RequestMapping(value="/profile", method = RequestMethod.GET)
 	public String showUser() {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		//String username = auth.getName();
 		return auth.getName(); 
 	}
+	
+	@RequestMapping(value="/profile/bio", method = RequestMethod.POST)
+	public Users editBio(@Valid @RequestBody Users user) {
+		Users change = repository.findByUsername(user.getUsername());
+		change.setBio(user.getBio());
+		return change;
+	}
+	
+	
+	
+	
+	
+	
+	
 	
 //	@RequestMapping(value = "/getuser", method = RequestMethod.POST)
 //	public String getUser(@Valid @RequestBody Users user){

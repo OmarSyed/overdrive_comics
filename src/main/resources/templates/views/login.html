@@ -9,7 +9,7 @@
 	<script src='https://cdnjs.cloudflare.com/ajax/libs/foundation/6.5.3/js/plugins/foundation.reveal.js'></script>
 	<script src = "https://unpkg.com/axios/dist/axios.min.js"></script>
 	<link rel="stylesheet" type="text/css" href="./assets/foundation-icons/foundation-icons.css">
-	<script src='localhost:8080/mainjs'></script>
+<!-- 	<script src='localhost:8080/mainjs'></script> -->
 	<link th:href="@{/assets/css/main.css}" type="text/css" rel="stylesheet">
 </head>
 
@@ -147,6 +147,7 @@
 //     }
     
 function goToSignUp(){
+	console.log("in response");
 	window.location =  window.location.href+"/signup";
 }
     
