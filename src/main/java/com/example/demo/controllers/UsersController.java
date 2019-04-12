@@ -30,7 +30,7 @@ import com.example.demo.services.MongoUserDetailsService;
 
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/users")
 public class UsersController {
 	
 	@Autowired
@@ -56,9 +56,9 @@ public class UsersController {
 	}
 	
 	@RequestMapping(value="/profile", method = RequestMethod.GET)
-	public String showUser() {
+	public Users showUser() {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		return auth.getName(); 
+		return repository.findByUsername(auth.getName()); 
 	}
 	
 //	@RequestMapping(value = "/getuser", method = RequestMethod.POST)
