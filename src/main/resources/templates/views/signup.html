@@ -173,13 +173,13 @@
 				if(response.data == "Duplicate"){
 					check = 1;
 					document.getElementById("uname").value = '';
-		    		document.getElementById("passwordd").value = '';
+		    		document.getElementById("password").value = '';
 		    		document.getElementById("rpassword").value = '';
 		    		document.getElementById("e-mail").value = '';					
 		    		alert("Username needs to be UNIQUE");
 				}else{
 					console.log("registered");
-					window.location = "http://localhost:8080/login";
+					window.location = window.location.href+"/login";
 				}	
     		})
     	}else{
