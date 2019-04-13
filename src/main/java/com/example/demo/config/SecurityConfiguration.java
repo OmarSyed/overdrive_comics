@@ -1,5 +1,11 @@
 package com.example.demo.config;
 
+import java.io.IOException;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -7,12 +13,18 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.access.channel.ChannelProcessingFilter;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 import com.example.demo.services.MongoUserDetailsService;
 
 @Configuration
+
 @EnableConfigurationProperties
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
   @Autowired
@@ -20,31 +32,19 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
   
   @Override
   protected void configure(HttpSecurity http) throws Exception {
-    http
-      .csrf().disable().authorizeRequests()
-      .antMatchers("/").permitAll()
-      .antMatchers("/signup").permitAll()
-      .antMatchers("/popular").permitAll()
-      .antMatchers("/genres").permitAll()
-      .antMatchers("/series").permitAll()
-      .antMatchers("/search").permitAll()
-      .antMatchers("/api/users/profile").permitAll()
-      .antMatchers("/login").permitAll()
-      .antMatchers("/api/users/register").permitAll()
-      .antMatchers(
-    		  		"/css/**",
-    		  		"/js/**",
-    		  		"/img/**").permitAll()
-      .anyRequest().authenticated()
-      .and()
-      .formLogin()
-      .loginPage("/login")
-      .defaultSuccessUrl("/")
-      .usernameParameter("username")
-      .passwordParameter("password")
-      .permitAll()
-      //.httpBasic()
-      .and().sessionManagement().disable();
+	http.addFilterBefore(new CustomFilter(), ChannelProcessingFilter.class);
+	http
+    .csrf().disable()
+    .exceptionHandling()
+    .and()
+    .authorizeRequests()
+    .antMatchers("/api/foos").authenticated()
+    .and()
+    .formLogin()
+    	.successHandler(successHandler())
+    	.failureHandler(failureHandler())
+    .and()
+    .logout();
   }
   
   @Bean
@@ -56,4 +56,25 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
   public void configure(AuthenticationManagerBuilder builder) throws Exception {
     builder.userDetailsService(userDetailsService);
   }
+  
+  private AuthenticationSuccessHandler successHandler() {
+	    return new AuthenticationSuccessHandler() {
+	      @Override
+	      public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
+	        httpServletResponse.getWriter().append("OK");
+	        httpServletResponse.setStatus(200);
+	      }
+	    };
+	  }
+
+	  private AuthenticationFailureHandler failureHandler() {
+	    return new AuthenticationFailureHandler() {
+	      @Override
+	      public void onAuthenticationFailure(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException, ServletException {
+	        httpServletResponse.getWriter().append("Authentication failure");
+	        httpServletResponse.setStatus(401);
+	      }
+	    };
+	  }
+  
 }

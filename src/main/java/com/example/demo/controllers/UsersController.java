@@ -39,7 +39,7 @@ public class UsersController {
 	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
 	
-	
+	@CrossOrigin(origins = "http://localhost:4200")
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
 	public String createUser(@Valid @RequestBody Users user) {
 		//Users grr = new Users("sdfs", "sdfsfwe");
