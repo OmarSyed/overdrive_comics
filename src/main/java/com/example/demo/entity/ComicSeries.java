@@ -9,22 +9,24 @@ import org.springframework.data.annotation.Id;
 public class ComicSeries {
 	
 	@Id
-	private ObjectId seriesId;
+	private ObjectId _id;
+	
 	private boolean isPublished;
 	private String genre;
 	private String comicSeriesName;
-	private Users author;
+	private String author;
 	private Blob thumbnail;
-	private double rating;
+	private double rating = -1;
 	private String description;
 	private int followers;
 	private ArrayList<String> chapters;	//Change type of ArrayList to comic chapter
 	
-	public ObjectId getSeriesId() {
-		return seriesId;
+	
+	public String getSeriesId() {
+		return _id.toHexString();
 	}
-	public void setSeriesId(ObjectId seriesId) {
-		this.seriesId = seriesId;
+	public void setSeriesId(ObjectId _id) {
+		this._id = _id;
 	}
 	public boolean isPublished() {
 		return isPublished;
@@ -44,10 +46,10 @@ public class ComicSeries {
 	public void setComicSeriesName(String comicSeriesName) {
 		this.comicSeriesName = comicSeriesName;
 	}
-	public Users getAuthor() {
+	public String getAuthor() {
 		return author;
 	}
-	public void setAuthor(Users author) {
+	public void setAuthor(String author) {
 		this.author = author;
 	}
 	public Blob getThumbnail() {
