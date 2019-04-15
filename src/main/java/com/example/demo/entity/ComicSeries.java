@@ -2,6 +2,7 @@ package com.example.demo.entity;
 
 import java.sql.Blob;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
@@ -16,7 +17,8 @@ public class ComicSeries {
 	private String comicSeriesName;
 	private String author;
 	private Blob thumbnail;
-	private double rating = -1;
+	private HashMap<String, Integer> rating; 
+	private double score;
 	private String description;
 	private int followers;
 	private ArrayList<String> chapters;	//Change type of ArrayList to comic chapter
@@ -58,11 +60,20 @@ public class ComicSeries {
 	public void setThumbnail(Blob thumbnail) {
 		this.thumbnail = thumbnail;
 	}
-	public double getRating() {
+	
+	public HashMap<String, Integer> getRating() {
 		return rating;
 	}
-	public void setRating(double rating) {
+	public void setRating(HashMap<String, Integer> rating) {
 		this.rating = rating;
+	}
+	
+	
+	public double getScore() {
+		return score;
+	}
+	public void setScore(double score) {
+		this.score = score;
 	}
 	public String getDescription() {
 		return description;

@@ -2,9 +2,7 @@ package com.example.demo.controllers;
 
 
 import java.util.ArrayList;
-
-
-
+import java.util.HashMap;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -12,8 +10,8 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.schema.JsonSchemaObject.Type.BsonType;
 import org.springframework.http.MediaType;
-import org.springframework.security.crypto.bcrypt.BCrypt;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+//import org.springframework.security.crypto.bcrypt.BCrypt;
+//import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.util.MultiValueMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -24,27 +22,28 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
+//import org.springframework.security.core.Authentication;
+//import org.springframework.security.core.context.SecurityContextHolder;
+//import org.springframework.security.core.userdetails.User;
+//import org.springframework.security.core.userdetails.UserDetails;
 
 import com.example.demo.entity.ComicSeries;
 //import com.example.demo.Users;
 import com.example.demo.entity.Users;
 import com.example.demo.repository.UserRepository;
-import com.example.demo.services.MongoUserDetailsService;
+//import com.example.demo.services.MongoUserDetailsService;
 
-
+@CrossOrigin
 @RestController
 @RequestMapping("/api/users")
 public class UsersController {
 	
 	@Autowired
 	private UserRepository repository;
-	private MongoUserDetailsService service;
-	@Autowired
-	private BCryptPasswordEncoder bCryptPasswordEncoder;
+	//private MongoUserDetailsService service;
+	//private BCryptPasswordEncoder bCryptPasswordEncoder;
+	
+	private String curUser;
 	
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
 	public String createUser(@Valid @RequestBody Users user) {
@@ -57,23 +56,42 @@ public class UsersController {
 			return "Duplicate";
 		}else {
 			//repository.save(user);
-			user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+			//user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
 			List<String> followed = new ArrayList<String>();
 			List<String> produced = new ArrayList<String>();
 			user.setFollowedSeries(followed);
 			user.setProducedSeries(produced);
 			repository.save(user);
 			//service.save(user);
+			System.out.println("sucess");
 			return "success";
 		}	
 	}
 	
+	//@CrossOrigin
+	@RequestMapping(value="/login", method = RequestMethod.POST)
+	public String loginUser(@Valid @RequestBody Users user) {
+		if(repository.findByUsername(user.getUsername())!=null) {
+			Users check = repository.findByUsername(user.getUsername());
+			if(check.getUsername().equals(user.getUsername()) && check.getPassword().equals(user.getPassword())) {
+				curUser = user.getUsername();
+				System.out.println(curUser);
+				return curUser;
+			}
+			return "failure";
+		}else {
+			return "failure";
+		}
+	}
+	
+	//@CrossOrigin
 	@RequestMapping(value="/profile", method = RequestMethod.GET)
 	public Users showUser() {
-		System.out.println("its in profile endpoint");
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		System.out.println(auth.getName());
-		return repository.findByUsername(auth.getName()); 
+		//System.out.println("its in profile endpoint");
+		//Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		//System.out.println(auth.getName());
+		//System.out.println(curUser);
+		return repository.findByUsername(curUser); 
 
 	}
 	
