@@ -59,6 +59,8 @@ public class UsersController {
 	
 	@RequestMapping(value="/profile", method = RequestMethod.GET)
 	public Users showUser() {
+		System.out.println(SecurityContextHolder.getContext().getAuthentication().getCredentials());
+		System.out.println(SecurityContextHolder.getContext().getAuthentication().getName());
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		return repository.findByUsername(auth.getName()); 
 
