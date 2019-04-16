@@ -5,7 +5,6 @@ import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -21,14 +20,12 @@ import org.springframework.security.web.access.channel.ChannelProcessingFilter;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
-import com.example.demo.services.MongoUserDetailsService;
+import com.example.demo.config.CustomFilter;
 
 @Configuration
 
 @EnableConfigurationProperties
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
-  @Autowired
-  MongoUserDetailsService userDetailsService;
   
   @Override
   protected void configure(HttpSecurity http) throws Exception {
@@ -54,10 +51,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     return new BCryptPasswordEncoder();
   }
   
-  @Override
-  public void configure(AuthenticationManagerBuilder builder) throws Exception {
-    builder.userDetailsService(userDetailsService);
-  }
+//  @Override
+//  public void configure(AuthenticationManagerBuilder builder) throws Exception {
+//    builder.userDetailsService(userDetailsService);
+//  }
   
   private AuthenticationSuccessHandler successHandler() {
 	    return new AuthenticationSuccessHandler() {
