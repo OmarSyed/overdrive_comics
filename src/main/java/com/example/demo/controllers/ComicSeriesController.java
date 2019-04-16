@@ -76,12 +76,13 @@ public class ComicSeriesController {
 	}
 	
 	//return the series under a user
-//	@RequestMapping(value="/user", method = RequestMethod.GET)
-//	public List<ComicSeries> userSeries(){
-//		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-//		System.out.println(auth.getName());
-//		return seriesrepository.findByAuthor(auth.getName());
-//	}
+	@RequestMapping(value="/user", method = RequestMethod.GET)
+	public List<ComicSeries> userSeries(){
+		//Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		//System.out.println(auth.getName());
+		UsersController user = new UsersController();
+		return seriesrepository.findByAuthor(user.getCurUser());
+	}
 	
 	//return series under a author
 	@RequestMapping(value="/author", method = RequestMethod.GET)
@@ -115,29 +116,31 @@ public class ComicSeriesController {
 	}
 	
 	//Users follows a series
-//	@RequestMapping(value="/follow", method = RequestMethod.POST)
-//	public ComicSeries followSeries(@Valid @RequestBody ComicSeries series) {
-//		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-//		Users user = userrepository.findByUsername(auth.getName());
-//		System.out.println(auth.getName());
-//		List<String> followed = user.getFollowedSeries();
-//		
-//		List<ComicSeries> check = seriesrepository.findByAuthor(series.getAuthor());
-//		for(int i = 0; i<check.size(); i++) {
-//			//System.out.println("test");
-//			if(check.get(i).getComicSeriesName().equals(series.getComicSeriesName())) {
-//				//System.out.println(series.getComicSeriesName());
-//				System.out.println(check.get(i).getFollowers());
-//				check.get(i).setFollowers(check.get(i).getFollowers()+1);
-//				System.out.println(check.get(i).getFollowers());
-//				followed.add(check.get(i).getSeriesId());
-//				user.setFollowedSeries(followed);
-//				seriesrepository.save(check.get(i));
-//				userrepository.save(user);
-//				return check.get(i);
-//			}
-//		}return null;
-//	}
+	@RequestMapping(value="/follow", method = RequestMethod.POST)
+	public ComicSeries followSeries(@Valid @RequestBody ComicSeries series) {
+		//Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		//Users user = userrepository.findByUsername(auth.getName());
+		UsersController curUser = new UsersController();
+		Users user = userrepository.findByUsername(curUser.getCurUser());
+		System.out.println(user.getUsername());
+		List<String> followed = user.getFollowedSeries();
+		
+		List<ComicSeries> check = seriesrepository.findByAuthor(series.getAuthor());
+		for(int i = 0; i<check.size(); i++) {
+			//System.out.println("test");
+			if(check.get(i).getComicSeriesName().equals(series.getComicSeriesName())) {
+				//System.out.println(series.getComicSeriesName());
+				System.out.println(check.get(i).getFollowers());
+				check.get(i).setFollowers(check.get(i).getFollowers()+1);
+				System.out.println(check.get(i).getFollowers());
+				followed.add(check.get(i).getSeriesId());
+				user.setFollowedSeries(followed);
+				seriesrepository.save(check.get(i));
+				userrepository.save(user);
+				return check.get(i);
+			}
+		}return null;
+	}
 	
 	//edit comic series description
 	@RequestMapping(value="/description", method = RequestMethod.POST)
@@ -154,39 +157,40 @@ public class ComicSeriesController {
 	}
 	
 	//rate or update rating for series
-//	@RequestMapping(value="/rating", method = RequestMethod.POST)
-//	public ComicSeries editRating(@Valid @RequestBody ComicSeries series, Rating rating) {
-//		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-//		Users user = userrepository.findByUsername(auth.getName());
-//		//System.out.println(auth.getName());
-//		List<ComicSeries> check = seriesrepository.findByAuthor(series.getAuthor());
-//		ComicSeries update = new ComicSeries();
-//		for(int i = 0; i<check.size(); i++) {
-//			if(check.get(i).getComicSeriesName().equals(series.getComicSeriesName())) {
-//				update = check.get(i);
-//			}
-//		}
-//		HashMap<String, Integer> newRating = update.getRating();
-//		//System.out.println(auth.getName());
-//		if(newRating.containsKey(user.getUsername())) {
-//			newRating.replace(rating.getUsername(), rating.getScore());
-//		}else {
-//			newRating.put(rating.getUsername(), rating.getScore());
-//		}
-//		//System.out.println(auth.getName());
-//		int sum = 0;
-//		int counter = 0;
-//		for (int f : newRating.values()) {
-//		    sum += f;
-//		    counter+=1;
-//		}
-//		System.out.println(auth.getName());
-//		double avg = sum/counter;
-//		update.setScore(avg);
-//		System.out.println(avg);
-//		seriesrepository.save(update);
-//		return update;
-//	}
-//	
+	@RequestMapping(value="/rating", method = RequestMethod.POST)
+	public ComicSeries editRating(@Valid @RequestBody ComicSeries series, Rating rating) {
+		//Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		UsersController curUser = new UsersController();
+		Users user = userrepository.findByUsername(curUser.getCurUser());
+		//System.out.println(auth.getName());
+		List<ComicSeries> check = seriesrepository.findByAuthor(series.getAuthor());
+		ComicSeries update = new ComicSeries();
+		for(int i = 0; i<check.size(); i++) {
+			if(check.get(i).getComicSeriesName().equals(series.getComicSeriesName())) {
+				update = check.get(i);
+			}
+		}
+		HashMap<String, Integer> newRating = update.getRating();
+		//System.out.println(auth.getName());
+		if(newRating.containsKey(user.getUsername())) {
+			newRating.replace(rating.getUsername(), rating.getScore());
+		}else {
+			newRating.put(rating.getUsername(), rating.getScore());
+		}
+		//System.out.println(auth.getName());
+		int sum = 0;
+		int counter = 0;
+		for (int f : newRating.values()) {
+		    sum += f;
+		    counter+=1;
+		}
+		//System.out.println(auth.getName());
+		double avg = sum/counter;
+		update.setScore(avg);
+		System.out.println(avg);
+		seriesrepository.save(update);
+		return update;
+	}
+	
 	
 }
