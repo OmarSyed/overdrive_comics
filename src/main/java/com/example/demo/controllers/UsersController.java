@@ -43,9 +43,10 @@ public class UsersController {
 	//private MongoUserDetailsService service;
 	//private BCryptPasswordEncoder bCryptPasswordEncoder;
 	
-	private String curUser;
+	public static String curUser;
+
 	
-	public String getCurUser() {
+	public static String getCurUser() {
 		return curUser;
 	}
 
@@ -83,7 +84,8 @@ public class UsersController {
 			Users check = repository.findByUsername(user.getUsername());
 			if(check.getUsername().equals(user.getUsername()) && check.getPassword().equals(user.getPassword())) {
 				curUser = user.getUsername();
-				System.out.println(curUser);
+				setCurUser(curUser);
+				//System.out.println(curUser);
 				return curUser;
 			}
 			return "failure";
