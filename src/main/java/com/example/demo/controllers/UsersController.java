@@ -43,7 +43,17 @@ public class UsersController {
 	//private MongoUserDetailsService service;
 	//private BCryptPasswordEncoder bCryptPasswordEncoder;
 	
-	private String curUser;
+	public static String curUser;
+
+	
+	public static String getCurUser() {
+		return curUser;
+	}
+
+	public void setCurUser(String curUser) {
+		this.curUser = curUser;
+	}
+
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
 	public String createUser(@Valid @RequestBody Users user) {
 		//Users grr = new Users("sdfs", "sdfsfwe");
@@ -74,7 +84,8 @@ public class UsersController {
 			Users check = repository.findByUsername(user.getUsername());
 			if(check.getUsername().equals(user.getUsername()) && check.getPassword().equals(user.getPassword())) {
 				curUser = user.getUsername();
-				System.out.println(curUser);
+				setCurUser(curUser);
+				//System.out.println(curUser);
 				return curUser;
 			}
 			return "failure";
@@ -99,6 +110,39 @@ public class UsersController {
 		change.setBio(user.getBio());
 		repository.save(change);
 		return change;
+	}
+	
+	@RequestMapping(value="/profile/username", method = RequestMethod.POST)
+	public String editUsername(@Valid @RequestBody Users user) {
+		Users check = repository.findByUsername(curUser);
+		if(repository.findByUsername(user.getUsername())==null) {
+			check.setUsername(user.getUsername());
+			repository.save(check);
+			return "success";
+		}else {
+			return "duplicate";
+		}
+	}
+	
+	@RequestMapping(value="/profile/password", method = RequestMethod.POST)
+	public Users editPassword(@Valid @RequestBody Users user) {
+		Users check = repository.findByUsername(user.getUsername());
+		check.setPassword(user.getPassword());
+		repository.save(check);
+		return check;
+	}
+	
+	@RequestMapping(value="/profile/email", method = RequestMethod.POST)
+	public String editEmail(@Valid @RequestBody Users user) {
+		Users check = repository.findByUsername(curUser);
+		if(repository.findByEmail(user.getEmail())==null) {
+			//System.out.println(user.getEmail());
+			check.setEmail(user.getEmail());
+			repository.save(check);
+			return "success";
+		}else {
+			return "duplicate";
+		}
 	}
 	
 //	@RequestMapping(value="/profile/pic", method = RequestMethod.POST)
