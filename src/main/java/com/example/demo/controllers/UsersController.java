@@ -51,7 +51,7 @@ public class UsersController {
 	}
 
 	public void setCurUser(String curUser) {
-		this.curUser = curUser;
+		UsersController.curUser = curUser;
 	}
 
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
@@ -92,6 +92,12 @@ public class UsersController {
 		}else {
 			return "failure";
 		}
+	}
+	
+	@RequestMapping(value ="/logout", method=RequestMethod.GET)
+	public String logoutUser() {
+		UsersController.curUser = "";
+		return "success";
 	}
 	
 	//@CrossOrigin
