@@ -79,18 +79,18 @@ public class UsersController {
 	
 	//@CrossOrigin
 	@RequestMapping(value="/login", method = RequestMethod.POST)
-	public String loginUser(@Valid @RequestBody Users user) {
+	public Users loginUser(@Valid @RequestBody Users user) {
 		if(repository.findByUsername(user.getUsername())!=null) {
 			Users check = repository.findByUsername(user.getUsername());
 			if(check.getUsername().equals(user.getUsername()) && check.getPassword().equals(user.getPassword())) {
 				curUser = user.getUsername();
 				setCurUser(curUser);
 				//System.out.println(curUser);
-				return curUser;
+				return check;
 			}
-			return "failure";
+			return null;
 		}else {
-			return "failure";
+			return null;
 		}
 	}
 	

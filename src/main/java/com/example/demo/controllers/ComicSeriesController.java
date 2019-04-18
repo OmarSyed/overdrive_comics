@@ -43,7 +43,7 @@ public class ComicSeriesController {
 			return "success";
 		}
 		for (int i = 0; i < check.size(); i++) {
-			if(check.get(i).getComicSeriesName().equals(series.getAuthor())) {
+			if(check.get(i).getComicSeriesName().equals(series.getComicSeriesName())) {
 				return "failure";
 			}
 		}
