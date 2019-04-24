@@ -1,6 +1,7 @@
 package com.example.demo.controllers;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
@@ -16,9 +17,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.entity.ComicChapter;
 import com.example.demo.entity.ComicSeries;
 import com.example.demo.entity.Rating;
 import com.example.demo.entity.Users;
+import com.example.demo.repository.ChapterRepository;
 import com.example.demo.repository.SeriesRepository;
 import com.example.demo.repository.UserRepository;
 
@@ -30,6 +33,8 @@ public class ComicSeriesController {
 	private SeriesRepository seriesrepository;
 	@Autowired
 	private UserRepository userrepository;
+	@Autowired
+	private ChapterRepository chapterrepository;
 	
 	
 	//Create a series, add it to mongo collection
@@ -104,15 +109,27 @@ public class ComicSeriesController {
 	
 	//show series of specific genre
 	@RequestMapping(value="genre", method = RequestMethod.GET)
-	public List<ComicSeries> genreSeries(){
-		List<ComicSeries> genres = seriesrepository.findByGenre("Action");
-		genres.addAll(seriesrepository.findByGenre("Fantasy"));
-		genres.addAll(seriesrepository.findByGenre("Comedy"));
-		genres.addAll(seriesrepository.findByGenre("Drama"));
-		genres.addAll(seriesrepository.findByGenre("Sports"));
-		//genres.addAll(seriesrepository.findByGenre("Thriller"));
-		//genres.addAll(seriesrepository.findByGenre("Adventure"));
-		return genres;
+	public List<ComicSeries> genreSeries(@RequestParam String genre){
+		List<ComicSeries> genres = seriesrepository.findByGenre(genre);
+		Collections.reverse(genres);
+		if(!UsersController.curUser.equals("")) {
+			Users user = userrepository.findByUsername(UsersController.curUser);
+			List<String> followed = user.getFollowedSeries();
+			for(int i = 0; i<genres.size(); i++) {
+				if(followed.contains(genres.get(i).getSeriesId())) {
+					genres.get(i).setFollowed(true);
+				}
+			}
+			if(genres.size()>20) {
+				List<ComicSeries> second = new ArrayList<ComicSeries>(genres.subList(0, 20));
+				return second;
+			}else {
+				return genres;
+			}
+			
+		}else {
+			return genres;
+		}
 	}
 	
 	//Users follows a series
@@ -128,60 +145,35 @@ public class ComicSeriesController {
 		System.out.println(series.getAuthor());
 		List<ComicSeries> check = seriesrepository.findByAuthor(series.getAuthor());
 		for(int i = 0; i<check.size(); i++) {
-			System.out.println(check.get(i).getComicSeriesName());
+			//System.out.println(check.get(i).getComicSeriesName());
 			if(check.get(i).getComicSeriesName().equals(series.getComicSeriesName())) {
-				System.out.println(series.getComicSeriesName());
+				//System.out.println(series.getComicSeriesName());
 				System.out.println(check.get(i).getFollowers());
-				check.get(i).setFollowers(check.get(i).getFollowers()+1);
-				System.out.println(check.get(i).getFollowers());
-				followed.add(check.get(i).getSeriesId());
-				user.setFollowedSeries(followed);
-				seriesrepository.save(check.get(i));
-				userrepository.save(user);
-				return check.get(i);
+				
+				if(followed.contains(check.get(i).getSeriesId())) {
+					check.get(i).setFollowers(check.get(i).getFollowers()-1);
+					System.out.println(check.get(i).getFollowers());
+					followed.remove(check.get(i).getSeriesId());
+					user.setFollowedSeries(followed);
+					//check.get(i).setFollowed(false);
+					seriesrepository.save(check.get(i));
+					userrepository.save(user);
+					return check.get(i);
+				}else {
+					check.get(i).setFollowers(check.get(i).getFollowers()+1);
+					System.out.println(check.get(i).getFollowers());
+					followed.add(check.get(i).getSeriesId());
+					user.setFollowedSeries(followed);
+					seriesrepository.save(check.get(i));
+					userrepository.save(user);
+					check.get(i).setFollowed(true);
+					return check.get(i);
+				}
 			}
 		}return null;
 	}
 	
-	//Users follows a series
-		@RequestMapping(value="/unfollow", method = RequestMethod.POST)
-		public ComicSeries unFollowSeries(@Valid @RequestBody ComicSeries series) {
-			//Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-			//Users user = userrepository.findByUsername(auth.getName());
-			//UsersController curUser = new UsersController();
-			String checkUser = UsersController.getCurUser();
-			Users user = userrepository.findByUsername(checkUser);
-			//Users user = userrepository.findByUsername("jean-pierre");
-			//System.out.println(curUser.getCurUser());
-			List<String> followed = user.getFollowedSeries();
-			String id = "";
-			ComicSeries update = new ComicSeries();
-			List<ComicSeries> check = seriesrepository.findByAuthor(series.getAuthor());
-			for(int i = 0; i<check.size(); i++) {
-				//System.out.println("test");
-				if(check.get(i).getComicSeriesName().equals(series.getComicSeriesName())) {
-					//System.out.println(series.getComicSeriesName());
-					System.out.println(check.get(i).getFollowers());
-					check.get(i).setFollowers(check.get(i).getFollowers()-1);
-					System.out.println(check.get(i).getFollowers());
-					//followed.add(check.get(i).getSeriesId());
-					id = check.get(i).getSeriesId();
-					//user.setFollowedSeries(followed);
-					seriesrepository.save(check.get(i));
-					//userrepository.save(user);
-					//return check.get(i);
-					update = check.get(i);
-				}
-			}
-			
-			if(followed.contains(id)) {
-				followed.remove(id);
-			}
-			
-			user.setFollowedSeries(followed);
-			userrepository.save(user);
-			return update;
-		}
+	
 	
 	//edit comic series description
 	@RequestMapping(value="/description", method = RequestMethod.POST)
@@ -240,6 +232,43 @@ public class ComicSeriesController {
 		Users user = userrepository.findByUsername(checkUser);
 		return seriesrepository.findAllById(user.getFollowedSeries());
 	}
+	
+	//add like to a chapter
+	@RequestMapping(value="/chapter/like", method = RequestMethod.POST)
+	public ComicChapter likeChapter(ComicChapter chapter) {
+		List<ComicChapter> chap = chapterrepository.findBySeriesId(chapter.getSeriesId());
+		ComicChapter comicChapter;
+		for(int i = 0; i<chap.size(); i++) {
+			if(chap.get(i).getChapterTitle().equals(chapter.getChapterTitle())) {
+				//comicChapter = chap.get(i);
+				List<String> users = chap.get(i).getLikedUsers();
+				users.add(UsersController.getCurUser());
+				chap.get(i).setLikedUsers(users);
+				chap.get(i).setLikes(chap.get(i).getLikes()+1);
+				chapterrepository.save(chap.get(i));
+				return chap.get(i);
+			}
+		}return null;
+	}
+	
+	//delete like to a chapter
+	@RequestMapping(value="/chapter/unlike", method = RequestMethod.POST)
+	public ComicChapter unlikeChapter(ComicChapter chapter) {
+		List<ComicChapter> chap = chapterrepository.findBySeriesId(chapter.getSeriesId());
+		ComicChapter comicChapter;
+		for(int i = 0; i<chap.size(); i++) {
+			if(chap.get(i).getChapterTitle().equals(chapter.getChapterTitle())) {
+				//comicChapter = chap.get(i);
+				List<String> users = chap.get(i).getLikedUsers();
+				users.remove(UsersController.getCurUser());
+				chap.get(i).setLikedUsers(users);
+				chap.get(i).setLikes(chap.get(i).getLikes()-1);
+				chapterrepository.save(chap.get(i));
+				return chap.get(i);
+			}
+		}return null;
+	}
+	
 	
 	
 }

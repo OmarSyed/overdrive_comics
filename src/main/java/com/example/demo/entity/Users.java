@@ -19,6 +19,7 @@ public class Users {
 	private String password;
 	private String email;
 	private BsonType profilePic;
+	private boolean pic;
 	private String bio;
 	private List<String> followedSeries;
 	private List<String> producedSeries;
@@ -29,6 +30,7 @@ public class Users {
 		this.username = username;
 		this.password = password;
 		this.email  = email;
+		pic = false;
 	}
 
 	public BsonType getProfilePic() {
@@ -69,6 +71,14 @@ public class Users {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}	
+	
+	public boolean isPic() {
+		return pic;
+	}
+
+	public void setPic(boolean pic) {
+		this.pic = pic;
 	}
 
 	public String get_id() {

@@ -1,11 +1,13 @@
 package com.example.demo.entity;
 
 import java.sql.Blob;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
+
 
 public class ComicSeries {
 	
@@ -22,6 +24,7 @@ public class ComicSeries {
 	private String description;
 	private int followers;
 	private ArrayList<String> chapters;	//Change type of ArrayList to comic chapter
+	private boolean isFollowed;
 	
 	
 	public String getSeriesId() {
@@ -92,6 +95,12 @@ public class ComicSeries {
 	}
 	public void setChapters(ArrayList<String> chapters) {
 		this.chapters = chapters;
+	}
+	public boolean isFollowed() {
+		return isFollowed;
+	}
+	public void setFollowed(boolean isFollowed) {
+		this.isFollowed = isFollowed;
 	}
 	
 }

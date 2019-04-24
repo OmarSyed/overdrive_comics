@@ -1,6 +1,9 @@
 package com.example.demo.controllers;
 
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -8,7 +11,10 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.schema.JsonSchemaObject.Type.BsonType;
+import org.springframework.data.mongodb.gridfs.GridFsOperations;
 import org.springframework.http.MediaType;
 //import org.springframework.security.crypto.bcrypt.BCrypt;
 //import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -31,7 +37,10 @@ import com.example.demo.entity.ComicSeries;
 //import com.example.demo.Users;
 import com.example.demo.entity.Users;
 import com.example.demo.repository.UserRepository;
-//import com.example.demo.services.MongoUserDetailsService;
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBObject;
+import com.mongodb.client.gridfs.model.GridFSFile;
+
 
 @CrossOrigin
 @RestController
@@ -42,8 +51,10 @@ public class UsersController {
 	private UserRepository repository;
 	//private MongoUserDetailsService service;
 	//private BCryptPasswordEncoder bCryptPasswordEncoder;
+	@Autowired
+	GridFsOperations gridOperations;
 	
-	public static String curUser;
+	public static String curUser="";
 
 	
 	public static String getCurUser() {
@@ -151,12 +162,27 @@ public class UsersController {
 		}
 	}
 	
-//	@RequestMapping(value="/profile/pic", method = RequestMethod.POST)
-//	public Users editProfilePic(@ModelAttribute("userFormData") LoginDTO fromData, BindingResult result) {
-//		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-//		Users user = repository.findByUsername(auth.getName());
-//		user.setProfilePic(formData.get("profile_pic"));
-//	}
+	@RequestMapping(value="/profile/pic", method = RequestMethod.POST)
+	public String editPic() throws FileNotFoundException {
+		Users user = repository.findByUsername(curUser);
+		if(user.isPic()==false) {
+			DBObject metaData = new BasicDBObject();
+			
+			InputStream inputStream = new FileInputStream("C:/Users/Richu/Pictures/tree.jpg"); 
+			gridOperations.store(inputStream, "tree.png", "image/jpg", metaData);
+			user.setPic(true);
+			repository.save(user);
+			
+			return "added";
+		}else {
+			List<GridFSFile> gridFSFiles = new ArrayList<GridFSFile>();
+			gridOperations.find(new Query(Criteria.where("metadata.user").is(curUser))).into(gridFSFiles);
+			
+			return gridFSFiles.get(0).getFilename();
+		}
+		
+		
+	}
 	
 	
 	
