@@ -212,8 +212,8 @@ public class ComicSeriesController {
 			newRating.put(curUser.getCurUser(), series.getScore());
 		}
 		//System.out.println(auth.getName());
-		int sum = 0;
-		int counter = 0;
+		double sum = 0;
+		double counter = 0;
 		for (Double f : newRating.values()) {
 		    sum += f;
 		    counter+=1;
