@@ -42,7 +42,7 @@ public class ComicSeriesController {
 	public String createSeries(@Valid @RequestBody ComicSeries series) {
 		List<ComicSeries> check = seriesrepository.findByAuthor(series.getAuthor());
 		if(check.isEmpty()){
-			HashMap<String, Integer> rating = new HashMap<>();
+			HashMap<String, Double> rating = new HashMap<>();
 			series.setRating(rating);
 			seriesrepository.save(series);
 			return "success";
@@ -53,7 +53,7 @@ public class ComicSeriesController {
 			}
 		}
 		seriesrepository.save(series);
-		HashMap<String, Integer> rating = new HashMap<>();
+		HashMap<String, Double> rating = new HashMap<>();
 		series.setRating(rating);
 		return "success";
 	}
@@ -155,7 +155,7 @@ public class ComicSeriesController {
 					System.out.println(check.get(i).getFollowers());
 					followed.remove(check.get(i).getSeriesId());
 					user.setFollowedSeries(followed);
-					//check.get(i).setFollowed(false);
+					check.get(i).setFollowed(false);
 					seriesrepository.save(check.get(i));
 					userrepository.save(user);
 					return check.get(i);
@@ -164,6 +164,7 @@ public class ComicSeriesController {
 					System.out.println(check.get(i).getFollowers());
 					followed.add(check.get(i).getSeriesId());
 					user.setFollowedSeries(followed);
+					check.get(i).setFollowed(false);
 					seriesrepository.save(check.get(i));
 					userrepository.save(user);
 					check.get(i).setFollowed(true);
@@ -191,7 +192,7 @@ public class ComicSeriesController {
 	
 	//rate or update rating for series
 	@RequestMapping(value="/rating", method = RequestMethod.POST)
-	public ComicSeries editRating(@Valid @RequestBody ComicSeries series, Rating rating) {
+	public ComicSeries editRating(@Valid @RequestBody ComicSeries series) {
 		//Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		UsersController curUser = new UsersController();
 		Users user = userrepository.findByUsername(curUser.getCurUser());
@@ -203,17 +204,17 @@ public class ComicSeriesController {
 				update = check.get(i);
 			}
 		}
-		HashMap<String, Integer> newRating = update.getRating();
+		HashMap<String, Double> newRating = update.getRating();
 		//System.out.println(auth.getName());
 		if(newRating.containsKey(user.getUsername())) {
-			newRating.replace(rating.getUsername(), rating.getScore());
+			newRating.replace(curUser.getCurUser(), series.getScore());
 		}else {
-			newRating.put(rating.getUsername(), rating.getScore());
+			newRating.put(curUser.getCurUser(), series.getScore());
 		}
 		//System.out.println(auth.getName());
 		int sum = 0;
 		int counter = 0;
-		for (int f : newRating.values()) {
+		for (Double f : newRating.values()) {
 		    sum += f;
 		    counter+=1;
 		}

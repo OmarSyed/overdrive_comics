@@ -32,10 +32,12 @@ import org.springframework.web.bind.annotation.RestController;
 //import org.springframework.security.core.context.SecurityContextHolder;
 //import org.springframework.security.core.userdetails.User;
 //import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.demo.entity.ComicSeries;
 //import com.example.demo.Users;
 import com.example.demo.entity.Users;
+import com.example.demo.repository.SeriesRepository;
 import com.example.demo.repository.UserRepository;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
@@ -51,6 +53,8 @@ public class UsersController {
 	private UserRepository repository;
 	//private MongoUserDetailsService service;
 	//private BCryptPasswordEncoder bCryptPasswordEncoder;
+	@Autowired
+	private SeriesRepository seriesrepository;
 	@Autowired
 	GridFsOperations gridOperations;
 	
@@ -130,11 +134,17 @@ public class UsersController {
 	}
 	
 	@RequestMapping(value="/profile/username", method = RequestMethod.POST)
-	public String editUsername(@Valid @RequestBody Users user) {
+	public String editUsername(@Valid @RequestBody Users user) throws NullPointerException{
 		Users check = repository.findByUsername(curUser);
+		List<ComicSeries> series = seriesrepository.findByAuthor(curUser);
 		if(repository.findByUsername(user.getUsername())==null) {
 			check.setUsername(user.getUsername());
 			repository.save(check);
+			for(int i = 0; i<series.size(); i++) {
+				series.get(i).setAuthor(user.getUsername());
+				seriesrepository.save(series.get(i));
+			}
+			curUser = user.getUsername();
 			return "success";
 		}else {
 			return "duplicate";
@@ -162,25 +172,20 @@ public class UsersController {
 		}
 	}
 	
-	@RequestMapping(value="/profile/pic", method = RequestMethod.POST)
-	public String editPic() throws FileNotFoundException {
+	@RequestMapping(value="/profile/pic", method = RequestMethod.GET)
+	public String editPic(@RequestParam("pic") MultipartFile imagefile) throws FileNotFoundException {
 		Users user = repository.findByUsername(curUser);
 		if(user.isPic()==false) {
-			DBObject metaData = new BasicDBObject();
 			
-			InputStream inputStream = new FileInputStream("C:/Users/Richu/Pictures/tree.jpg"); 
-			gridOperations.store(inputStream, "tree.png", "image/jpg", metaData);
+			
 			user.setPic(true);
 			repository.save(user);
-			
 			return "added";
 		}else {
-			List<GridFSFile> gridFSFiles = new ArrayList<GridFSFile>();
-			gridOperations.find(new Query(Criteria.where("metadata.user").is(curUser))).into(gridFSFiles);
 			
-			return gridFSFiles.get(0).getFilename();
+			
+			return "replaced";
 		}
-		
 		
 	}
 	

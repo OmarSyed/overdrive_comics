@@ -19,7 +19,7 @@ public class ComicSeries {
 	private String comicSeriesName;
 	private String author;
 	private Blob thumbnail;
-	private HashMap<String, Integer> rating; 
+	private HashMap<String, Double> rating; 
 	private double score;
 	private String description;
 	private int followers;
@@ -64,10 +64,10 @@ public class ComicSeries {
 		this.thumbnail = thumbnail;
 	}
 	
-	public HashMap<String, Integer> getRating() {
+	public HashMap<String, Double> getRating() {
 		return rating;
 	}
-	public void setRating(HashMap<String, Integer> rating) {
+	public void setRating(HashMap<String, Double> rating) {
 		this.rating = rating;
 	}
 	
