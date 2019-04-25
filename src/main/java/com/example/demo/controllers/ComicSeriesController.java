@@ -229,9 +229,14 @@ public class ComicSeriesController {
 	//display what the author follows
 	@RequestMapping(value="/displayfollows", method = RequestMethod.GET)
 	public Iterable<ComicSeries> displaySeriesFollows(){
-		String checkUser = UsersController.getCurUser();
-		Users user = userrepository.findByUsername(checkUser);
-		return seriesrepository.findAllById(user.getFollowedSeries());
+		try {
+			String checkUser = UsersController.getCurUser();
+			Users user = userrepository.findByUsername(checkUser);
+			return seriesrepository.findAllById(user.getFollowedSeries());
+		} catch(NullPointerException ex) {
+			System.out.println("No followed series found");
+			return null;
+		}
 	}
 	
 	//add like to a chapter
