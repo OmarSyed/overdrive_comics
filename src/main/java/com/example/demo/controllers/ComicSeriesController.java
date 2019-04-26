@@ -318,11 +318,13 @@ public class ComicSeriesController {
 				//chapter.setSeriesId(series.get(i).getSeriesId());
 		List<String> likedUsers  = new ArrayList<String>();
 		List<Comment> comments  = new ArrayList<Comment>();
+		List<String> imgUrls = new ArrayList<String>();
 		//List<String> pages = new ArrayList<String>();
 		chapter.setAuthor(UsersController.curUser);
 		chapter.setLikedUsers(likedUsers);
 		chapter.setComments(comments);
-		//chapter.setPages(pages);
+		chapter.setImgUrls(imgUrls);
+		chapter.setPublished(false);
 		chapter.setCreated(date);
 		chapterrepository.save(chapter);
 		//return chapter;
@@ -360,7 +362,12 @@ public class ComicSeriesController {
 	@RequestMapping(value="/chapter/view/{id}", method = RequestMethod.GET)
 	public String viewChapter(@PathVariable String id) {
 		Optional<ComicChapter> chap = chapterrepository.findById(id);
-		return chap.get().getPages();
+		String check = chap.get().getPages();
+		if(check==null) {
+			return "error";
+		}else {
+			return check;
+		}
 	}
 	
 	
@@ -369,30 +376,43 @@ public class ComicSeriesController {
 	public String publishChapter(@Valid @RequestBody ComicChapter chapter) {
 		System.out.println(chapter.get_id());
 		String user = UsersController.curUser;
+		Optional<ComicChapter> chap = chapterrepository.findById(chapter.get_id());
+		List<String> imgurls = new ArrayList<String>();
 		JSONArray arr;
 		try {
-			File userdirectory = new File(user+"/" + chapter.getSeriesTitle() + "/" + chapter.get_id());
+			
+			
 			arr = new JSONArray(chapter.getImages());
 			List<String> list = new ArrayList<String>();
 			for(int i = 0; i < arr.length(); i++){
 //			    //list.add(arr.getJSONObject(i).toString());
-					String filename = chapter.get_id() + i + ".png";
+					String filename = "user1"+"\\" + chap.get().getSeriesTitle() + "\\" + chapter.get_id()+ "\\"+"image_" + i + ".png";
+					//File userdirectory = new File("user"+"/" + chapter.getSeriesTitle() + "/" + chapter.get_id()+"/"+filename);
+					//File userdirectory = new File(user+"/" + chapter.getSeriesTitle() + "/" + chapter.get_id()+"/"+filename);
 					String base64Image = arr.getString(i);
 					byte[] imageBytes = javax.xml.bind.DatatypeConverter.parseBase64Binary(base64Image);
 					BufferedImage img = ImageIO.read(new ByteArrayInputStream(imageBytes));
 					File outputfile = new File(filename);
+					outputfile.getParentFile().mkdirs();
+					System.out.println(filename);
 					ImageIO.write(img, "png", outputfile);
+					imgurls.add(filename);
+					
 				
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}return chapter.getImages();
+		}
+		chap.get().setImgUrls(imgurls);
+		chap.get().setPublished(true);
+		chapterrepository.save(chap.get());
+		return chapter.getImages();
 	}
 	
 	//return chapters of a series
 	//seriesid
-	@RequestMapping(value="chapter{id}", method=RequestMethod.GET)
+	@RequestMapping(value="chapter/{id}", method=RequestMethod.GET)
 	public List<ComicChapter> getChapters(@PathVariable String id){
 		List<ComicChapter> chapters  = chapterrepository.findBySeriesId(id);
 		return chapters;

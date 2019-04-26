@@ -14,10 +14,12 @@ public class ComicChapter {
 	private String chapterTitle;
 	private String seriesTitle;
 	private String author;
+	private boolean isPublished;
 	private int likes;
 	private List<String> likedUsers;
 	private String pages; 
 	private String images;
+	private List<String> imgUrls;
 	private Date lastModified;
 	private Date created;
 	private List<Comment> comments;
@@ -99,6 +101,18 @@ public class ComicChapter {
 		this.created = created;
 	}
 	
+	public List<String> getImgUrls() {
+		return imgUrls;
+	}
+	public void setImgUrls(List<String> imgUrls) {
+		this.imgUrls = imgUrls;
+	}
+	public boolean isPublished() {
+		return isPublished;
+	}
+	public void setPublished(boolean isPublished) {
+		this.isPublished = isPublished;
+	}
 	
 	
 }
