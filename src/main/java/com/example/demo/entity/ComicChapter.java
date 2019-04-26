@@ -1,5 +1,6 @@
 package com.example.demo.entity;
 
+import java.util.Date;
 import java.util.List;
 
 import org.bson.types.ObjectId;
@@ -15,6 +16,10 @@ public class ComicChapter {
 	private String author;
 	private int likes;
 	private List<String> likedUsers;
+	private String pages; 
+	private String images;
+	private Date lastModified;
+	private Date created;
 	private List<Comment> comments;
 	
 	
@@ -35,6 +40,13 @@ public class ComicChapter {
 	}
 	public void setChapterTitle(String chapterTitle) {
 		this.chapterTitle = chapterTitle;
+	}
+	
+	public String getImages() {
+		return images;
+	}
+	public void setImages(String images) {
+		this.images = images;
 	}
 	public String getSeriesTitle() {
 		return seriesTitle;
@@ -66,6 +78,27 @@ public class ComicChapter {
 	public void setComments(List<Comment> comments) {
 		this.comments = comments;
 	}
+	
+	
+	public String getPages() {
+		return pages;
+	}
+	public void setPages(String pages) {
+		this.pages = pages;
+	}
+	public Date getLastModified() {
+		return lastModified;
+	}
+	public void setLastModified(Date lastModified) {
+		this.lastModified = lastModified;
+	}
+	public Date getCreated() {
+		return created;
+	}
+	public void setCreated(Date created) {
+		this.created = created;
+	}
+	
 	
 	
 }

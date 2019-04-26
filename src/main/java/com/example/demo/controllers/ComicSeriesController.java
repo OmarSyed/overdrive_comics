@@ -1,14 +1,25 @@
 package com.example.demo.controllers;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.text.DateFormat;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
+import javax.imageio.ImageIO;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 //import org.springframework.security.core.Authentication;
 //import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,6 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.entity.ComicChapter;
 import com.example.demo.entity.ComicSeries;
+import com.example.demo.entity.Comment;
 import com.example.demo.entity.Rating;
 import com.example.demo.entity.Users;
 import com.example.demo.repository.ChapterRepository;
@@ -243,32 +255,156 @@ public class ComicSeriesController {
 			if(chap.get(i).getChapterTitle().equals(chapter.getChapterTitle())) {
 				//comicChapter = chap.get(i);
 				List<String> users = chap.get(i).getLikedUsers();
-				users.add(UsersController.getCurUser());
-				chap.get(i).setLikedUsers(users);
-				chap.get(i).setLikes(chap.get(i).getLikes()+1);
-				chapterrepository.save(chap.get(i));
-				return chap.get(i);
+				if(users.contains(UsersController.getCurUser())) {
+					users.remove(UsersController.getCurUser());
+					chap.get(i).setLikedUsers(users);
+					chap.get(i).setLikes(chap.get(i).getLikes()-1);
+					chapterrepository.save(chap.get(i));
+					return chap.get(i);
+				}else {
+					users.add(UsersController.getCurUser());
+					chap.get(i).setLikedUsers(users);
+					chap.get(i).setLikes(chap.get(i).getLikes()+1);
+					chapterrepository.save(chap.get(i));
+					return chap.get(i);
+				}
 			}
 		}return null;
 	}
 	
 	//delete like to a chapter
-	@RequestMapping(value="/chapter/unlike", method = RequestMethod.POST)
-	public ComicChapter unlikeChapter(ComicChapter chapter) {
-		List<ComicChapter> chap = chapterrepository.findBySeriesId(chapter.getSeriesId());
-		ComicChapter comicChapter;
-		for(int i = 0; i<chap.size(); i++) {
-			if(chap.get(i).getChapterTitle().equals(chapter.getChapterTitle())) {
-				//comicChapter = chap.get(i);
-				List<String> users = chap.get(i).getLikedUsers();
-				users.remove(UsersController.getCurUser());
-				chap.get(i).setLikedUsers(users);
-				chap.get(i).setLikes(chap.get(i).getLikes()-1);
-				chapterrepository.save(chap.get(i));
-				return chap.get(i);
-			}
-		}return null;
+//	@RequestMapping(value="/chapter/unlike", method = RequestMethod.POST)
+//	public ComicChapter unlikeChapter(ComicChapter chapter) {
+//		List<ComicChapter> chap = chapterrepository.findBySeriesId(chapter.getSeriesId());
+//		ComicChapter comicChapter;
+//		for(int i = 0; i<chap.size(); i++) {
+//			if(chap.get(i).getChapterTitle().equals(chapter.getChapterTitle())) {
+//				//comicChapter = chap.get(i);
+//				List<String> users = chap.get(i).getLikedUsers();
+//				users.remove(UsersController.getCurUser());
+//				chap.get(i).setLikedUsers(users);
+//				chap.get(i).setLikes(chap.get(i).getLikes()-1);
+//				chapterrepository.save(chap.get(i));
+//				return chap.get(i);
+//			}
+//		}return null;
+//	}
+	
+	//get all the likes a user has
+	@RequestMapping(value="/totallikes", method = RequestMethod.GET)
+	public int totalLikes() {
+		int total = 0;
+		List<ComicChapter> chapter = chapterrepository.findByAuthor(UsersController.curUser);
+		for(int i = 0;i<chapter.size(); i++) {
+			total = total + chapter.get(i).getLikes();
+		}
+		return total;
 	}
+	
+	//create a chapter
+	@RequestMapping(value="/chapter/create", method = RequestMethod.POST)
+	public ComicChapter createChapter(@Valid @RequestBody ComicChapter chapter) {
+		//List<ComicSeries> series = seriesrepository.findByAuthor(UsersController.curUser);
+		String seriesId = "";
+		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+		Date date = new Date();
+		//for(int i = 0; i<series.size(); i++) {
+			//if(series.get(i).getComicSeriesName().equals(chapter.getSeriesTitle())) {
+				//chapter.setSeriesId(series.get(i).getSeriesId());
+		List<String> likedUsers  = new ArrayList<String>();
+		List<Comment> comments  = new ArrayList<Comment>();
+		//List<String> pages = new ArrayList<String>();
+		chapter.setAuthor(UsersController.curUser);
+		chapter.setLikedUsers(likedUsers);
+		chapter.setComments(comments);
+		//chapter.setPages(pages);
+		chapter.setCreated(date);
+		chapterrepository.save(chapter);
+		//return chapter;
+			//}
+			//}
+		return chapter;
+	}
+	
+	//save a chapter
+	//check if current user is author
+	@RequestMapping(value="/chapter/save", method = RequestMethod.POST)
+	public ComicChapter saveChapter(@Valid @RequestBody ComicChapter chapter) throws JSONException {
+		Optional<ComicChapter> chap = chapterrepository.findById(chapter.get_id());
+		//JSONObject obj = new JSONObject(chapter.getPages());
+//		JSONArray arr = obj.getJSONArray("posts");
+		
+		System.out.println("sdfds" + " " + chapter.getPages());
+		chap.get().setPages(chapter.getPages());
+//		JSONArray arr = new JSONArray(chapter.getPages());
+//		List<String> list = new ArrayList<String>();
+//		for(int i = 0; i < arr.length(); i++){
+//		    list.add(arr.getJSONObject(i).toString());
+//		}
+//		chap.get().setPages(list);
+//		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+//		Date date = new Date();
+//		chap.get().setLastModified(date);
+		chapterrepository.save(chap.get());
+		return chap.get();
+		//return null;
+	}
+	
+	//view a chapter
+	//id is series id
+	@RequestMapping(value="/chapter/view/{id}", method = RequestMethod.GET)
+	public String viewChapter(@PathVariable String id) {
+		Optional<ComicChapter> chap = chapterrepository.findById(id);
+		return chap.get().getPages();
+	}
+	
+	
+	//publish a chapter
+	@RequestMapping(value="/chapter/publish", method=RequestMethod.POST)
+	public String publishChapter(@Valid @RequestBody ComicChapter chapter) {
+		System.out.println(chapter.get_id());
+		String user = UsersController.curUser;
+		JSONArray arr;
+		try {
+			File userdirectory = new File(user+"/" + chapter.getSeriesTitle() + "/" + chapter.get_id());
+			arr = new JSONArray(chapter.getImages());
+			List<String> list = new ArrayList<String>();
+			for(int i = 0; i < arr.length(); i++){
+//			    //list.add(arr.getJSONObject(i).toString());
+					String filename = chapter.get_id() + i + ".png";
+					String base64Image = arr.getString(i);
+					byte[] imageBytes = javax.xml.bind.DatatypeConverter.parseBase64Binary(base64Image);
+					BufferedImage img = ImageIO.read(new ByteArrayInputStream(imageBytes));
+					File outputfile = new File(filename);
+					ImageIO.write(img, "png", outputfile);
+				
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}return chapter.getImages();
+	}
+	
+	//return chapters of a series
+	//seriesid
+	@RequestMapping(value="series/chapter{id}", method=RequestMethod.GET)
+	public List<ComicChapter> getChapters(@PathVariable String id){
+		List<ComicChapter> chapters  = chapterrepository.findBySeriesId(id);
+		return chapters;
+	}
+	
+	//retrieve chapter images
+	//chapterid
+	@RequestMapping(value="chapter/retrieve{id}", method=RequestMethod.POST)
+	public String retrieveChapter(@PathVariable String id) {
+		
+		
+		
+		
+		return "";
+	}
+	
+	
 	
 	
 	
