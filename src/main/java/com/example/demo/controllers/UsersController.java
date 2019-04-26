@@ -1,8 +1,10 @@
 package com.example.demo.controllers;
 
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -172,21 +174,42 @@ public class UsersController {
 		}
 	}
 	
-	@RequestMapping(value="/profile/pic", method = RequestMethod.GET)
-	public String editPic(@RequestParam("pic") MultipartFile imagefile) throws FileNotFoundException {
-		Users user = repository.findByUsername(curUser);
+	@RequestMapping(value="/profile/pic", method = RequestMethod.POST)
+	public String editPic(@RequestParam("pic") MultipartFile imagefile) throws IllegalStateException, IOException {
+		Users user = repository.findByUsername(curUser); 
+		boolean created;
+		File img = new File(imagefile.getOriginalFilename());
 		if(user.isPic()==false) {
-			
-			
 			user.setPic(true);
-			repository.save(user);
-			return "added";
+			user.setProfilePic(imagefile.getOriginalFilename());
+			imagefile.transferTo(img);
+			try {
+				created = img.createNewFile();
+				if (created) {
+					repository.save(user);
+					return "added";
+				}
+				else
+					return "trouble adding file";
+			}
+			catch(Exception e) {
+				return "Exception while adding file";
+			}
 		}else {
-			
-			
-			return "replaced";
+			user.setProfilePic(imagefile.getOriginalFilename());
+			imagefile.transferTo(img);
+			try {
+				created = img.createNewFile();
+				if (created) {
+					repository.save(user);
+					return "replaced";
+				}
+				else
+					return "trouble replacing file"; 
+			}catch(Exception e) {
+				return "Exception while adding file"; 
+			}
 		}
-		
 	}
 	
 	

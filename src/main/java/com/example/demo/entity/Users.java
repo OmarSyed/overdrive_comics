@@ -18,7 +18,7 @@ public class Users {
 	private String username;
 	private String password;
 	private String email;
-	private BsonType profilePic;
+	private String profilePic;
 	private boolean pic;
 	private String bio;
 	private List<String> followedSeries;
@@ -33,11 +33,11 @@ public class Users {
 		pic = false;
 	}
 
-	public BsonType getProfilePic() {
+	public String getProfilePic() {
 		return profilePic;
 	}
 
-	public void setProfilePic(BsonType profilePic) {
+	public void setProfilePic(String profilePic) {
 		this.profilePic = profilePic;
 	}
 
