@@ -392,7 +392,7 @@ public class ComicSeriesController {
 	
 	//return chapters of a series
 	//seriesid
-	@RequestMapping(value="chapter{id}", method=RequestMethod.GET)
+	@RequestMapping(value="chapter/{id}", method=RequestMethod.GET)
 	public List<ComicChapter> getChapters(@PathVariable String id){
 		List<ComicChapter> chapters  = chapterrepository.findBySeriesId(id);
 		return chapters;
