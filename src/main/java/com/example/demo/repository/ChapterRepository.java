@@ -8,4 +8,5 @@ import com.example.demo.entity.ComicChapter;
 
 public interface ChapterRepository extends MongoRepository<ComicChapter, String>{
 	List<ComicChapter> findBySeriesId(String seriesId);
+	List<ComicChapter> findByAuthor(String author);
 }
