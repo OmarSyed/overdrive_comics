@@ -22,6 +22,7 @@ public class Users {
 	private boolean pic;
 	private String bio;
 	private List<String> followedSeries;
+	private List<String> likedChapters;
 	private List<String> producedSeries;
 	
 	
@@ -105,6 +106,15 @@ public class Users {
 		this.password = password;
 	}
 
+	public List<String> getLikedChapters() {
+		return likedChapters;
+	}
+
+	public void setLikedChapters(List<String> likedChapters) {
+		this.likedChapters = likedChapters;
+	}
+
+	
 	
 	
 }

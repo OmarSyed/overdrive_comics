@@ -1,5 +1,6 @@
 package com.example.demo.entity;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -20,9 +21,8 @@ public class ComicChapter {
 	private String pages; 
 	private String images;
 	private List<String> imgUrls;
-	private Date lastModified;
-	private Date created;
-	private List<Comment> comments;
+	private LocalDate lastModified;
+	private LocalDate created;
 	
 	
 	public String get_id() {
@@ -74,13 +74,6 @@ public class ComicChapter {
 	public void setLikedUsers(List<String> likedUsers) {
 		this.likedUsers = likedUsers;
 	}
-	public List<Comment> getComments() {
-		return comments;
-	}
-	public void setComments(List<Comment> comments) {
-		this.comments = comments;
-	}
-	
 	
 	public String getPages() {
 		return pages;
@@ -88,16 +81,16 @@ public class ComicChapter {
 	public void setPages(String pages) {
 		this.pages = pages;
 	}
-	public Date getLastModified() {
+	public LocalDate getLastModified() {
 		return lastModified;
 	}
-	public void setLastModified(Date lastModified) {
+	public void setLastModified(LocalDate lastModified) {
 		this.lastModified = lastModified;
 	}
-	public Date getCreated() {
+	public LocalDate getCreated() {
 		return created;
 	}
-	public void setCreated(Date created) {
+	public void setCreated(LocalDate created) {
 		this.created = created;
 	}
 	

@@ -85,8 +85,10 @@ public class UsersController {
 			//user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
 			List<String> followed = new ArrayList<String>();
 			List<String> produced = new ArrayList<String>();
+			List<String> liked = new ArrayList<String>();
 			user.setFollowedSeries(followed);
 			user.setProducedSeries(produced);
+			user.setLikedChapters(liked);
 			repository.save(user);
 			//service.save(user);
 			System.out.println("sucess");

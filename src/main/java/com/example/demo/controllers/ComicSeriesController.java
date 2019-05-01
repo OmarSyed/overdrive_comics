@@ -1,6 +1,7 @@
 package com.example.demo.controllers;
 
 import java.awt.image.BufferedImage;
+
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.text.DateFormat;
@@ -8,6 +9,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -34,6 +36,7 @@ import com.example.demo.entity.Comment;
 import com.example.demo.entity.Rating;
 import com.example.demo.entity.Users;
 import com.example.demo.repository.ChapterRepository;
+import com.example.demo.repository.CommentRepository;
 import com.example.demo.repository.SeriesRepository;
 import com.example.demo.repository.UserRepository;
 
@@ -47,6 +50,8 @@ public class ComicSeriesController {
 	private UserRepository userrepository;
 	@Autowired
 	private ChapterRepository chapterrepository;
+	@Autowired
+	private CommentRepository commentrepository;
 	
 	
 	//Create a series, add it to mongo collection
@@ -255,22 +260,30 @@ public class ComicSeriesController {
 	@RequestMapping(value="/chapter/like", method = RequestMethod.POST)
 	public ComicChapter likeChapter(ComicChapter chapter) {
 		List<ComicChapter> chap = chapterrepository.findBySeriesId(chapter.getSeriesId());
+		Users currentUser = userrepository.findByUsername(UsersController.curUser);
+		List<String> chapterId = currentUser.getLikedChapters();
 		ComicChapter comicChapter;
 		for(int i = 0; i<chap.size(); i++) {
 			if(chap.get(i).getChapterTitle().equals(chapter.getChapterTitle())) {
 				//comicChapter = chap.get(i);
 				List<String> users = chap.get(i).getLikedUsers();
 				if(users.contains(UsersController.getCurUser())) {
+					chapterId.remove(chapter.get_id());
 					users.remove(UsersController.getCurUser());
 					chap.get(i).setLikedUsers(users);
 					chap.get(i).setLikes(chap.get(i).getLikes()-1);
 					chapterrepository.save(chap.get(i));
+					currentUser.setLikedChapters(chapterId);
+					userrepository.save(currentUser);
 					return chap.get(i);
 				}else {
+					chapterId.add(chapter.get_id());
 					users.add(UsersController.getCurUser());
 					chap.get(i).setLikedUsers(users);
 					chap.get(i).setLikes(chap.get(i).getLikes()+1);
 					chapterrepository.save(chap.get(i));
+					currentUser.setLikedChapters(chapterId);
+					userrepository.save(currentUser);
 					return chap.get(i);
 				}
 			}
@@ -311,21 +324,18 @@ public class ComicSeriesController {
 	public ComicChapter createChapter(@Valid @RequestBody ComicChapter chapter) {
 		//List<ComicSeries> series = seriesrepository.findByAuthor(UsersController.curUser);
 		String seriesId = "";
-		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-		Date date = new Date();
+		LocalDate today = LocalDate.now();
 		//for(int i = 0; i<series.size(); i++) {
 			//if(series.get(i).getComicSeriesName().equals(chapter.getSeriesTitle())) {
 				//chapter.setSeriesId(series.get(i).getSeriesId());
 		List<String> likedUsers  = new ArrayList<String>();
-		List<Comment> comments  = new ArrayList<Comment>();
 		List<String> imgUrls = new ArrayList<String>();
 		//List<String> pages = new ArrayList<String>();
 		chapter.setAuthor(UsersController.curUser);
 		chapter.setLikedUsers(likedUsers);
-		chapter.setComments(comments);
 		chapter.setImgUrls(imgUrls);
 		chapter.setPublished(false);
-		chapter.setCreated(date);
+		chapter.setCreated(today);
 		chapterrepository.save(chapter);
 		//return chapter;
 			//}
@@ -342,6 +352,7 @@ public class ComicSeriesController {
 //		JSONArray arr = obj.getJSONArray("posts");
 		
 		System.out.println("sdfds" + " " + chapter.getPages());
+		LocalDate today = LocalDate.now();
 		chap.get().setPages(chapter.getPages());
 //		JSONArray arr = new JSONArray(chapter.getPages());
 //		List<String> list = new ArrayList<String>();
@@ -351,7 +362,7 @@ public class ComicSeriesController {
 //		chap.get().setPages(list);
 //		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 //		Date date = new Date();
-//		chap.get().setLastModified(date);
+		chap.get().setLastModified(today);
 		chapterrepository.save(chap.get());
 		return chap.get();
 		//return null;
@@ -386,7 +397,7 @@ public class ComicSeriesController {
 			List<String> list = new ArrayList<String>();
 			for(int i = 0; i < arr.length(); i++){
 //			    //list.add(arr.getJSONObject(i).toString());
-					String filename = "user1"+"\\" + chap.get().getSeriesTitle() + "\\" + chapter.get_id()+ "\\"+"image_" + i + ".png";
+					String filename = UsersController.curUser+"\\" + chap.get().getSeriesTitle() + "\\" + chapter.get_id()+ "\\"+"image_" + i + ".png";
 					//File userdirectory = new File("user"+"/" + chapter.getSeriesTitle() + "/" + chapter.get_id()+"/"+filename);
 					//File userdirectory = new File(user+"/" + chapter.getSeriesTitle() + "/" + chapter.get_id()+"/"+filename);
 					String base64Image = arr.getString(i);
@@ -418,13 +429,33 @@ public class ComicSeriesController {
 		return chapters;
 	}
 	
+	//return popular series
+	
+	//add comment to chapter
+	@RequestMapping(value="chapter/addComment", method=RequestMethod.POST)
+	public Comment addComment(@Valid @RequestBody Comment comment) {
+		//List<Comment> com = commentrepository.findByChapterId(comment.getChapterId());
+		commentrepository.save(comment);
+		return comment;
+	}
+	
+	//delete  comment to chapter
+	@RequestMapping(value="chapter/deleteComment", method=RequestMethod.POST)
+	public String deleteComment(@Valid @RequestBody Comment comment) {
+		commentrepository.deleteById(comment.get_id());
+		return "success";
+	}
+	
+	//list comments for a chapter
+	@RequestMapping(value="chapter/listcomments", method=RequestMethod.GET)
+	public List<Comment> listComments(@PathVariable String chapterId){
+		return commentrepository.findByChapterId(chapterId);
+	}
+	
 	//retrieve chapter images
 	//chapterid
 	@RequestMapping(value="chapter/retrieve{id}", method=RequestMethod.POST)
 	public String retrieveChapter(@PathVariable String id) {
-		
-		
-		
 		
 		return "";
 	}
