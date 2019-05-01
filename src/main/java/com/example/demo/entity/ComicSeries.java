@@ -4,6 +4,7 @@ import java.sql.Blob;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
@@ -23,6 +24,7 @@ public class ComicSeries {
 	private double score;
 	private String description;
 	private int followers;
+	
 	private ArrayList<String> chapters;	//Change type of ArrayList to comic chapter
 	private boolean isFollowed;
 	
@@ -102,5 +104,7 @@ public class ComicSeries {
 	public void setFollowed(boolean isFollowed) {
 		this.isFollowed = isFollowed;
 	}
+	
+	
 	
 }
