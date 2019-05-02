@@ -290,7 +290,7 @@ public class ComicSeriesController {
 			userrepository.save(currentUser);
 			return chap.get();
 		}
-		return null;
+
 	}
 
 	// delete like to a chapter
