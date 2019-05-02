@@ -266,34 +266,29 @@ public class ComicSeriesController {
 	// add like to a chapter
 	@RequestMapping(value = "/chapter/like", method = RequestMethod.POST)
 	public ComicChapter likeChapter(ComicChapter chapter) {
-		List<ComicChapter> chap = chapterrepository.findBySeriesId(chapter.getSeriesId());
-		Users currentUser = userrepository.findByUsername(UsersController.curUser);
+		Optional<ComicChapter> chap = chapterrepository.findById(chapter.get_id());
+		Users currentUser  = userrepository.findByUsername(UsersController.curUser);
 		List<String> chapterId = currentUser.getLikedChapters();
-		ComicChapter comicChapter;
-		for (int i = 0; i < chap.size(); i++) {
-			if (chap.get(i).getChapterTitle().equals(chapter.getChapterTitle())) {
-				// comicChapter = chap.get(i);
-				List<String> users = chap.get(i).getLikedUsers();
-				if (users.contains(UsersController.getCurUser())) {
-					chapterId.remove(chapter.get_id());
-					users.remove(UsersController.getCurUser());
-					chap.get(i).setLikedUsers(users);
-					chap.get(i).setLikes(chap.get(i).getLikes() - 1);
-					chapterrepository.save(chap.get(i));
-					currentUser.setLikedChapters(chapterId);
-					userrepository.save(currentUser);
-					return chap.get(i);
-				} else {
-					chapterId.add(chapter.get_id());
-					users.add(UsersController.getCurUser());
-					chap.get(i).setLikedUsers(users);
-					chap.get(i).setLikes(chap.get(i).getLikes() + 1);
-					chapterrepository.save(chap.get(i));
-					currentUser.setLikedChapters(chapterId);
-					userrepository.save(currentUser);
-					return chap.get(i);
-				}
-			}
+		List<String> users = chap.get().getLikedUsers();
+		
+		if(users.contains(UsersController.getCurUser())) {
+			chapterId.remove(chapter.get_id());
+			users.remove(UsersController.curUser);
+			chap.get().setLikedUsers(chapterId);
+			chap.get().setLikes(chap.get().getLikes()-1);
+			chapterrepository.save(chap.get());
+			currentUser.setLikedChapters(users);
+			userrepository.save(currentUser);
+			return chap.get();
+		}else {
+			chapterId.add(chapter.get_id());
+			users.add(UsersController.curUser);
+			chap.get().setLikedUsers(chapterId);
+			chap.get().setLikes(chap.get().getLikes()+1);
+			chapterrepository.save(chap.get());
+			currentUser.setLikedChapters(users);
+			userrepository.save(currentUser);
+			return chap.get();
 		}
 		return null;
 	}
