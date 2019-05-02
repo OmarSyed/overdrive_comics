@@ -337,9 +337,6 @@ public class ComicSeriesController {
 		chapter.setPublished(false);
 		chapter.setCreated(today);
 		chapterrepository.save(chapter);
-		//return chapter;
-			//}
-			//}
 		return chapter;
 	}
 	
@@ -381,7 +378,6 @@ public class ComicSeriesController {
 		}
 	}
 	
-	
 	//publish a chapter
 	@RequestMapping(value="/chapter/publish", method=RequestMethod.POST)
 	public String publishChapter(@Valid @RequestBody ComicChapter chapter) {
@@ -391,13 +387,11 @@ public class ComicSeriesController {
 		List<String> imgurls = new ArrayList<String>();
 		JSONArray arr;
 		try {
-			
-			
 			arr = new JSONArray(chapter.getImages());
 			List<String> list = new ArrayList<String>();
 			for(int i = 0; i < arr.length(); i++){
 //			    //list.add(arr.getJSONObject(i).toString());
-					String filename = UsersController.curUser+"\\" + chap.get().getSeriesTitle() + "\\" + chapter.get_id()+ "\\"+"image_" + i + ".png";
+					String filename = "../"+ "overdrive_assets/" + UsersController.curUser+"\\" + chap.get().getSeriesTitle() + "\\" + chapter.get_id()+ "\\"+"image_" + i + ".png";
 					//File userdirectory = new File("user"+"/" + chapter.getSeriesTitle() + "/" + chapter.get_id()+"/"+filename);
 					//File userdirectory = new File(user+"/" + chapter.getSeriesTitle() + "/" + chapter.get_id()+"/"+filename);
 					String base64Image = arr.getString(i);
@@ -450,6 +444,32 @@ public class ComicSeriesController {
 	@RequestMapping(value="chapter/listcomments", method=RequestMethod.GET)
 	public List<Comment> listComments(@PathVariable String chapterId){
 		return commentrepository.findByChapterId(chapterId);
+	}	
+	
+	//get total likes for a series
+	@RequestMapping(value="likes", method=RequestMethod.GET)
+	public int seriesLikes(@PathVariable String seriesId) {
+		List<ComicChapter> chapter = chapterrepository.findBySeriesId(seriesId);
+		int likes = 0;
+		for(int i = 0; i<chapter.size(); i++) {
+			likes = likes + chapter.get(i).getLikes();
+		}
+		return likes;
+	}
+	
+	//check if current user liked chapter
+	@RequestMapping(value="chapter/liked{id}", method=RequestMethod.GET)
+	public boolean checkLiked(@PathVariable String chapterId) throws NullPointerException {
+		try {
+			Optional<ComicChapter> chap = chapterrepository.findById(chapterId);
+			if(chap.get().getLikedUsers().contains(UsersController.curUser)) {
+				return true;
+			}else {
+				return false;
+			}
+		}catch(NullPointerException e) {
+			return false;
+		}
 	}
 	
 	//retrieve chapter images

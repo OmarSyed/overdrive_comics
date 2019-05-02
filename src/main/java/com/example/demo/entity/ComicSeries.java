@@ -21,6 +21,7 @@ public class ComicSeries {
 	private String author;
 	private Blob thumbnail;
 	private HashMap<String, Double> rating; 
+	private int likes;
 	private double score;
 	private String description;
 	private int followers;
@@ -104,6 +105,13 @@ public class ComicSeries {
 	public void setFollowed(boolean isFollowed) {
 		this.isFollowed = isFollowed;
 	}
+	public int getLikes() {
+		return likes;
+	}
+	public void setLikes(int likes) {
+		this.likes = likes;
+	}
+	
 	
 	
 	
