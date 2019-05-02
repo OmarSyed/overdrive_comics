@@ -346,12 +346,7 @@ public class ComicSeriesController {
 		chapter.setPublished(false);
 		chapter.setCreated(today);
 		chapterrepository.save(chapter);
-<<<<<<< HEAD
-		// return chapter;
-		// }
-		// }
-=======
->>>>>>> f5b799cda6244a07e4f44ee0cc92639833941060
+
 		return chapter;
 	}
 
@@ -392,7 +387,6 @@ public class ComicSeriesController {
 			return check;
 		}
 	}
-<<<<<<< HEAD
 
 	// view published chapter
 	@RequestMapping(value = "/chapter/view/publish/{series_id}/{chapter}", method = RequestMethod.GET)
@@ -405,13 +399,9 @@ public class ComicSeriesController {
 		}
 	}
 
-	// publish a chapter
-	@RequestMapping(value = "/chapter/publish", method = RequestMethod.POST)
-=======
 	
 	//publish a chapter
 	@RequestMapping(value="/chapter/publish", method=RequestMethod.POST)
->>>>>>> f5b799cda6244a07e4f44ee0cc92639833941060
 	public String publishChapter(@Valid @RequestBody ComicChapter chapter) {
 		System.out.println(chapter.get_id() + " " + UsersController.curUser);
 //		String user = UsersController.curUser;
@@ -420,31 +410,9 @@ public class ComicSeriesController {
 		List<String> imgurls = new ArrayList<String>();
 		JSONArray arr;
 		try {
-<<<<<<< HEAD
-
-=======
->>>>>>> f5b799cda6244a07e4f44ee0cc92639833941060
 			arr = new JSONArray(chapter.getImages());
 			List<String> list = new ArrayList<String>();
-			for (int i = 0; i < arr.length(); i++) {
-//			    //list.add(arr.getJSONObject(i).toString());
-<<<<<<< HEAD
-				String filename = user + "/" + chap.get().getSeriesId() + "/" + chapter.get_id() + "/" + "image_" + i
-						+ ".png";
-				// File userdirectory = new File("user"+"/" + chapter.getSeriesTitle() + "/" +
-				// chapter.get_id()+"/"+filename);
-				// File userdirectory = new File(user+"/" + chapter.getSeriesTitle() + "/" +
-				// chapter.get_id()+"/"+filename);
-				String base64Image = arr.getString(i);
-				byte[] imageBytes = javax.xml.bind.DatatypeConverter.parseBase64Binary(base64Image);
-				BufferedImage img = ImageIO.read(new ByteArrayInputStream(imageBytes));
-				System.out.println(filename);
-				File outputfile = new File(filename);
-				outputfile.getParentFile().mkdirs();
-				ImageIO.write(img, "png", outputfile);
-				imgurls.add(filename);
-
-=======
+			for (int i = 0; i < arr.length(); i++) {			    //list.add(arr.getJSONObject(i).toString());
 					String filename = "../"+ "overdrive_assets/" + UsersController.curUser+"\\" + chap.get().getSeriesTitle() + "\\" + chapter.get_id()+ "\\"+"image_" + i + ".png";
 					//File userdirectory = new File("user"+"/" + chapter.getSeriesTitle() + "/" + chapter.get_id()+"/"+filename);
 					//File userdirectory = new File(user+"/" + chapter.getSeriesTitle() + "/" + chapter.get_id()+"/"+filename);
@@ -457,8 +425,7 @@ public class ComicSeriesController {
 					ImageIO.write(img, "png", outputfile);
 					imgurls.add(filename);
 					
-				
->>>>>>> f5b799cda6244a07e4f44ee0cc92639833941060
+			
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
