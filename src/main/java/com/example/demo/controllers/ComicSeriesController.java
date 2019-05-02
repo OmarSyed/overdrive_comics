@@ -211,22 +211,29 @@ public class ComicSeriesController {
 	@RequestMapping(value="/rating", method = RequestMethod.POST)
 	public ComicSeries editRating(@Valid @RequestBody ComicSeries series) {
 		//Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		UsersController curUser = new UsersController();
-		Users user = userrepository.findByUsername(curUser.getCurUser());
+		String curUser = UsersController.curUser;
+		Users user = userrepository.findByUsername(curUser);
 		//System.out.println(auth.getName());
 		List<ComicSeries> check = seriesrepository.findByAuthor(series.getAuthor());
 		ComicSeries update = new ComicSeries();
 		for(int i = 0; i<check.size(); i++) {
 			if(check.get(i).getComicSeriesName().equals(series.getComicSeriesName())) {
 				update = check.get(i);
+				break;
 			}
 		}
-		HashMap<String, Double> newRating = update.getRating();
+		HashMap<String, Double> newRating;
+		if(update.getRating() == null) {
+			newRating = new HashMap<>();
+			update.setRating(newRating);
+		}else {
+			newRating = update.getRating();
+		}
 		//System.out.println(auth.getName());
 		if(newRating.containsKey(user.getUsername())) {
-			newRating.replace(curUser.getCurUser(), series.getScore());
+			newRating.replace(curUser, series.getScore());
 		}else {
-			newRating.put(curUser.getCurUser(), series.getScore());
+			newRating.put(curUser, series.getScore());
 		}
 		//System.out.println(auth.getName());
 		double sum = 0;
