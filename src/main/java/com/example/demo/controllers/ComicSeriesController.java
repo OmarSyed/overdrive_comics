@@ -413,7 +413,7 @@ public class ComicSeriesController {
 			arr = new JSONArray(chapter.getImages());
 			List<String> list = new ArrayList<String>();
 			for (int i = 0; i < arr.length(); i++) {			    //list.add(arr.getJSONObject(i).toString());
-					String filename = "../"+ "overdrive_assets/" + UsersController.curUser+"\\" + chap.get().getSeriesTitle() + "\\" + chapter.get_id()+ "\\"+"image_" + i + ".png";
+					String filename = "../"+ "overdrive_assets/" + UsersController.curUser+"/" + chap.get().getSeriesTitle() + "/" + chapter.get_id()+ "/"+"image_" + i + ".png";
 					//File userdirectory = new File("user"+"/" + chapter.getSeriesTitle() + "/" + chapter.get_id()+"/"+filename);
 					//File userdirectory = new File(user+"/" + chapter.getSeriesTitle() + "/" + chapter.get_id()+"/"+filename);
 					String base64Image = arr.getString(i);
@@ -422,8 +422,9 @@ public class ComicSeriesController {
 					File outputfile = new File(filename);
 					outputfile.getParentFile().mkdirs();
 					System.out.println(filename);
+					String addfile = "assets/" + UsersController.curUser+"/" + chap.get().getSeriesTitle() + "/" + chapter.get_id()+ "/"+"image_" + i + ".png";
 					ImageIO.write(img, "png", outputfile);
-					imgurls.add(filename);
+					imgurls.add(addfile);
 					
 			
 			}
