@@ -322,6 +322,31 @@ public class ComicSeriesController {
 		}
 		return total;
 	}
+	
+	//get all the followers a user has
+	@RequestMapping(value="/totalfollowers", method = RequestMethod.GET)
+	public int totalFollowers() {
+		int total  = 0;
+		List<ComicSeries> series = seriesrepository.findByAuthor(UsersController.curUser);
+		for(int i = 0; i < series.size(); i++) {
+			total = total + series.get(i).getFollowers();
+		}
+		return total;
+	}
+	
+	//get number of comics made
+	@RequestMapping(value="/totalcomics", method = RequestMethod.GET)
+	public int totalComics() {
+		List<ComicSeries> series = seriesrepository.findByAuthor(UsersController.curUser);
+		return series.size();
+	}
+	
+	//get number of follows
+	@RequestMapping(value="/totalfollows", method = RequestMethod.GET)
+	public int totalFollowing() {
+		Users user  = userrepository.findByUsername(UsersController.curUser);
+		return user.getFollowedSeries().size();
+	}
 
 	// create a chapter
 	@RequestMapping(value = "/chapter/create", method = RequestMethod.POST)

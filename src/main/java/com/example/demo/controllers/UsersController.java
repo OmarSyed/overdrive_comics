@@ -180,11 +180,13 @@ public class UsersController {
 	public String editPic(@RequestParam("pic") MultipartFile imagefile) throws IllegalStateException, IOException {
 		Users user = repository.findByUsername(curUser); 
 		boolean created;
-		//String filename = "../" + "overdrive_assets"
-		File img = new File(imagefile.getOriginalFilename());
+		//File img = new File(imagefile.getOriginalFilename());
 		if(user.isPic()==false) {
 			user.setPic(true);
-			user.setProfilePic(imagefile.getOriginalFilename());
+			user.setProfilePic("assets/" + curUser + "/" + "image_0.png");
+			String filename = "../" + "overdrive_frontend/src/assets/" + curUser;
+			File img = new File(filename);
+			img.getParentFile().mkdirs();
 			imagefile.transferTo(img);
 			try {
 				created = img.createNewFile();
@@ -199,7 +201,10 @@ public class UsersController {
 				return "Exception while adding file";
 			}
 		}else {
-			user.setProfilePic(imagefile.getOriginalFilename());
+			String filename = "../" + "overdrive_frontend/src/assets/" + curUser + "/" + "image_0.png";
+			File img = new File(filename);
+			user.setProfilePic("assets/" + curUser + "/" + "image_0.png");
+			img.getParentFile().mkdirs();
 			imagefile.transferTo(img);
 			try {
 				created = img.createNewFile();
