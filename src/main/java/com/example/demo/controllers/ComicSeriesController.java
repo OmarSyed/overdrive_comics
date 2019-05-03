@@ -542,5 +542,14 @@ public class ComicSeriesController {
 		Optional<ComicChapter> chap = chapterrepository.findById(chapter.get_id());
 		return chap.get();
 	}
+	
+	//add chapter title
+	@RequestMapping(value="chapter/title", method=RequestMethod.POST)
+	public ComicChapter titleChapter(@Valid @RequestBody ComicChapter chapter) {
+		Optional<ComicChapter> chap = chapterrepository.findById(chapter.get_id());
+		chap.get().setChapterTitle(chapter.getChapterTitle());
+		chapterrepository.save(chap.get());
+		return chap.get();
+	}
 
 }
