@@ -265,7 +265,7 @@ public class ComicSeriesController {
 
 	// add like to a chapter
 	@RequestMapping(value = "/chapter/like", method = RequestMethod.POST)
-	public ComicChapter likeChapter(ComicChapter chapter) {
+	public ComicChapter likeChapter(@Valid @RequestBody ComicChapter chapter) {
 		System.out.println(chapter.get_id());
 		Optional<ComicChapter> chap = chapterrepository.findById(chapter.get_id());
 		Users currentUser  = userrepository.findByUsername(UsersController.curUser);
