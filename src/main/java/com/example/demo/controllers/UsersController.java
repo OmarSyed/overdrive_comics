@@ -180,6 +180,7 @@ public class UsersController {
 	public String editPic(@RequestParam("pic") MultipartFile imagefile) throws IllegalStateException, IOException {
 		Users user = repository.findByUsername(curUser); 
 		boolean created;
+		//String filename = "../" + "overdrive_assets"
 		File img = new File(imagefile.getOriginalFilename());
 		if(user.isPic()==false) {
 			user.setPic(true);

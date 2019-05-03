@@ -266,6 +266,7 @@ public class ComicSeriesController {
 	// add like to a chapter
 	@RequestMapping(value = "/chapter/like", method = RequestMethod.POST)
 	public ComicChapter likeChapter(ComicChapter chapter) {
+		System.out.println(chapter.get_id());
 		Optional<ComicChapter> chap = chapterrepository.findById(chapter.get_id());
 		Users currentUser  = userrepository.findByUsername(UsersController.curUser);
 		List<String> chapterId = currentUser.getLikedChapters();
@@ -402,6 +403,7 @@ public class ComicSeriesController {
 		System.out.println(chapter.get_id() + " " + UsersController.curUser);
 //		String user = UsersController.curUser;
 		String user = "johnsmith";
+		LocalDate today = LocalDate.now();
 		Optional<ComicChapter> chap = chapterrepository.findById(chapter.get_id());
 		List<String> imgurls = new ArrayList<String>();
 		JSONArray arr;
@@ -409,7 +411,7 @@ public class ComicSeriesController {
 			arr = new JSONArray(chapter.getImages());
 			List<String> list = new ArrayList<String>();
 			for (int i = 0; i < arr.length(); i++) {			    //list.add(arr.getJSONObject(i).toString());
-					String filename = "../"+ "overdrive_assets/" + UsersController.curUser+"/" + chap.get().getSeriesTitle() + "/" + chapter.get_id()+ "/"+"image_" + i + ".png";
+					String filename = "../"+ "overdrive_frontend/src/assets/" + UsersController.curUser+"/" + chap.get().getSeriesTitle() + "/" + chapter.get_id()+ "/"+"image_" + i + ".png";
 					//File userdirectory = new File("user"+"/" + chapter.getSeriesTitle() + "/" + chapter.get_id()+"/"+filename);
 					//File userdirectory = new File(user+"/" + chapter.getSeriesTitle() + "/" + chapter.get_id()+"/"+filename);
 					String base64Image = arr.getString(i);
@@ -430,6 +432,7 @@ public class ComicSeriesController {
 		}
 		chap.get().setImgUrls(imgurls);
 		chap.get().setPublished(true);
+		chap.get().setLastModified(today);
 		chapterrepository.save(chap.get());
 		return chapter.getImages();
 	}
