@@ -19,7 +19,7 @@ public class ComicSeries {
 	private String genre;
 	private String comicSeriesName;
 	private String author;
-	private Blob thumbnail;
+	private String thumbnail;
 	private HashMap<String, Double> rating; 
 	private int likes;
 	private double score;
@@ -61,10 +61,10 @@ public class ComicSeries {
 	public void setAuthor(String author) {
 		this.author = author;
 	}
-	public Blob getThumbnail() {
+	public String getThumbnail() {
 		return thumbnail;
 	}
-	public void setThumbnail(Blob thumbnail) {
+	public void setThumbnail(String thumbnail) {
 		this.thumbnail = thumbnail;
 	}
 	

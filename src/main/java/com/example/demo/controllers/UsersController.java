@@ -1,9 +1,12 @@
 package com.example.demo.controllers;
 
 
+import java.io.BufferedOutputStream;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -12,6 +15,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.hibernate.validator.internal.util.logging.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -179,45 +183,38 @@ public class UsersController {
 	@RequestMapping(value="/profile/pic", method = RequestMethod.POST)
 	public String editPic(@RequestParam("pic") MultipartFile imagefile) throws IllegalStateException, IOException {
 		Users user = repository.findByUsername(curUser); 
-		boolean created;
-		//File img = new File(imagefile.getOriginalFilename());
-		if(user.isPic()==false) {
-			user.setPic(true);
-			user.setProfilePic("assets/" + curUser + "/" + "image_0.png");
-			String filename = "../" + "overdrive_frontend/src/assets/" + curUser;
-			File img = new File(filename);
-			img.getParentFile().mkdirs();
-			imagefile.transferTo(img);
-			try {
-				created = img.createNewFile();
-				if (created) {
-					repository.save(user);
-					return "added";
-				}
-				else
-					return "trouble adding file";
-			}
-			catch(Exception e) {
-				return "Exception while adding file";
-			}
-		}else {
-			String filename = "../" + "overdrive_frontend/src/assets/" + curUser + "/" + "image_0.png";
-			File img = new File(filename);
-			user.setProfilePic("assets/" + curUser + "/" + "image_0.png");
-			img.getParentFile().mkdirs();
-			imagefile.transferTo(img);
-			try {
-				created = img.createNewFile();
-				if (created) {
-					repository.save(user);
-					return "replaced";
-				}
-				else
-					return "trouble replacing file"; 
-			}catch(Exception e) {
-				return "Exception while adding file"; 
-			}
-		}
+		
+		String message = "";
+		String filename = "";
+        //MultipartFile file = imagefile;
+        try {
+            byte[] bytes = imagefile.getBytes();
+
+            // Creating the directory to store file
+            //String rootPath = System.getProperty("catalina.home");
+            File dir = new File("../" + "overdrive_frontend/src/assets/" + curUser);
+            if (!dir.exists())
+                dir.mkdirs();
+            filename = "assets/" + curUser +"/" + "image0.png";
+            // Create the file on server
+            File serverFile = new File(dir.getAbsolutePath()
+                    + File.separator + "image0.png");
+            BufferedOutputStream stream = new BufferedOutputStream(
+                    new FileOutputStream(serverFile));
+            stream.write(bytes);
+            stream.close();
+
+//            logger.info("Server File Location="
+//                    + serverFile.getAbsolutePath());
+
+            message = message + "You successfully uploaded file=" + "image"
+                    + "<br />";
+        } catch (Exception e) {
+            return "You failed to upload " + "image" + " => " + e.getMessage();
+        }
+        user.setProfilePic(filename);
+        repository.save(user);
+        return message;
 	}
 	
 	
