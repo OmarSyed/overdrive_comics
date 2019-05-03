@@ -336,6 +336,7 @@ public class ComicSeriesController {
 		List<String> imgUrls = new ArrayList<String>();
 		// List<String> pages = new ArrayList<String>();
 		chapter.setAuthor(UsersController.curUser);
+		chapter.setSeriesId(chapter.getSeriesId());
 		chapter.setLikedUsers(likedUsers);
 		chapter.setImgUrls(imgUrls);
 		chapter.setPublished(false);
@@ -491,12 +492,20 @@ public class ComicSeriesController {
 		}
 	}
 
-	// retrieve chapter images
-	// chapterid
-	@RequestMapping(value = "chapter/retrieve{id}", method = RequestMethod.POST)
-	public String retrieveChapter(@PathVariable String id) {
-
-		return "";
+	//change series settings
+	@RequestMapping(value="/settings", method=RequestMethod.POST)
+	public ComicSeries changeSettings(@Valid @RequestBody ComicSeries series) {
+		Optional<ComicSeries> comic = seriesrepository.findById(series.getSeriesId());
+		if(!series.getDay().isEmpty()) {
+			comic.get().setDay(series.getDay());
+		}
+		if(!series.getGenre().isEmpty()) {
+			comic.get().setGenre(series.getGenre());
+		}
+		if(!series.getDescription().isEmpty()) {
+			comic.get().setDescription(series.getDescription());
+		}
+		return seriesrepository.save(comic.get());
 	}
 
 }

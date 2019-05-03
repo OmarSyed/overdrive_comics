@@ -25,6 +25,7 @@ public class ComicSeries {
 	private double score;
 	private String description;
 	private int followers;
+	private String day;
 	
 	private ArrayList<String> chapters;	//Change type of ArrayList to comic chapter
 	private boolean isFollowed;
@@ -110,6 +111,12 @@ public class ComicSeries {
 	}
 	public void setLikes(int likes) {
 		this.likes = likes;
+	}
+	public String getDay() {
+		return day;
+	}
+	public void setDay(String day) {
+		this.day = day;
 	}
 	
 	
