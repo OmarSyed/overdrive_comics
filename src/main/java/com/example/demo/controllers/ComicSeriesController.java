@@ -14,8 +14,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import javax.imageio.ImageIO;
 import javax.validation.Valid;
@@ -30,6 +32,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.controllers.UsersController;
 import com.example.demo.entity.ComicChapter;
 import com.example.demo.entity.ComicSeries;
 import com.example.demo.entity.Comment;
@@ -550,6 +553,56 @@ public class ComicSeriesController {
 		chap.get().setChapterTitle(chapter.getChapterTitle());
 		chapterrepository.save(chap.get());
 		return chap.get();
+	}
+	
+	@RequestMapping(value = "/popular/{option}", method = RequestMethod.POST)
+	public Set<ComicSeries> getPopular(@PathVariable String option) {
+		List<ComicSeries> all_popular_followers = seriesrepository.orderByFollowers();
+		List<ComicSeries> all_popular_likes = seriesrepository.orderByLikes();
+		Set<ComicSeries> s = new HashSet<ComicSeries>();
+		s.addAll(all_popular_likes);
+		s.addAll(all_popular_followers);
+		return s;
+	}
+
+	@RequestMapping(value = "/discover", method = RequestMethod.POST)
+	public Set<ComicSeries> discover() {
+		String checkUser = UsersController.getCurUser();
+		Users user = userrepository.findByUsername(checkUser);
+		List<String> followed = user.getFollowedSeries();
+		Set<ComicSeries> suggested = new HashSet<ComicSeries>();
+		for (int i = 0; i < followed.size(); i++) {
+			// get string name of comic series
+			ComicSeries comic = seriesrepository.findByComicSeriesName(followed.get(i)).get(0);
+			// get author name of series
+			String authorname = comic.getAuthor();
+			// find author by username
+			Users author = userrepository.findByUsername(authorname);
+			// get the names of produced series by that author
+			List<String> made_comics = author.getProducedSeries();
+			// retrieve each comic by name and add to the set of suggested series
+			for (int j = 0; j < made_comics.size(); j++) {
+				ComicSeries series = seriesrepository.findByComicSeriesName(made_comics.get(j)).get(0);
+				suggested.add(series);
+			}
+		}
+		return suggested;
+	}
+
+	@RequestMapping(value = "/search/<query>", method = RequestMethod.POST)
+	public Set<ComicSeries> search(@PathVariable String query) {
+		String[] words = query.toLowerCase().split(" ");
+		String regex = "";
+		for (int i = 0; i < words.length; i++) {
+			regex += words[i] + " |";
+		}
+		regex = regex.substring(0, regex.length() - 1);
+		List<ComicSeries> descriptionResults = seriesrepository.findByDescriptionQuery(regex);
+		List<ComicSeries> titleResults = seriesrepository.findByTitleQuery(regex);
+		Set<ComicSeries> results = new HashSet<ComicSeries>();
+		results.addAll(descriptionResults);
+		results.addAll(titleResults);
+		return results;
 	}
 
 }
