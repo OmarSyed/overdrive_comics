@@ -266,6 +266,10 @@ public class ComicSeriesController {
 	// add like to a chapter
 	@RequestMapping(value = "/chapter/like", method = RequestMethod.POST)
 	public ComicChapter likeChapter(@Valid @RequestBody ComicChapter chapter) {
+<<<<<<< HEAD
+=======
+		System.out.println(chapter.get_id());
+>>>>>>> e9b64693ac7a5e48546768b62a1092e62a683ed5
 		Optional<ComicChapter> chap = chapterrepository.findById(chapter.get_id());
 		Users currentUser  = userrepository.findByUsername(UsersController.curUser);
 		List<String> chapterId = currentUser.getLikedChapters();
@@ -540,6 +544,15 @@ public class ComicSeriesController {
 	@RequestMapping(value="/getchapter", method=RequestMethod.POST)
 	public ComicChapter getChapter(@Valid @RequestBody ComicChapter chapter) {
 		Optional<ComicChapter> chap = chapterrepository.findById(chapter.get_id());
+		return chap.get();
+	}
+	
+	//add chapter title
+	@RequestMapping(value="chapter/title", method=RequestMethod.POST)
+	public ComicChapter titleChapter(@Valid @RequestBody ComicChapter chapter) {
+		Optional<ComicChapter> chap = chapterrepository.findById(chapter.get_id());
+		chap.get().setChapterTitle(chapter.getChapterTitle());
+		chapterrepository.save(chap.get());
 		return chap.get();
 	}
 
