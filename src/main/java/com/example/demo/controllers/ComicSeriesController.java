@@ -497,27 +497,6 @@ public class ComicSeriesController {
 		return chapters;
 	}
 
-	// return popular series
-	@RequestMapping(value = "/popular/{option}", method = RequestMethod.GET)
-	public List<ComicSeries> getPopular(@PathVariable String option) {
-		System.out.println("stuff");
-		List<ComicSeries> all_popular_followers = seriesrepository.findByGenreOrderByFollowersDesc(option);
-		List<ComicSeries> all_popular_likes = seriesrepository.findByOrderByLikesDesc();
-		//Set<ComicSeries> s = new HashSet<ComicSeries>();
-		//s.addAll(all_popular_likes);
-		//s.addAll(all_popular_followers);
-		//return s;
-		//all_popular_followers.addAll(all_popular_likes);
-		//List<ComicSeries> listWithoutDuplicates = all_popular_followers.stream().distinct().collect(Collectors.toList());
-		if (all_popular_followers.size() > 20) {
-			List<ComicSeries> second = new ArrayList<ComicSeries>(all_popular_followers.subList(0, 20));
-			return second;
-		} else {
-			return all_popular_followers;
-		}
-		//return all_popular_followers;
-	}
-
 	// add comment to chapter
 	@RequestMapping(value = "chapter/addComment", method = RequestMethod.POST)
 	public Comment addComment(@Valid @RequestBody Comment comment) {
