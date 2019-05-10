@@ -18,6 +18,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.imageio.ImageIO;
 import javax.validation.Valid;
@@ -63,17 +64,29 @@ public class ComicSeriesController {
 		if (check.isEmpty()) {
 			HashMap<String, Double> rating = new HashMap<>();
 			series.setRating(rating);
-			seriesrepository.save(series);
+			String id = seriesrepository.save(series).getSeriesId();
+			Users user = userrepository.findByUsername(UsersController.curUser);
+			List<String> ids = user.getProducedSeries();
+			ids.add(id);
+			user.setProducedSeries(ids);
+			userrepository.save(user);
 			return "success";
 		}
 		for (int i = 0; i < check.size(); i++) {
+			//System.out.println(check.get(i).getComicSeriesName());
+			//System.out.println(series.getComicSeriesName());
 			if (check.get(i).getComicSeriesName().equals(series.getComicSeriesName())) {
 				return "failure";
 			}
 		}
-		seriesrepository.save(series);
 		HashMap<String, Double> rating = new HashMap<>();
 		series.setRating(rating);
+		String id = seriesrepository.save(series).getSeriesId();
+		Users user = userrepository.findByUsername(UsersController.curUser);
+		List<String> ids = user.getProducedSeries();
+		ids.add(id);
+		user.setProducedSeries(ids);
+		userrepository.save(user);
 		return "success";
 	}
 
@@ -149,7 +162,12 @@ public class ComicSeriesController {
 			}
 
 		} else {
-			return genres;
+			if (genres.size() > 20) {
+				List<ComicSeries> second = new ArrayList<ComicSeries>(genres.subList(0, 20));
+				return second;
+			} else {
+				return genres;
+			}
 		}
 	}
 
@@ -274,6 +292,7 @@ public class ComicSeriesController {
 		Users currentUser  = userrepository.findByUsername(UsersController.curUser);
 		List<String> chapterId = currentUser.getLikedChapters();
 		List<String> users = chap.get().getLikedUsers();
+		Optional<ComicSeries> series = seriesrepository.findById(chap.get().getSeriesId());
 		
 		if(users.contains(UsersController.getCurUser())) {
 			chapterId.remove(chapter.get_id());
@@ -283,6 +302,8 @@ public class ComicSeriesController {
 			chapterrepository.save(chap.get());
 			currentUser.setLikedChapters(users);
 			userrepository.save(currentUser);
+			series.get().setLikes(series.get().getLikes()-1);
+			seriesrepository.save(series.get());
 			return chap.get();
 		}else {
 			chapterId.add(chapter.get_id());
@@ -292,6 +313,8 @@ public class ComicSeriesController {
 			chapterrepository.save(chap.get());
 			currentUser.setLikedChapters(users);
 			userrepository.save(currentUser);
+			series.get().setLikes(series.get().getLikes()+1);
+			seriesrepository.save(series.get());
 			return chap.get();
 		}
 
@@ -556,17 +579,9 @@ public class ComicSeriesController {
 		return chap.get();
 	}
 	
-	@RequestMapping(value = "/popular/{option}", method = RequestMethod.POST)
-	public Set<ComicSeries> getPopular(@PathVariable String option) {
-		List<ComicSeries> all_popular_followers = seriesrepository.orderByFollowers();
-		List<ComicSeries> all_popular_likes = seriesrepository.orderByLikes();
-		Set<ComicSeries> s = new HashSet<ComicSeries>();
-		s.addAll(all_popular_likes);
-		s.addAll(all_popular_followers);
-		return s;
-	}
+	
 
-	@RequestMapping(value = "/discover", method = RequestMethod.POST)
+	@RequestMapping(value = "/discover", method = RequestMethod.GET)
 	public Set<ComicSeries> discover() {
 		String checkUser = UsersController.getCurUser();
 		Users user = userrepository.findByUsername(checkUser);
