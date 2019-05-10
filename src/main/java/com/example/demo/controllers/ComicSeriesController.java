@@ -15,6 +15,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -579,7 +580,25 @@ public class ComicSeriesController {
 		return chap.get();
 	}
 	
-	
+	@RequestMapping(value = "/popular/{option}", method = RequestMethod.GET)
+	public List<ComicSeries> getPopular(@PathVariable String option) {
+		System.out.println("stuff");
+		List<ComicSeries> all_popular_followers = seriesrepository.findByGenreOrderByFollowersDesc(option);
+		List<ComicSeries> all_popular_likes = seriesrepository.findByOrderByLikesDesc();
+		//Set<ComicSeries> s = new HashSet<ComicSeries>();
+		//s.addAll(all_popular_likes);
+		//s.addAll(all_popular_followers);
+		//return s;
+		//all_popular_followers.addAll(all_popular_likes);
+		//List<ComicSeries> listWithoutDuplicates = all_popular_followers.stream().distinct().collect(Collectors.toList());
+		if (all_popular_followers.size() > 20) {
+			List<ComicSeries> second = new ArrayList<ComicSeries>(all_popular_followers.subList(0, 20));
+			return second;
+		} else {
+			return all_popular_followers;
+		}
+		//return all_popular_followers;
+	}
 
 	@RequestMapping(value = "/discover", method = RequestMethod.GET)
 	public Set<ComicSeries> discover() {
@@ -605,20 +624,6 @@ public class ComicSeriesController {
 		return suggested;
 	}
 
-	@RequestMapping(value = "/search/<query>", method = RequestMethod.POST)
-	public Set<ComicSeries> search(@PathVariable String query) {
-		String[] words = query.toLowerCase().split(" ");
-		String regex = "";
-		for (int i = 0; i < words.length; i++) {
-			regex += words[i] + " |";
-		}
-		regex = regex.substring(0, regex.length() - 1);
-		List<ComicSeries> descriptionResults = seriesrepository.findByDescriptionQuery(regex);
-		List<ComicSeries> titleResults = seriesrepository.findByTitleQuery(regex);
-		Set<ComicSeries> results = new HashSet<ComicSeries>();
-		results.addAll(descriptionResults);
-		results.addAll(titleResults);
-		return results;
-	}
+	
 
 }
