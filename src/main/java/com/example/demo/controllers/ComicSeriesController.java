@@ -497,26 +497,6 @@ public class ComicSeriesController {
 		return chapters;
 	}
 
-	// return popular series
-	@RequestMapping(value = "/popular/{option}", method = RequestMethod.GET)
-	public List<ComicSeries> getPopular(@PathVariable String option) {
-		System.out.println("stuff");
-		List<ComicSeries> all_popular_followers = seriesrepository.findByGenreOrderByFollowersDesc(option);
-		List<ComicSeries> all_popular_likes = seriesrepository.findByOrderByLikesDesc();
-		//Set<ComicSeries> s = new HashSet<ComicSeries>();
-		//s.addAll(all_popular_likes);
-		//s.addAll(all_popular_followers);
-		//return s;
-		//all_popular_followers.addAll(all_popular_likes);
-		//List<ComicSeries> listWithoutDuplicates = all_popular_followers.stream().distinct().collect(Collectors.toList());
-		if (all_popular_followers.size() > 20) {
-			List<ComicSeries> second = new ArrayList<ComicSeries>(all_popular_followers.subList(0, 20));
-			return second;
-		} else {
-			return all_popular_followers;
-		}
-		//return all_popular_followers;
-	}
 
 	// add comment to chapter
 	@RequestMapping(value = "chapter/addComment", method = RequestMethod.POST)
@@ -610,7 +590,7 @@ public class ComicSeriesController {
 		//return s;
 		//all_popular_followers.addAll(all_popular_likes);
 		//List<ComicSeries> listWithoutDuplicates = all_popular_followers.stream().distinct().collect(Collectors.toList());
-		if (all_popular_followers.size() > 20) {
+		if (all_popular_followers.size() > 10) {
 			List<ComicSeries> second = new ArrayList<ComicSeries>(all_popular_followers.subList(0, 20));
 			return second;
 		} else {
@@ -643,8 +623,25 @@ public class ComicSeriesController {
 		return suggested;
 	}
 
-
-	
+	@RequestMapping(value = "/search/{query}", method = RequestMethod.GET)
+	public List<ComicSeries> search(@PathVariable String query) {
+		List<ComicSeries> series = seriesrepository.findByComicSeriesNameIgnoreCaseLikeOrderByFollowersDesc(query);
+		List<String> ids = new ArrayList<String>();
+		
+		for(int i = 0; i<series.size(); i++) {
+			ids.add(series.get(i).getSeriesId());
+		}
+		List<ComicSeries> des = seriesrepository.findByDescriptionIgnoreCaseLikeOrderByFollowersDesc(query);
+		//series.addAll(des);
+		for(int i = 0; i<des.size(); i++) {
+			if(ids.contains(des.get(i).getSeriesId())) {
+				System.out.println("duplicate");
+			}else {
+				series.add(des.get(i));
+			}
+		}
+		return series;
+	}
 
 
 }
