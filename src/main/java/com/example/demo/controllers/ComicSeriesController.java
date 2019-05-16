@@ -25,6 +25,7 @@ import javax.imageio.ImageIO;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.PathVariable;
 //import org.springframework.security.core.Authentication;
 //import org.springframework.security.core.context.SecurityContextHolder;
@@ -589,13 +590,14 @@ public class ComicSeriesController {
 		//return s;
 		//all_popular_followers.addAll(all_popular_likes);
 		//List<ComicSeries> listWithoutDuplicates = all_popular_followers.stream().distinct().collect(Collectors.toList());
-		if (all_popular_followers.size() > 20) {
-			List<ComicSeries> second = new ArrayList<ComicSeries>(all_popular_followers.subList(0, 20));
+		if (all_popular_followers.size() > 5) {
+			List<ComicSeries> second = new ArrayList<ComicSeries>(all_popular_followers.subList(0, 5));
 			return second;
 		} else {
 			return all_popular_followers;
 		}
 		//return all_popular_followers;
+
 	}
 
 	@RequestMapping(value = "/discover", method = RequestMethod.GET)
@@ -606,9 +608,9 @@ public class ComicSeriesController {
 		Set<ComicSeries> suggested = new HashSet<ComicSeries>();
 		for (int i = 0; i < followed.size(); i++) {
 			// get string name of comic series
-			ComicSeries comic = seriesrepository.findByComicSeriesName(followed.get(i)).get(0);
+			Optional<ComicSeries> comic = seriesrepository.findById(followed.get(i));
 			// get author name of series
-			String authorname = comic.getAuthor();
+			String authorname = comic.get().getAuthor();
 			// find author by username
 			Users author = userrepository.findByUsername(authorname);
 			// get the names of produced series by that author
@@ -622,8 +624,24 @@ public class ComicSeriesController {
 		return suggested;
 	}
 
-
-	
-
+	@RequestMapping(value = "/search/{query}", method = RequestMethod.GET)
+	public List<ComicSeries> search(@PathVariable String query) {
+		List<ComicSeries> series = seriesrepository.findByComicSeriesNameLikeOrderByFollowersDesc(query);
+		List<String> ids = new ArrayList<String>();
+		
+		for(int i = 0; i<series.size(); i++) {
+			ids.add(series.get(i).getSeriesId());
+		}
+		List<ComicSeries> des = seriesrepository.findByDescriptionLikeOrderByFollowersDesc(query);
+		//series.addAll(des);
+		for(int i = 0; i<des.size(); i++) {
+			if(ids.contains(des.get(i).getSeriesId())) {
+				System.out.println("duplicate");
+			}else {
+				series.add(des.get(i));
+			}
+		}
+		return series;
+	}
 
 }
