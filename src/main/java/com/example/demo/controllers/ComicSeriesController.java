@@ -299,10 +299,10 @@ public class ComicSeriesController {
 		if(users.contains(UsersController.getCurUser())) {
 			chapterId.remove(chapter.get_id());
 			users.remove(UsersController.curUser);
-			chap.get().setLikedUsers(chapterId);
+			chap.get().setLikedUsers(users);
 			chap.get().setLikes(chap.get().getLikes()-1);
 			chapterrepository.save(chap.get());
-			currentUser.setLikedChapters(users);
+			currentUser.setLikedChapters(chapterId);
 			userrepository.save(currentUser);
 			series.get().setLikes(series.get().getLikes()-1);
 			seriesrepository.save(series.get());
@@ -310,10 +310,10 @@ public class ComicSeriesController {
 		}else {
 			chapterId.add(chapter.get_id());
 			users.add(UsersController.curUser);
-			chap.get().setLikedUsers(chapterId);
+			chap.get().setLikedUsers(users);
 			chap.get().setLikes(chap.get().getLikes()+1);
 			chapterrepository.save(chap.get());
-			currentUser.setLikedChapters(users);
+			currentUser.setLikedChapters(chapterId);
 			userrepository.save(currentUser);
 			series.get().setLikes(series.get().getLikes()+1);
 			seriesrepository.save(series.get());
@@ -498,11 +498,13 @@ public class ComicSeriesController {
 		return chapters;
 	}
 
+
 	// add comment to chapter
 	@RequestMapping(value = "chapter/addComment", method = RequestMethod.POST)
 	public Comment addComment(@Valid @RequestBody Comment comment) {
 		// List<Comment> com =
 		// commentrepository.findByChapterId(comment.getChapterId());
+		comment.setUsername(UsersController.curUser);
 		commentrepository.save(comment);
 		return comment;
 	}
@@ -515,7 +517,7 @@ public class ComicSeriesController {
 	}
 
 	// list comments for a chapter
-	@RequestMapping(value = "chapter/listcomments", method = RequestMethod.GET)
+	@RequestMapping(value = "chapter/listcomments/{chapterId}", method = RequestMethod.GET)
 	public List<Comment> listComments(@PathVariable String chapterId) {
 		return commentrepository.findByChapterId(chapterId);
 	}	
@@ -532,7 +534,7 @@ public class ComicSeriesController {
 	}
 	
 	//check if current user liked chapter
-	@RequestMapping(value="chapter/liked{id}", method=RequestMethod.GET)
+	@RequestMapping(value="chapter/liked/{chapterId}", method=RequestMethod.GET)
 	public boolean checkLiked(@PathVariable String chapterId) throws NullPointerException {
 		try {
 			Optional<ComicChapter> chap = chapterrepository.findById(chapterId);

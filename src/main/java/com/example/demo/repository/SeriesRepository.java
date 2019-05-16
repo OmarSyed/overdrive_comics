@@ -23,4 +23,3 @@ public interface SeriesRepository extends MongoRepository<ComicSeries, String> {
 	List<ComicSeries> findByComicSeriesNameLikeOrderByFollowersDesc(String comicSeriesName);
 	List<ComicSeries> findByDescriptionLikeOrderByFollowersDesc(String description);
 }
-
