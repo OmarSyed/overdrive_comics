@@ -2,6 +2,7 @@ package com.example.demo.config;
 
 import java.io.IOException;
 
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,6 +21,7 @@ import org.springframework.security.web.access.channel.ChannelProcessingFilter;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
 
 import com.example.demo.config.CustomFilter;
 
@@ -52,6 +54,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
   public BCryptPasswordEncoder passwordEncoder() {
     return new BCryptPasswordEncoder();
   }
+  
+//  @Bean
+//  public AuthenticationSuccessHandler successHandler() {
+//	  return new AuthenticationSuccessHandler();
+//  }
   
 //  @Override
 //  public void configure(AuthenticationManagerBuilder builder) throws Exception {

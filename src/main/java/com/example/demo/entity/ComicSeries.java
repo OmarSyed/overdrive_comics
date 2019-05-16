@@ -1,7 +1,7 @@
 package com.example.demo.entity;
 
 import java.sql.Blob;
-
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -26,6 +26,7 @@ public class ComicSeries {
 	private String description;
 	private int followers;
 	private String day;
+	private LocalDate date;
 	
 	private ArrayList<String> chapters;	//Change type of ArrayList to comic chapter
 	private boolean isFollowed;
@@ -118,8 +119,12 @@ public class ComicSeries {
 	public void setDay(String day) {
 		this.day = day;
 	}
-	
-	
+	public LocalDate getDate() {
+		return date;
+	}
+	public void setDate(LocalDate date) {
+		this.date = date;
+	}
 	
 	
 }

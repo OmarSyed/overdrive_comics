@@ -1,9 +1,11 @@
 package com.example.demo.controllers;
 
 import java.awt.image.BufferedImage;
-
+import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.DateFormat;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -29,6 +31,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.demo.entity.ComicChapter;
 import com.example.demo.entity.ComicSeries;
@@ -60,6 +63,8 @@ public class ComicSeriesController {
 		if (check.isEmpty()) {
 			HashMap<String, Double> rating = new HashMap<>();
 			series.setRating(rating);
+			LocalDate today = LocalDate.now();
+			series.setDate(today);
 			seriesrepository.save(series);
 			return "success";
 		}
@@ -71,6 +76,8 @@ public class ComicSeriesController {
 		seriesrepository.save(series);
 		HashMap<String, Double> rating = new HashMap<>();
 		series.setRating(rating);
+		LocalDate today = LocalDate.now();
+		series.setDate(today);
 		return "success";
 	}
 
@@ -266,10 +273,7 @@ public class ComicSeriesController {
 	// add like to a chapter
 	@RequestMapping(value = "/chapter/like", method = RequestMethod.POST)
 	public ComicChapter likeChapter(@Valid @RequestBody ComicChapter chapter) {
-<<<<<<< HEAD
-=======
 		System.out.println(chapter.get_id());
->>>>>>> e9b64693ac7a5e48546768b62a1092e62a683ed5
 		Optional<ComicChapter> chap = chapterrepository.findById(chapter.get_id());
 		Users currentUser  = userrepository.findByUsername(UsersController.curUser);
 		List<String> chapterId = currentUser.getLikedChapters();
@@ -509,7 +513,7 @@ public class ComicSeriesController {
 	}
 	
 	//check if current user liked chapter
-	@RequestMapping(value="chapter/liked{id}", method=RequestMethod.GET)
+	@RequestMapping(value="chapter/liked/{id}", method=RequestMethod.GET)
 	public boolean checkLiked(@PathVariable String chapterId) throws NullPointerException {
 		try {
 			Optional<ComicChapter> chap = chapterrepository.findById(chapterId);
@@ -536,8 +540,47 @@ public class ComicSeriesController {
 		if(!series.getDescription().isEmpty()) {
 			comic.get().setDescription(series.getDescription());
 		}
-		return seriesrepository.save(comic.get());
-		
+		return seriesrepository.save(comic.get());		
+	}
+	
+	@RequestMapping(value="/thumbnail/pic/{id}", method = RequestMethod.POST)
+	public String editPic(@RequestParam("pic") MultipartFile imagefile, @PathVariable String id) throws IllegalStateException, IOException {
+		Users user = userrepository.findByUsername(UsersController.curUser); 
+		Optional<ComicSeries> series = seriesrepository.findById(id);
+	
+		String message = "";
+		String filename = "";
+        //MultipartFile file = imagefile;
+        try {
+            byte[] bytes = imagefile.getBytes();
+
+            // Creating the directory to store file
+            //String rootPath = System.getProperty("catalina.home");
+            File dir = new File("../" + "overdrive_frontend/src/assets/" + UsersController.curUser + "/" 
+            + "/" + series.get().getComicSeriesName());
+            if (!dir.exists())
+                dir.mkdirs();
+            filename = "assets/" + UsersController.curUser + "/" 
+                    + series.get().getComicSeriesName() +"/" + "image0.png";
+            // Create the file on server
+            File serverFile = new File(dir.getAbsolutePath()
+                    + File.separator + "image0.png");
+            BufferedOutputStream stream = new BufferedOutputStream(
+                    new FileOutputStream(serverFile));
+            stream.write(bytes);
+            stream.close();
+
+//            logger.info("Server File Location="
+//                    + serverFile.getAbsolutePath());
+
+            message = message + "You successfully uploaded file=" + "image"
+                    + "<br />";
+        } catch (Exception e) {
+            return "You failed to upload " + "image" + " => " + e.getMessage();
+        }
+        series.get().setThumbnail(filename);
+        seriesrepository.save(series.get());
+        return message;
 	}
 	
 	//get chapter object
