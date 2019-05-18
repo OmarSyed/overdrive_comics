@@ -16,13 +16,18 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.imageio.ImageIO;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.PathVariable;
 //import org.springframework.security.core.Authentication;
 //import org.springframework.security.core.context.SecurityContextHolder;
@@ -33,6 +38,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.example.demo.controllers.UsersController;
 import com.example.demo.entity.ComicChapter;
 import com.example.demo.entity.ComicSeries;
 import com.example.demo.entity.Comment;
@@ -66,18 +72,31 @@ public class ComicSeriesController {
 			LocalDate today = LocalDate.now();
 			series.setDate(today);
 			seriesrepository.save(series);
+			String id = seriesrepository.save(series).getSeriesId();
+			Users user = userrepository.findByUsername(UsersController.curUser);
+			List<String> ids = user.getProducedSeries();
+			ids.add(id);
+			user.setProducedSeries(ids);
+			userrepository.save(user);
 			return "success";
 		}
 		for (int i = 0; i < check.size(); i++) {
+			//System.out.println(check.get(i).getComicSeriesName());
+			//System.out.println(series.getComicSeriesName());
 			if (check.get(i).getComicSeriesName().equals(series.getComicSeriesName())) {
 				return "failure";
 			}
 		}
-		seriesrepository.save(series);
 		HashMap<String, Double> rating = new HashMap<>();
 		series.setRating(rating);
 		LocalDate today = LocalDate.now();
 		series.setDate(today);
+		String id = seriesrepository.save(series).getSeriesId();
+		Users user = userrepository.findByUsername(UsersController.curUser);
+		List<String> ids = user.getProducedSeries();
+		ids.add(id);
+		user.setProducedSeries(ids);
+		userrepository.save(user);
 		return "success";
 	}
 
@@ -153,7 +172,12 @@ public class ComicSeriesController {
 			}
 
 		} else {
-			return genres;
+			if (genres.size() > 20) {
+				List<ComicSeries> second = new ArrayList<ComicSeries>(genres.subList(0, 20));
+				return second;
+			} else {
+				return genres;
+			}
 		}
 	}
 
@@ -278,24 +302,29 @@ public class ComicSeriesController {
 		Users currentUser  = userrepository.findByUsername(UsersController.curUser);
 		List<String> chapterId = currentUser.getLikedChapters();
 		List<String> users = chap.get().getLikedUsers();
+		Optional<ComicSeries> series = seriesrepository.findById(chap.get().getSeriesId());
 		
 		if(users.contains(UsersController.getCurUser())) {
 			chapterId.remove(chapter.get_id());
 			users.remove(UsersController.curUser);
-			chap.get().setLikedUsers(chapterId);
+			chap.get().setLikedUsers(users);
 			chap.get().setLikes(chap.get().getLikes()-1);
 			chapterrepository.save(chap.get());
-			currentUser.setLikedChapters(users);
+			currentUser.setLikedChapters(chapterId);
 			userrepository.save(currentUser);
+			series.get().setLikes(series.get().getLikes()-1);
+			seriesrepository.save(series.get());
 			return chap.get();
 		}else {
 			chapterId.add(chapter.get_id());
 			users.add(UsersController.curUser);
-			chap.get().setLikedUsers(chapterId);
+			chap.get().setLikedUsers(users);
 			chap.get().setLikes(chap.get().getLikes()+1);
 			chapterrepository.save(chap.get());
-			currentUser.setLikedChapters(users);
+			currentUser.setLikedChapters(chapterId);
 			userrepository.save(currentUser);
+			series.get().setLikes(series.get().getLikes()+1);
+			seriesrepository.save(series.get());
 			return chap.get();
 		}
 
@@ -477,13 +506,13 @@ public class ComicSeriesController {
 		return chapters;
 	}
 
-	// return popular series
 
 	// add comment to chapter
 	@RequestMapping(value = "chapter/addComment", method = RequestMethod.POST)
 	public Comment addComment(@Valid @RequestBody Comment comment) {
 		// List<Comment> com =
 		// commentrepository.findByChapterId(comment.getChapterId());
+		comment.setUsername(UsersController.curUser);
 		commentrepository.save(comment);
 		return comment;
 	}
@@ -496,7 +525,7 @@ public class ComicSeriesController {
 	}
 
 	// list comments for a chapter
-	@RequestMapping(value = "chapter/listcomments", method = RequestMethod.GET)
+	@RequestMapping(value = "chapter/listcomments/{chapterId}", method = RequestMethod.GET)
 	public List<Comment> listComments(@PathVariable String chapterId) {
 		return commentrepository.findByChapterId(chapterId);
 	}	
@@ -513,7 +542,7 @@ public class ComicSeriesController {
 	}
 	
 	//check if current user liked chapter
-	@RequestMapping(value="chapter/liked/{id}", method=RequestMethod.GET)
+	@RequestMapping(value="chapter/liked/{chapterId}", method=RequestMethod.GET)
 	public boolean checkLiked(@PathVariable String chapterId) throws NullPointerException {
 		try {
 			Optional<ComicChapter> chap = chapterrepository.findById(chapterId);
@@ -597,6 +626,71 @@ public class ComicSeriesController {
 		chap.get().setChapterTitle(chapter.getChapterTitle());
 		chapterrepository.save(chap.get());
 		return chap.get();
+	}
+	
+	@RequestMapping(value = "/popular/{option}", method = RequestMethod.GET)
+	public List<ComicSeries> getPopular(@PathVariable String option) {
+		System.out.println("stuff");
+		List<ComicSeries> all_popular_followers = seriesrepository.findByGenreOrderByFollowersDesc(option);
+		List<ComicSeries> all_popular_likes = seriesrepository.findByOrderByLikesDesc();
+		//Set<ComicSeries> s = new HashSet<ComicSeries>();
+		//s.addAll(all_popular_likes);
+		//s.addAll(all_popular_followers);
+		//return s;
+		//all_popular_followers.addAll(all_popular_likes);
+		//List<ComicSeries> listWithoutDuplicates = all_popular_followers.stream().distinct().collect(Collectors.toList());
+		if (all_popular_followers.size() > 5) {
+			List<ComicSeries> second = new ArrayList<ComicSeries>(all_popular_followers.subList(0, 5));
+			return second;
+		} else {
+			return all_popular_followers;
+		}
+		//return all_popular_followers;
+
+	}
+
+	@RequestMapping(value = "/discover", method = RequestMethod.GET)
+	public Set<ComicSeries> discover() {
+		String checkUser = UsersController.getCurUser();
+		Users user = userrepository.findByUsername(checkUser);
+		List<String> followed = user.getFollowedSeries();
+		Set<ComicSeries> suggested = new HashSet<ComicSeries>();
+		for (int i = 0; i < followed.size(); i++) {
+			// get string name of comic series
+			Optional<ComicSeries> comic = seriesrepository.findById(followed.get(i));
+			// get author name of series
+			String authorname = comic.get().getAuthor();
+			// find author by username
+			Users author = userrepository.findByUsername(authorname);
+			// get the names of produced series by that author
+			List<String> made_comics = author.getProducedSeries();
+			// retrieve each comic by name and add to the set of suggested series
+			for (int j = 0; j < made_comics.size(); j++) {
+				ComicSeries series = seriesrepository.findByComicSeriesName(made_comics.get(j)).get(0);
+				suggested.add(series);
+			}
+		}
+		return suggested;
+	}
+
+	@RequestMapping(value = "/search/{query}", method = RequestMethod.GET)
+	public List<ComicSeries> search(@PathVariable String query) {
+		List<ComicSeries> series = seriesrepository.findByComicSeriesNameLikeOrderByFollowersDesc(query);
+		List<String> ids = new ArrayList<String>();
+		
+		for(int i = 0; i<series.size(); i++) {
+			ids.add(series.get(i).getSeriesId());
+		}
+		List<ComicSeries> des = seriesrepository.findByDescriptionLikeOrderByFollowersDesc(query);
+		//series.addAll(des);
+		for(int i = 0; i<des.size(); i++) {
+			if(ids.contains(des.get(i).getSeriesId())) {
+				System.out.println("duplicate");
+			}else {
+				series.add(des.get(i));
+			}
+		}
+		return series;
 	}
 
 }

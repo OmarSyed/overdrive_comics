@@ -1,6 +1,6 @@
 /target/
 !.mvn/wrapper/maven-wrapper.jar
-
+omar (2).jpg
 ### STS ###
 .apt_generated
 .classpath
@@ -9,6 +9,9 @@
 .settings
 .springBeans
 .sts4-cache
+image_0.png
+user/
+user1/
 
 ### IntelliJ IDEA ###
 .idea
