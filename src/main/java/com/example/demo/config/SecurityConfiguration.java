@@ -14,6 +14,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.access.channel.ChannelProcessingFilter;
@@ -26,7 +27,15 @@ import com.example.demo.config.CustomFilter;
 
 @EnableConfigurationProperties
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+	
+	
+	@Override
+    protected void configure(
+      AuthenticationManagerBuilder auth) throws Exception {
   
+        auth.authenticationProvider(authProvider());
+    }
+	
   @Override
   protected void configure(HttpSecurity http) throws Exception {
 	http.addFilterBefore(new CustomFilter(), ChannelProcessingFilter.class);
@@ -46,9 +55,24 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     .logout();
   }
   
+//  @Bean 
+//  public SecurityContextHolder securityContextHolder() {
+//	  return new SecurityContextHolder();
+//  }
+  
   @Bean
   public BCryptPasswordEncoder passwordEncoder() {
     return new BCryptPasswordEncoder();
+  }
+  
+  @Bean
+  public CustomAuthenticationProvider authProvider() {
+	  return new CustomAuthenticationProvider();
+  }
+  
+  @Bean
+  public CustomSuccessHandler successHandler() {
+	  return new CustomSuccessHandler();
   }
   
 //  @Override
@@ -56,15 +80,15 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 //    builder.userDetailsService(userDetailsService);
 //  }
   
-  private AuthenticationSuccessHandler successHandler() {
-	    return new AuthenticationSuccessHandler() {
-	      @Override
-	      public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
-	        httpServletResponse.getWriter().append("OK");
-	        httpServletResponse.setStatus(200);
-	      }
-	    };
-	  }
+//  private AuthenticationSuccessHandler successHandler() {
+//	    return new AuthenticationSuccessHandler() {
+//	      @Override
+//	      public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
+//	        httpServletResponse.getWriter().append("OK");
+//	        httpServletResponse.setStatus(200);
+//	      }
+//	    };
+//	  }
 
 	  private AuthenticationFailureHandler failureHandler() {
 	    return new AuthenticationFailureHandler() {
