@@ -2,7 +2,6 @@ package com.example.demo.config;
 
 import java.io.IOException;
 
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -15,13 +14,12 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.access.channel.ChannelProcessingFilter;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
 
 import com.example.demo.config.CustomFilter;
 
@@ -29,11 +27,18 @@ import com.example.demo.config.CustomFilter;
 
 @EnableConfigurationProperties
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+	
+	
+	@Override
+    protected void configure(
+      AuthenticationManagerBuilder auth) throws Exception {
   
+        auth.authenticationProvider(authProvider());
+    }
+	
   @Override
   protected void configure(HttpSecurity http) throws Exception {
 	http.addFilterBefore(new CustomFilter(), ChannelProcessingFilter.class);
-	http.addFilter(new CustomUsernamePasswordAuthenticationFilter());
 	http
     .csrf().disable()
     .exceptionHandling()
@@ -50,30 +55,40 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     .logout();
   }
   
+//  @Bean 
+//  public SecurityContextHolder securityContextHolder() {
+//	  return new SecurityContextHolder();
+//  }
+  
   @Bean
   public BCryptPasswordEncoder passwordEncoder() {
     return new BCryptPasswordEncoder();
   }
   
-//  @Bean
-//  public AuthenticationSuccessHandler successHandler() {
-//	  return new AuthenticationSuccessHandler();
-//  }
+  @Bean
+  public CustomAuthenticationProvider authProvider() {
+	  return new CustomAuthenticationProvider();
+  }
+  
+  @Bean
+  public CustomSuccessHandler successHandler() {
+	  return new CustomSuccessHandler();
+  }
   
 //  @Override
 //  public void configure(AuthenticationManagerBuilder builder) throws Exception {
 //    builder.userDetailsService(userDetailsService);
 //  }
   
-  private AuthenticationSuccessHandler successHandler() {
-	    return new AuthenticationSuccessHandler() {
-	      @Override
-	      public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
-	        httpServletResponse.getWriter().append("OK");
-	        httpServletResponse.setStatus(200);
-	      }
-	    };
-	  }
+//  private AuthenticationSuccessHandler successHandler() {
+//	    return new AuthenticationSuccessHandler() {
+//	      @Override
+//	      public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
+//	        httpServletResponse.getWriter().append("OK");
+//	        httpServletResponse.setStatus(200);
+//	      }
+//	    };
+//	  }
 
 	  private AuthenticationFailureHandler failureHandler() {
 	    return new AuthenticationFailureHandler() {
