@@ -48,6 +48,13 @@ public class LoginController {
 		
 	}
 	
+	@RequestMapping(value = "/logout", method = RequestMethod.GET)
+	public String logout() {
+		SecurityContextHolder sc = securityContextHolder();
+		sc.clearContext();
+		return "Success";
+	}
+	
 	@RequestMapping(value = "/user", method = RequestMethod.GET)
 	public String getUser() {
 		return (String)SecurityContextHolder.getContext().getAuthentication().getPrincipal();

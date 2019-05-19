@@ -26,6 +26,7 @@ import org.springframework.http.MediaType;
 //import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.util.MultiValueMap;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -125,12 +126,12 @@ public class UsersController {
 	
 	//@CrossOrigin
 	@RequestMapping(value="/profile", method = RequestMethod.GET)
-	public Users showUser() {
+	public Users showUser(@CookieValue("username") String username) {
 		//System.out.println("its in profile endpoint");
 		//Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		//System.out.println(auth.getName());
 		//System.out.println(curUser);
-		return repository.findByUsername(curUser); 
+		return repository.findByUsername(username); 
 	}
 	
 	@RequestMapping(value="/profile/bio", method = RequestMethod.POST)

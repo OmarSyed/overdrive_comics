@@ -28,6 +28,8 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
+import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 //import org.springframework.security.core.Authentication;
 //import org.springframework.security.core.context.SecurityContextHolder;
@@ -49,6 +51,7 @@ import com.example.demo.repository.CommentRepository;
 import com.example.demo.repository.SeriesRepository;
 import com.example.demo.repository.UserRepository;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/api/series")
 public class ComicSeriesController {
@@ -64,7 +67,7 @@ public class ComicSeriesController {
 
 	// Create a series, add it to mongo collection
 	@RequestMapping(value = "/create", method = RequestMethod.POST)
-	public String createSeries(@Valid @RequestBody ComicSeries series) {
+	public String createSeries(@Valid @RequestBody ComicSeries series, @CookieValue("username") String username) {
 		List<ComicSeries> check = seriesrepository.findByAuthor(series.getAuthor());
 		if (check.isEmpty()) {
 			HashMap<String, Double> rating = new HashMap<>();
@@ -73,7 +76,7 @@ public class ComicSeriesController {
 			series.setDate(today);
 			seriesrepository.save(series);
 			String id = seriesrepository.save(series).getSeriesId();
-			Users user = userrepository.findByUsername(UsersController.curUser);
+			Users user = userrepository.findByUsername(username);
 			List<String> ids = user.getProducedSeries();
 			ids.add(id);
 			user.setProducedSeries(ids);
@@ -92,7 +95,7 @@ public class ComicSeriesController {
 		LocalDate today = LocalDate.now();
 		series.setDate(today);
 		String id = seriesrepository.save(series).getSeriesId();
-		Users user = userrepository.findByUsername(UsersController.curUser);
+		Users user = userrepository.findByUsername(username);
 		List<String> ids = user.getProducedSeries();
 		ids.add(id);
 		user.setProducedSeries(ids);
@@ -125,11 +128,11 @@ public class ComicSeriesController {
 
 	// return the series under a user
 	@RequestMapping(value = "/user", method = RequestMethod.GET)
-	public List<ComicSeries> userSeries() {
+	public List<ComicSeries> userSeries(@CookieValue("username") String username) {
 		// Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		// System.out.println(auth.getName());
-		UsersController user = new UsersController();
-		return seriesrepository.findByAuthor(user.getCurUser());
+//		UsersController user = new UsersController();
+		return seriesrepository.findByAuthor(username);
 	}
 
 	// return series under a author
@@ -183,12 +186,12 @@ public class ComicSeriesController {
 
 	// Users follows a series
 	@RequestMapping(value = "/follow", method = RequestMethod.POST)
-	public ComicSeries followSeries(@Valid @RequestBody ComicSeries series) {
+	public ComicSeries followSeries(@Valid @RequestBody ComicSeries series, @CookieValue("username") String username) {
 		// Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		// Users user = userrepository.findByUsername(auth.getName());
 		// UsersController curUser = new UsersController();
-		String checkUser = UsersController.getCurUser();
-		Users user = userrepository.findByUsername(checkUser);
+//		String checkUser = UsersController.getCurUser();
+		Users user = userrepository.findByUsername(username);
 		// System.out.println(curUser.getCurUser());
 		List<String> followed = user.getFollowedSeries();
 		System.out.println(series.getAuthor());
@@ -240,10 +243,10 @@ public class ComicSeriesController {
 
 	// rate or update rating for series
 	@RequestMapping(value = "/rating", method = RequestMethod.POST)
-	public ComicSeries editRating(@Valid @RequestBody ComicSeries series) {
+	public ComicSeries editRating(@Valid @RequestBody ComicSeries series, @CookieValue("username") String username) {
 		// Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		String curUser = UsersController.curUser;
-		Users user = userrepository.findByUsername(curUser);
+//		String curUser = UsersController.curUser;
+		Users user = userrepository.findByUsername(username);
 		// System.out.println(auth.getName());
 		List<ComicSeries> check = seriesrepository.findByAuthor(series.getAuthor());
 		ComicSeries update = new ComicSeries();
@@ -262,9 +265,9 @@ public class ComicSeriesController {
 		}
 		// System.out.println(auth.getName());
 		if (newRating.containsKey(user.getUsername())) {
-			newRating.replace(curUser, series.getScore());
+			newRating.replace(username, series.getScore());
 		} else {
-			newRating.put(curUser, series.getScore());
+			newRating.put(username, series.getScore());
 		}
 		// System.out.println(auth.getName());
 		double sum = 0;
@@ -282,11 +285,12 @@ public class ComicSeriesController {
 	}
 
 	// display what the author follows
+	@CrossOrigin
 	@RequestMapping(value = "/displayfollows", method = RequestMethod.GET)
-	public Iterable<ComicSeries> displaySeriesFollows() {
+	public Iterable<ComicSeries> displaySeriesFollows(@CookieValue("username") String username) {
 		try {
-			String checkUser = UsersController.getCurUser();
-			Users user = userrepository.findByUsername(checkUser);
+//			String checkUser = UsersController.getCurUser();
+			Users user = userrepository.findByUsername(username);
 			return seriesrepository.findAllById(user.getFollowedSeries());
 		} catch (NullPointerException ex) {
 			System.out.println("No followed series found");
@@ -296,17 +300,17 @@ public class ComicSeriesController {
 
 	// add like to a chapter
 	@RequestMapping(value = "/chapter/like", method = RequestMethod.POST)
-	public ComicChapter likeChapter(@Valid @RequestBody ComicChapter chapter) {
+	public ComicChapter likeChapter(@Valid @RequestBody ComicChapter chapter, @CookieValue("username") String username) {
 		System.out.println(chapter.get_id());
 		Optional<ComicChapter> chap = chapterrepository.findById(chapter.get_id());
-		Users currentUser  = userrepository.findByUsername(UsersController.curUser);
+		Users currentUser  = userrepository.findByUsername(username);
 		List<String> chapterId = currentUser.getLikedChapters();
 		List<String> users = chap.get().getLikedUsers();
 		Optional<ComicSeries> series = seriesrepository.findById(chap.get().getSeriesId());
 		
 		if(users.contains(UsersController.getCurUser())) {
 			chapterId.remove(chapter.get_id());
-			users.remove(UsersController.curUser);
+			users.remove(username);
 			chap.get().setLikedUsers(users);
 			chap.get().setLikes(chap.get().getLikes()-1);
 			chapterrepository.save(chap.get());
@@ -317,7 +321,7 @@ public class ComicSeriesController {
 			return chap.get();
 		}else {
 			chapterId.add(chapter.get_id());
-			users.add(UsersController.curUser);
+			users.add(username);
 			chap.get().setLikedUsers(users);
 			chap.get().setLikes(chap.get().getLikes()+1);
 			chapterrepository.save(chap.get());
@@ -349,10 +353,11 @@ public class ComicSeriesController {
 //	}
 
 	// get all the likes a user has
+	@CrossOrigin
 	@RequestMapping(value = "/totallikes", method = RequestMethod.GET)
-	public int totalLikes() {
+	public int totalLikes(@CookieValue("username") String username) {
 		int total = 0;
-		List<ComicChapter> chapter = chapterrepository.findByAuthor(UsersController.curUser);
+		List<ComicChapter> chapter = chapterrepository.findByAuthor(username);
 		for (int i = 0; i < chapter.size(); i++) {
 			total = total + chapter.get(i).getLikes();
 		}
@@ -360,10 +365,11 @@ public class ComicSeriesController {
 	}
 	
 	//get all the followers a user has
+	@CrossOrigin
 	@RequestMapping(value="/totalfollowers", method = RequestMethod.GET)
-	public int totalFollowers() {
+	public int totalFollowers(@CookieValue("username") String username) {
 		int total  = 0;
-		List<ComicSeries> series = seriesrepository.findByAuthor(UsersController.curUser);
+		List<ComicSeries> series = seriesrepository.findByAuthor(username);
 		for(int i = 0; i < series.size(); i++) {
 			total = total + series.get(i).getFollowers();
 		}
@@ -371,22 +377,24 @@ public class ComicSeriesController {
 	}
 	
 	//get number of comics made
+	@CrossOrigin
 	@RequestMapping(value="/totalcomics", method = RequestMethod.GET)
-	public int totalComics() {
-		List<ComicSeries> series = seriesrepository.findByAuthor(UsersController.curUser);
+	public int totalComics(@CookieValue("username") String username) {
+		List<ComicSeries> series = seriesrepository.findByAuthor(username);
 		return series.size();
 	}
 	
 	//get number of follows
+	@CrossOrigin
 	@RequestMapping(value="/totalfollows", method = RequestMethod.GET)
-	public int totalFollowing() {
-		Users user  = userrepository.findByUsername(UsersController.curUser);
+	public int totalFollowing(@CookieValue("username") String username) {
+		Users user  = userrepository.findByUsername(username);
 		return user.getFollowedSeries().size();
 	}
 
 	// create a chapter
 	@RequestMapping(value = "/chapter/create", method = RequestMethod.POST)
-	public ComicChapter createChapter(@Valid @RequestBody ComicChapter chapter) {
+	public ComicChapter createChapter(@Valid @RequestBody ComicChapter chapter, @CookieValue("username") String username) {
 		// List<ComicSeries> series =
 		// seriesrepository.findByAuthor(UsersController.curUser);
 		String seriesId = "";
@@ -397,7 +405,7 @@ public class ComicSeriesController {
 		List<String> likedUsers = new ArrayList<String>();
 		List<String> imgUrls = new ArrayList<String>();
 		// List<String> pages = new ArrayList<String>();
-		chapter.setAuthor(UsersController.curUser);
+		chapter.setAuthor(username);
 		chapter.setSeriesId(chapter.getSeriesId());
 		chapter.setLikedUsers(likedUsers);
 		chapter.setImgUrls(imgUrls);
@@ -460,7 +468,7 @@ public class ComicSeriesController {
 	
 	//publish a chapter
 	@RequestMapping(value="/chapter/publish", method=RequestMethod.POST)
-	public String publishChapter(@Valid @RequestBody ComicChapter chapter) {
+	public String publishChapter(@Valid @RequestBody ComicChapter chapter, @CookieValue("username") String username) {
 		System.out.println(chapter.get_id() + " " + UsersController.curUser);
 //		String user = UsersController.curUser;
 		String user = "johnsmith";
@@ -472,7 +480,7 @@ public class ComicSeriesController {
 			arr = new JSONArray(chapter.getImages());
 			List<String> list = new ArrayList<String>();
 			for (int i = 0; i < arr.length(); i++) {			    //list.add(arr.getJSONObject(i).toString());
-					String filename = "../"+ "overdrive_frontend/src/assets/" + UsersController.curUser+"/" + chap.get().getSeriesTitle() + "/" + chapter.get_id()+ "/"+"image_" + i + ".png";
+					String filename = "../"+ "overdrive_frontend/src/assets/" + username +"/" + chap.get().getSeriesTitle() + "/" + chapter.get_id()+ "/"+"image_" + i + ".png";
 					//File userdirectory = new File("user"+"/" + chapter.getSeriesTitle() + "/" + chapter.get_id()+"/"+filename);
 					//File userdirectory = new File(user+"/" + chapter.getSeriesTitle() + "/" + chapter.get_id()+"/"+filename);
 					String base64Image = arr.getString(i);
@@ -481,7 +489,7 @@ public class ComicSeriesController {
 					File outputfile = new File(filename);
 					outputfile.getParentFile().mkdirs();
 					System.out.println(filename);
-					String addfile = "assets/" + UsersController.curUser+"/" + chap.get().getSeriesTitle() + "/" + chapter.get_id()+ "/"+"image_" + i + ".png";
+					String addfile = "assets/" + username +"/" + chap.get().getSeriesTitle() + "/" + chapter.get_id()+ "/"+"image_" + i + ".png";
 					ImageIO.write(img, "png", outputfile);
 					imgurls.add(addfile);
 					
@@ -509,10 +517,10 @@ public class ComicSeriesController {
 
 	// add comment to chapter
 	@RequestMapping(value = "chapter/addComment", method = RequestMethod.POST)
-	public Comment addComment(@Valid @RequestBody Comment comment) {
+	public Comment addComment(@Valid @RequestBody Comment comment, @CookieValue("username") String username) {
 		// List<Comment> com =
 		// commentrepository.findByChapterId(comment.getChapterId());
-		comment.setUsername(UsersController.curUser);
+		comment.setUsername(username);
 		commentrepository.save(comment);
 		return comment;
 	}
@@ -543,10 +551,10 @@ public class ComicSeriesController {
 	
 	//check if current user liked chapter
 	@RequestMapping(value="chapter/liked/{chapterId}", method=RequestMethod.GET)
-	public boolean checkLiked(@PathVariable String chapterId) throws NullPointerException {
+	public boolean checkLiked(@PathVariable String chapterId, @CookieValue("username") String username) throws NullPointerException {
 		try {
 			Optional<ComicChapter> chap = chapterrepository.findById(chapterId);
-			if(chap.get().getLikedUsers().contains(UsersController.curUser)) {
+			if(chap.get().getLikedUsers().contains(username)) {
 				return true;
 			}else {
 				return false;
@@ -650,9 +658,9 @@ public class ComicSeriesController {
 	}
 
 	@RequestMapping(value = "/discover", method = RequestMethod.GET)
-	public Set<ComicSeries> discover() {
-		String checkUser = UsersController.getCurUser();
-		Users user = userrepository.findByUsername(checkUser);
+	public Set<ComicSeries> discover(@CookieValue("username") String username) {
+//		String checkUser = UsersController.getCurUser();
+		Users user = userrepository.findByUsername(username);
 		List<String> followed = user.getFollowedSeries();
 		Set<ComicSeries> suggested = new HashSet<ComicSeries>();
 		for (int i = 0; i < followed.size(); i++) {
