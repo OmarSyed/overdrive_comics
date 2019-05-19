@@ -120,7 +120,7 @@ public class UsersController {
 	
 	@RequestMapping(value ="/logout", method=RequestMethod.GET)
 	public String logoutUser() {
-		UsersController.curUser = "";
+		//UsersController.curUser = "";
 		return "success";
 	}
 	
@@ -135,17 +135,17 @@ public class UsersController {
 	}
 	
 	@RequestMapping(value="/profile/bio", method = RequestMethod.POST)
-	public Users editBio(@Valid @RequestBody Users user) {
-		Users change = repository.findByUsername(user.getUsername());
+	public Users editBio(@Valid @RequestBody Users user, @CookieValue("username") String username) {
+		Users change = repository.findByUsername(username);
 		change.setBio(user.getBio());
 		repository.save(change);
 		return change;
 	}
 	
 	@RequestMapping(value="/profile/username", method = RequestMethod.POST)
-	public String editUsername(@Valid @RequestBody Users user) throws NullPointerException{
-		Users check = repository.findByUsername(curUser);
-		List<ComicSeries> series = seriesrepository.findByAuthor(curUser);
+	public String editUsername(@Valid @RequestBody Users user, @CookieValue("username") String username) throws NullPointerException{
+		Users check = repository.findByUsername(username);
+		List<ComicSeries> series = seriesrepository.findByAuthor(username);
 		if(repository.findByUsername(user.getUsername())==null) {
 			check.setUsername(user.getUsername());
 			repository.save(check);
@@ -161,16 +161,16 @@ public class UsersController {
 	}
 	
 	@RequestMapping(value="/profile/password", method = RequestMethod.POST)
-	public Users editPassword(@Valid @RequestBody Users user) {
-		Users check = repository.findByUsername(user.getUsername());
+	public Users editPassword(@Valid @RequestBody Users user, @CookieValue("username") String username) {
+		Users check = repository.findByUsername(username);
 		check.setPassword(user.getPassword());
 		repository.save(check);
 		return check;
 	}
 	
 	@RequestMapping(value="/profile/email", method = RequestMethod.POST)
-	public String editEmail(@Valid @RequestBody Users user) {
-		Users check = repository.findByUsername(curUser);
+	public String editEmail(@Valid @RequestBody Users user, @CookieValue("username") String username) {
+		Users check = repository.findByUsername(username);
 		if(repository.findByEmail(user.getEmail())==null) {
 			//System.out.println(user.getEmail());
 			check.setEmail(user.getEmail());
@@ -181,10 +181,11 @@ public class UsersController {
 		}
 	}
 	
+	@CrossOrigin
 	@RequestMapping(value="/profile/pic", method = RequestMethod.POST)
-	public String editPic(@RequestParam("pic") MultipartFile imagefile) throws IllegalStateException, IOException {
-		Users user = repository.findByUsername(curUser); 
-		
+	public String editPic(@RequestParam("pic") MultipartFile imagefile, @CookieValue("username") String username) throws IllegalStateException, IOException {
+		Users user = repository.findByUsername(username); 
+		System.out.println(username);
 		String message = "";
 		String filename = "";
         //MultipartFile file = imagefile;
@@ -193,10 +194,10 @@ public class UsersController {
 
             // Creating the directory to store file
             //String rootPath = System.getProperty("catalina.home");
-            File dir = new File("../" + "overdrive_frontend/src/assets/" + curUser);
+            File dir = new File("../" + "overdrive_frontend/src/assets/" + username);
             if (!dir.exists())
                 dir.mkdirs();
-            filename = "assets/" + curUser +"/" + "image0.png";
+            filename = "assets/" + username +"/" + "image0.png";
             // Create the file on server
             File serverFile = new File(dir.getAbsolutePath()
                     + File.separator + "image0.png");
@@ -213,6 +214,7 @@ public class UsersController {
         } catch (Exception e) {
             return "You failed to upload " + "image" + " => " + e.getMessage();
         }
+        System.out.println(filename);
         user.setProfilePic(filename);
         repository.save(user);
         return message;

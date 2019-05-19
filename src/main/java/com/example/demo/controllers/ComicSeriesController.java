@@ -435,6 +435,7 @@ public class ComicSeriesController {
 //		chap.get().setPages(list);
 //		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 //		Date date = new Date();
+		chap.get().setChapterTitle(chapter.getChapterTitle());
 		chap.get().setLastModified(today);
 		chapterrepository.save(chap.get());
 		return chap.get();
