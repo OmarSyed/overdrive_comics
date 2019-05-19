@@ -20,6 +20,7 @@ public interface SeriesRepository extends MongoRepository<ComicSeries, String> {
 	List<ComicSeries> findByDescriptionQuery(String description);
 	@Query("{'title': {$regex: ?0}}")
 	List<ComicSeries> findByComicSeriesNameQuery(String title);
-	List<ComicSeries> findByComicSeriesNameLikeOrderByFollowersDesc(String comicSeriesName);
-	List<ComicSeries> findByDescriptionLikeOrderByFollowersDesc(String description);
+	List<ComicSeries> findByComicSeriesNameIgnoreCaseLikeOrderByFollowersDesc(String comicSeriesName);
+	List<ComicSeries> findByDescriptionIgnoreCaseLikeOrderByFollowersDesc(String description);
 }
+

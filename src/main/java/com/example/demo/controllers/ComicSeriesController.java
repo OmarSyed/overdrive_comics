@@ -515,7 +515,6 @@ public class ComicSeriesController {
 		return chapters;
 	}
 
-
 	// add comment to chapter
 	@RequestMapping(value = "chapter/addComment", method = RequestMethod.POST)
 	public Comment addComment(@Valid @RequestBody Comment comment, @CookieValue("username") String username) {
@@ -682,16 +681,16 @@ public class ComicSeriesController {
 		}
 		return suggested;
 	}
-
+	
 	@RequestMapping(value = "/search/{query}", method = RequestMethod.GET)
 	public List<ComicSeries> search(@PathVariable String query) {
-		List<ComicSeries> series = seriesrepository.findByComicSeriesNameLikeOrderByFollowersDesc(query);
+		List<ComicSeries> series = seriesrepository.findByComicSeriesNameIgnoreCaseLikeOrderByFollowersDesc(query);
 		List<String> ids = new ArrayList<String>();
 		
 		for(int i = 0; i<series.size(); i++) {
 			ids.add(series.get(i).getSeriesId());
 		}
-		List<ComicSeries> des = seriesrepository.findByDescriptionLikeOrderByFollowersDesc(query);
+		List<ComicSeries> des = seriesrepository.findByDescriptionIgnoreCaseLikeOrderByFollowersDesc(query);
 		//series.addAll(des);
 		for(int i = 0; i<des.size(); i++) {
 			if(ids.contains(des.get(i).getSeriesId())) {
@@ -702,5 +701,5 @@ public class ComicSeriesController {
 		}
 		return series;
 	}
-
 }
+
