@@ -25,6 +25,7 @@ import javax.imageio.ImageIO;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.PathVariable;
 //import org.springframework.security.core.Authentication;
 //import org.springframework.security.core.context.SecurityContextHolder;
@@ -298,10 +299,10 @@ public class ComicSeriesController {
 		if(users.contains(UsersController.getCurUser())) {
 			chapterId.remove(chapter.get_id());
 			users.remove(UsersController.curUser);
-			chap.get().setLikedUsers(chapterId);
+			chap.get().setLikedUsers(users);
 			chap.get().setLikes(chap.get().getLikes()-1);
 			chapterrepository.save(chap.get());
-			currentUser.setLikedChapters(users);
+			currentUser.setLikedChapters(chapterId);
 			userrepository.save(currentUser);
 			series.get().setLikes(series.get().getLikes()-1);
 			seriesrepository.save(series.get());
@@ -309,10 +310,10 @@ public class ComicSeriesController {
 		}else {
 			chapterId.add(chapter.get_id());
 			users.add(UsersController.curUser);
-			chap.get().setLikedUsers(chapterId);
+			chap.get().setLikedUsers(users);
 			chap.get().setLikes(chap.get().getLikes()+1);
 			chapterrepository.save(chap.get());
-			currentUser.setLikedChapters(users);
+			currentUser.setLikedChapters(chapterId);
 			userrepository.save(currentUser);
 			series.get().setLikes(series.get().getLikes()+1);
 			seriesrepository.save(series.get());
@@ -502,6 +503,7 @@ public class ComicSeriesController {
 	public Comment addComment(@Valid @RequestBody Comment comment) {
 		// List<Comment> com =
 		// commentrepository.findByChapterId(comment.getChapterId());
+		comment.setUsername(UsersController.curUser);
 		commentrepository.save(comment);
 		return comment;
 	}
@@ -514,7 +516,7 @@ public class ComicSeriesController {
 	}
 
 	// list comments for a chapter
-	@RequestMapping(value = "chapter/listcomments", method = RequestMethod.GET)
+	@RequestMapping(value = "chapter/listcomments/{chapterId}", method = RequestMethod.GET)
 	public List<Comment> listComments(@PathVariable String chapterId) {
 		return commentrepository.findByChapterId(chapterId);
 	}	
@@ -531,7 +533,7 @@ public class ComicSeriesController {
 	}
 	
 	//check if current user liked chapter
-	@RequestMapping(value="chapter/liked{id}", method=RequestMethod.GET)
+	@RequestMapping(value="chapter/liked/{chapterId}", method=RequestMethod.GET)
 	public boolean checkLiked(@PathVariable String chapterId) throws NullPointerException {
 		try {
 			Optional<ComicChapter> chap = chapterrepository.findById(chapterId);
@@ -589,13 +591,14 @@ public class ComicSeriesController {
 		//return s;
 		//all_popular_followers.addAll(all_popular_likes);
 		//List<ComicSeries> listWithoutDuplicates = all_popular_followers.stream().distinct().collect(Collectors.toList());
-		if (all_popular_followers.size() > 20) {
-			List<ComicSeries> second = new ArrayList<ComicSeries>(all_popular_followers.subList(0, 20));
+		if (all_popular_followers.size() > 5) {
+			List<ComicSeries> second = new ArrayList<ComicSeries>(all_popular_followers.subList(0, 5));
 			return second;
 		} else {
 			return all_popular_followers;
 		}
 		//return all_popular_followers;
+
 	}
 
 	@RequestMapping(value = "/discover", method = RequestMethod.GET)
@@ -606,9 +609,9 @@ public class ComicSeriesController {
 		Set<ComicSeries> suggested = new HashSet<ComicSeries>();
 		for (int i = 0; i < followed.size(); i++) {
 			// get string name of comic series
-			ComicSeries comic = seriesrepository.findByComicSeriesName(followed.get(i)).get(0);
+			Optional<ComicSeries> comic = seriesrepository.findById(followed.get(i));
 			// get author name of series
-			String authorname = comic.getAuthor();
+			String authorname = comic.get().getAuthor();
 			// find author by username
 			Users author = userrepository.findByUsername(authorname);
 			// get the names of produced series by that author
@@ -641,9 +644,5 @@ public class ComicSeriesController {
 		}
 		return series;
 	}
-
-
-	
-
-
 }
+
