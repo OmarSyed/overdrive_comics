@@ -481,7 +481,7 @@ public class ComicSeriesController {
 			arr = new JSONArray(chapter.getImages());
 			List<String> list = new ArrayList<String>();
 			for (int i = 0; i < arr.length(); i++) {			    //list.add(arr.getJSONObject(i).toString());
-					String filename = "../"+ "overdrive_frontend/src/assets/" + username +"/" + chap.get().getSeriesTitle() + "/" + chapter.get_id()+ "/"+"image_" + i + ".png";
+					String filename = "../"+ "overdrive_frontend/src/assets/" + username +"/" + chap.get().getSeriesId() + "/" + chapter.get_id()+ "/"+"image_" + i + ".png";
 					//File userdirectory = new File("user"+"/" + chapter.getSeriesTitle() + "/" + chapter.get_id()+"/"+filename);
 					//File userdirectory = new File(user+"/" + chapter.getSeriesTitle() + "/" + chapter.get_id()+"/"+filename);
 					String base64Image = arr.getString(i);
@@ -490,7 +490,7 @@ public class ComicSeriesController {
 					File outputfile = new File(filename);
 					outputfile.getParentFile().mkdirs();
 					System.out.println(filename);
-					String addfile = "assets/" + username +"/" + chap.get().getSeriesTitle() + "/" + chapter.get_id()+ "/"+"image_" + i + ".png";
+					String addfile = "assets/" + username +"/" + chap.get().getSeriesId() + "/" + chapter.get_id()+ "/"+"image_" + i + ".png";
 					ImageIO.write(img, "png", outputfile);
 					imgurls.add(addfile);
 					
@@ -595,11 +595,11 @@ public class ComicSeriesController {
             // Creating the directory to store file
             //String rootPath = System.getProperty("catalina.home");
             File dir = new File("../" + "overdrive_frontend/src/assets/" + username + "/" 
-            + series.get().getComicSeriesName());
+            + id);
             if (!dir.exists())
                 dir.mkdirs();
             filename = "assets/" + username + "/" 
-                    + series.get().getComicSeriesName() +"/" + "image0.png";
+                    + id +"/" + "image0.png";
             // Create the file on server
             File serverFile = new File(dir.getAbsolutePath()
                     + File.separator + "image0.png");
