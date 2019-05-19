@@ -101,29 +101,7 @@ public class UsersController {
 		}	
 	}
 	
-	//@CrossOrigin
-	@RequestMapping(value="/login", method = RequestMethod.POST)
-	public Users loginUser(@Valid @RequestBody Users user) {
-		if(repository.findByUsername(user.getUsername())!=null) {
-			Users check = repository.findByUsername(user.getUsername());
-			if(check.getUsername().equals(user.getUsername()) && check.getPassword().equals(user.getPassword())) {
-				curUser = user.getUsername();
-				setCurUser(curUser);
-				//System.out.println(curUser);
-				return check;
-			}
-			return null;
-		}else {
-			return null;
-		}
-	}
-	
-	@RequestMapping(value ="/logout", method=RequestMethod.GET)
-	public String logoutUser() {
-		//UsersController.curUser = "";
-		return "success";
-	}
-	
+
 	//@CrossOrigin
 	@RequestMapping(value="/profile", method = RequestMethod.GET)
 	public Users showUser(@CookieValue("username") String username) {
@@ -135,11 +113,11 @@ public class UsersController {
 	}
 	
 	@RequestMapping(value="/profile/bio", method = RequestMethod.POST)
-	public Users editBio(@Valid @RequestBody Users user, @CookieValue("username") String username) {
+	public String editBio(@Valid @RequestBody Users user, @CookieValue("username") String username) {
 		Users change = repository.findByUsername(username);
 		change.setBio(user.getBio());
 		repository.save(change);
-		return change;
+		return "sucess";
 	}
 	
 	@RequestMapping(value="/profile/username", method = RequestMethod.POST)
@@ -161,11 +139,11 @@ public class UsersController {
 	}
 	
 	@RequestMapping(value="/profile/password", method = RequestMethod.POST)
-	public Users editPassword(@Valid @RequestBody Users user, @CookieValue("username") String username) {
+	public String editPassword(@Valid @RequestBody Users user, @CookieValue("username") String username) {
 		Users check = repository.findByUsername(username);
 		check.setPassword(user.getPassword());
 		repository.save(check);
-		return check;
+		return "success";
 	}
 	
 	@RequestMapping(value="/profile/email", method = RequestMethod.POST)
@@ -217,31 +195,8 @@ public class UsersController {
         System.out.println(filename);
         user.setProfilePic(filename);
         repository.save(user);
-        return message;
+        return "success";
 	}
-	
-	
-	
-	
-	
-//	@RequestMapping(value = "/getuser", method = RequestMethod.POST)
-//	public String getUser(@Valid @RequestBody Users user){
-//		Users check = repository.findByUsername(user.getUsername());
-//		//Users check  = repository.findByUsername(user.getUsername());
-//		//user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-//		if (check == null)
-//			
-//		UserDetails test  = service.loadUserByUsername(user.getUsername());
-//		if(repository.findByUsername(user.getUsername())!= null) {
-//			return "success";
-//		}else {
-//			return "error";
-//		}
-//	}
-	
-	
-	
-	
 	
 	
 	

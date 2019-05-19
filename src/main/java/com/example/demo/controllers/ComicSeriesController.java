@@ -582,8 +582,9 @@ public class ComicSeriesController {
 	}
 	
 	@RequestMapping(value="/thumbnail/pic/{id}", method = RequestMethod.POST)
-	public String editPic(@RequestParam("pic") MultipartFile imagefile, @PathVariable String id) throws IllegalStateException, IOException {
-		Users user = userrepository.findByUsername(UsersController.curUser); 
+	public String editPic(@RequestParam("pic") MultipartFile imagefile, @PathVariable String id, 
+			@CookieValue("username") String username) throws IllegalStateException, IOException {
+		Users user = userrepository.findByUsername(username); 
 		Optional<ComicSeries> series = seriesrepository.findById(id);
 	
 		String message = "";
@@ -594,11 +595,11 @@ public class ComicSeriesController {
 
             // Creating the directory to store file
             //String rootPath = System.getProperty("catalina.home");
-            File dir = new File("../" + "overdrive_frontend/src/assets/" + UsersController.curUser + "/" 
-            + "/" + series.get().getComicSeriesName());
+            File dir = new File("../" + "overdrive_frontend/src/assets/" + username + "/" 
+            + series.get().getComicSeriesName());
             if (!dir.exists())
                 dir.mkdirs();
-            filename = "assets/" + UsersController.curUser + "/" 
+            filename = "assets/" + username + "/" 
                     + series.get().getComicSeriesName() +"/" + "image0.png";
             // Create the file on server
             File serverFile = new File(dir.getAbsolutePath()
