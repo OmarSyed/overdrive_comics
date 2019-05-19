@@ -308,7 +308,7 @@ public class ComicSeriesController {
 		List<String> users = chap.get().getLikedUsers();
 		Optional<ComicSeries> series = seriesrepository.findById(chap.get().getSeriesId());
 		
-		if(users.contains(UsersController.getCurUser())) {
+		if(users.contains(username)) {
 			chapterId.remove(chapter.get_id());
 			users.remove(username);
 			chap.get().setLikedUsers(users);
@@ -459,7 +459,7 @@ public class ComicSeriesController {
 	@RequestMapping(value = "/chapter/view/publish/{series_id}/{chapter}", method = RequestMethod.GET)
 	public ComicChapter viewChapterPublished(@PathVariable String series_id, @PathVariable int chapter) {
 		List<ComicChapter>  chapters = chapterrepository.findBySeriesId(series_id);
-		if (chapters.size() == 0 || chapter - 1 > chapters.size() - 1) {
+		if (chapters.size() == 0 || chapter - 1 > chapters.size() - 1 || chapter == 0) {
 			return null;
 		} else {
 			return chapters.get(chapter - 1);
