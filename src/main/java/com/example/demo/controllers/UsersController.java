@@ -208,8 +208,25 @@ public class UsersController {
         return true;
 	}
 	
-
+	@RequestMapping(value = "/validUser", method=RequestMethod.POST)
+	public boolean changePassword(@RequestBody Users user) {
+		Users userr = repository.findByUsername(user.getUsername()); 
+		if (userr != null)
+			return true; 
+		else
+			return false; 
+	}
 	
+	@RequestMapping(value="/checkAnswer", method=RequestMethod.POST)
+	public boolean checkAnswer(@Valid @RequestBody Users user) {
+		Users userr = repository.findByUsername(user.getUsername()); 
+		if (user.getSecurityAnswer().equals(userr.getSecurityAnswer()))
+			return true; 
+		else
+			return false; 
+	}
+	
+		
 	
 	
 }

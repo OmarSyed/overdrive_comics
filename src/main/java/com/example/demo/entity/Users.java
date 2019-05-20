@@ -1,6 +1,6 @@
 package com.example.demo.entity;
 
-import java.sql.Blob;
+
 
 
 import java.util.List;
@@ -8,7 +8,6 @@ import java.util.List;
 
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.schema.JsonSchemaObject.Type.BsonType;
 
 public class Users {
 	
@@ -24,6 +23,7 @@ public class Users {
 	private List<String> followedSeries;
 	private List<String> likedChapters;
 	private List<String> producedSeries;
+	private String securityAnswer; 
 	private List<String> editorPics;
 	
 	
@@ -34,7 +34,8 @@ public class Users {
 //		this.email  = email;
 //		pic = false;
 //	}
-
+	
+	
 	public String getProfilePic() {
 		return profilePic;
 	}
@@ -113,6 +114,14 @@ public class Users {
 
 	public void setLikedChapters(List<String> likedChapters) {
 		this.likedChapters = likedChapters;
+	}
+
+	public String getSecurityAnswer() {
+		return securityAnswer;
+	}
+
+	public void setSecurityAnswer(String securityAnswer) {
+		this.securityAnswer = securityAnswer;
 	}
 
 	public List<String> getEditorPics() {
