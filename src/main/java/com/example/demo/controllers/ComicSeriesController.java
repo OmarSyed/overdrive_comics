@@ -720,13 +720,13 @@ public class ComicSeriesController {
 				List<ComicSeries> second = new ArrayList<ComicSeries>(popular_series.subList(0, 30));
 				//noUser.addAll(second);
 				Collections.shuffle(second);
-				List<ComicSeries> third = new ArrayList<ComicSeries>(popular_series.subList(0, 15));
+				List<ComicSeries> third = new ArrayList<ComicSeries>(popular_series.subList(0, 16));
 				noUser.addAll(third);
 				return noUser;
 			} else {
 				Collections.shuffle(popular_series);
-				if(popular_series.size()>15) {
-					List<ComicSeries> second = new ArrayList<ComicSeries>(popular_series.subList(0, 15));
+				if(popular_series.size()>16) {
+					List<ComicSeries> second = new ArrayList<ComicSeries>(popular_series.subList(0, 16));
 					noUser.addAll(second);
 					return noUser;
 				}else {
@@ -736,21 +736,30 @@ public class ComicSeriesController {
 			}
 		}
 		Set<ComicSeries> suggested = new HashSet<ComicSeries>();
+		List<String> authors = new ArrayList<String>();
+		//Set<String> authorList = new LinkedHashSet<String>();
 		for (int i = 0; i < followed.size(); i++) {
-			// get string name of comic series
-			Optional<ComicSeries> comic = seriesrepository.findById(followed.get(i));
-			// get author name of series
-			String authorname = comic.get().getAuthor();
-			// find author by username
-			Users author = userrepository.findByUsername(authorname);
-			// get the names of produced series by that author
-			List<String> made_comics = author.getProducedSeries();
-			// retrieve each comic by name and add to the set of suggested series
-			for (int j = 0; j < made_comics.size(); j++) {
-				ComicSeries series = seriesrepository.findByComicSeriesName(made_comics.get(j)).get(0);
-				suggested.add(series);
+			Optional<ComicSeries> series = seriesrepository.findById(followed.get(i));
+			authors.add(series.get().getAuthor());
+		}
+		if(authors.size()>5) {
+			 authors =  authors.subList(0, 5);
+		}
+		List<ComicSeries> series = new ArrayList<ComicSeries>();
+		for(int i=0; i<authors.size(); i++) {
+			List<ComicSeries> authorseries = new ArrayList<ComicSeries>();
+			authorseries = seriesrepository.findByAuthor(authors.get(i));
+			series.addAll(authorseries);
+		}
+		for(int i = 0; i<series.size(); i++) {
+			if(followed.contains(series.get(i).getSeriesId())) {
+				series.remove(i);
 			}
 		}
+		if(series.size()>16) {
+			 series =  series.subList(0, 16);
+		}
+		suggested.addAll(series);
 		return suggested;
 	}
 	
