@@ -28,6 +28,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -68,6 +69,7 @@ public class ComicSeriesController {
 	// Create a series, add it to mongo collection
 	@RequestMapping(value = "/create", method = RequestMethod.POST)
 	public String createSeries(@Valid @RequestBody ComicSeries series, @CookieValue("username") String username) {
+		series.setAuthor(username);
 		List<ComicSeries> check = seriesrepository.findByAuthor(series.getAuthor());
 		if (check.isEmpty()) {
 			HashMap<String, Double> rating = new HashMap<>();
@@ -472,7 +474,7 @@ public class ComicSeriesController {
 	//publish a chapter
 	@RequestMapping(value="/chapter/publish", method=RequestMethod.POST)
 	public String publishChapter(@Valid @RequestBody ComicChapter chapter, @CookieValue("username") String username) {
-		System.out.println(chapter.get_id() + " " + UsersController.curUser);
+		//System.out.println(chapter.get_id() + " " + UsersController.curUser);
 //		String user = UsersController.curUser;
 		String user = "johnsmith";
 		LocalDate today = LocalDate.now();
@@ -522,7 +524,9 @@ public class ComicSeriesController {
 	public Comment addComment(@Valid @RequestBody Comment comment, @CookieValue("username") String username) {
 		// List<Comment> com =
 		// commentrepository.findByChapterId(comment.getChapterId());
+		Date date = new Date();
 		comment.setUsername(username);
+		comment.setDate(date);
 		commentrepository.save(comment);
 		return comment;
 	}
@@ -623,6 +627,47 @@ public class ComicSeriesController {
         return message;
 	}
 	
+	@RequestMapping(value="/upload", method = RequestMethod.POST)
+	public String uploadPic(@RequestParam("pic") MultipartFile imagefile, 
+			@CookieValue("username") String username) throws IllegalStateException, IOException {
+		Users user = userrepository.findByUsername(username); 
+		//Optional<ComicSeries> series = seriesrepository.findById(id);
+		List<String> editorPics = user.getEditorPics();
+		int index = editorPics.size();
+		String message = "";
+		String filename = "";
+        //MultipartFile file = imagefile;
+        try {
+            byte[] bytes = imagefile.getBytes();
+
+            // Creating the directory to store file
+            //String rootPath = System.getProperty("catalina.home");
+            File dir = new File("../" + "overdrive_frontend/src/assets/" + username + "/pictures");
+            if (!dir.exists())
+                dir.mkdirs();
+            filename = "assets/" + username + "/pictures" + "/"  + "image" + index + ".png";
+            // Create the file on server
+            File serverFile = new File(dir.getAbsolutePath()
+                    + File.separator + "image" + index + ".png");
+            BufferedOutputStream stream = new BufferedOutputStream(
+                    new FileOutputStream(serverFile));
+            stream.write(bytes);
+            stream.close();
+
+//            logger.info("Server File Location="
+//                    + serverFile.getAbsolutePath());
+
+            message = message + "You successfully uploaded file=" + "image"
+                    + "<br />";
+        } catch (Exception e) {
+            return "You failed to upload " + "image" + " => " + e.getMessage();
+        }
+        editorPics.add(filename);
+        user.setEditorPics(editorPics);
+        userrepository.save(user);
+        return message;
+	}
+	
 	//get chapter object
 	@RequestMapping(value="/getchapter", method=RequestMethod.POST)
 	public ComicChapter getChapter(@Valid @RequestBody ComicChapter chapter) {
@@ -641,7 +686,7 @@ public class ComicSeriesController {
 	
 	@RequestMapping(value = "/popular/{option}", method = RequestMethod.GET)
 	public List<ComicSeries> getPopular(@PathVariable String option) {
-		System.out.println("stuff");
+		//System.out.println("stuff");
 		List<ComicSeries> all_popular_followers = seriesrepository.findByGenreOrderByFollowersDesc(option);
 		List<ComicSeries> all_popular_likes = seriesrepository.findByOrderByLikesDesc();
 		//Set<ComicSeries> s = new HashSet<ComicSeries>();
@@ -662,9 +707,35 @@ public class ComicSeriesController {
 
 	@RequestMapping(value = "/discover", method = RequestMethod.GET)
 	public Set<ComicSeries> discover(@CookieValue("username") String username) {
+		//String check = (String)securityContext.getContext().getAuthentication().getPrincipal();
+		System.out.println("In discover");
 //		String checkUser = UsersController.getCurUser();
 		Users user = userrepository.findByUsername(username);
 		List<String> followed = user.getFollowedSeries();
+		int size = followed.size();
+		if(size==0) {
+			System.out.println("In discover, with user");
+			List<ComicSeries> popular_series = seriesrepository.findByOrderByFollowersDesc();
+			Set<ComicSeries> noUser = new HashSet<ComicSeries>();
+			if (popular_series.size() > 30) {
+				List<ComicSeries> second = new ArrayList<ComicSeries>(popular_series.subList(0, 30));
+				//noUser.addAll(second);
+				Collections.shuffle(second);
+				List<ComicSeries> third = new ArrayList<ComicSeries>(popular_series.subList(0, 15));
+				noUser.addAll(third);
+				return noUser;
+			} else {
+				Collections.shuffle(popular_series);
+				if(popular_series.size()>15) {
+					List<ComicSeries> second = new ArrayList<ComicSeries>(popular_series.subList(0, 15));
+					noUser.addAll(second);
+					return noUser;
+				}else {
+					noUser.addAll(popular_series);
+					return noUser;
+				}
+			}
+		}
 		Set<ComicSeries> suggested = new HashSet<ComicSeries>();
 		for (int i = 0; i < followed.size(); i++) {
 			// get string name of comic series
@@ -682,6 +753,31 @@ public class ComicSeriesController {
 			}
 		}
 		return suggested;
+	}
+	
+	@RequestMapping(value = "/discover/nouser", method = RequestMethod.GET)
+	public Set<ComicSeries> discoverNoUser(){
+		System.out.println("In discover, with no user");
+		List<ComicSeries> popular_series = seriesrepository.findByOrderByFollowersDesc();
+		Set<ComicSeries> noUser = new HashSet<ComicSeries>();
+		if (popular_series.size() > 30) {
+			List<ComicSeries> second = new ArrayList<ComicSeries>(popular_series.subList(0, 30));
+			//noUser.addAll(second);
+			Collections.shuffle(second);
+			List<ComicSeries> third = new ArrayList<ComicSeries>(popular_series.subList(0, 16));
+			noUser.addAll(third);
+			return noUser;
+		} else {
+			Collections.shuffle(popular_series);
+			if(popular_series.size()>16) {
+				List<ComicSeries> second = new ArrayList<ComicSeries>(popular_series.subList(0, 16));
+				noUser.addAll(second);
+				return noUser;
+			}else {
+				noUser.addAll(popular_series);
+				return noUser;
+			}
+		}
 	}
 	
 	@RequestMapping(value = "/search/{query}", method = RequestMethod.GET)

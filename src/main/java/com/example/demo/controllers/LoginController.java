@@ -21,6 +21,7 @@ public class LoginController {
 	
 	@Autowired
 	UserRepository userRepo;
+	
 	@Bean
 	public SecurityContextHolder securityContextHolder() {
 		return new SecurityContextHolder();
@@ -34,8 +35,8 @@ public class LoginController {
 			if(foundUser.getPassword().equals(user.getPassword())) {
 				System.out.println("passwords match");
 				Authentication auth = new UsernamePasswordAuthenticationToken(foundUser.getUsername(), foundUser.getPassword());
-				SecurityContextHolder sc = securityContextHolder();
-				sc.getContext().setAuthentication(auth);
+				SecurityContextHolder securityContext = securityContextHolder();
+				securityContext.getContext().setAuthentication(auth);
 				return foundUser;
 			} else {
 				System.out.println("passwords don't match");
