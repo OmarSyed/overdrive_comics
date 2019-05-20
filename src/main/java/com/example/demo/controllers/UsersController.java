@@ -122,6 +122,14 @@ public class UsersController {
 		return true;
 	}
 	
+	@RequestMapping(value="/profile/editorPics", method = RequestMethod.GET)
+	public List<String> getUserEditorPics(@CookieValue("username") String username) {
+		Users user = repository.findByUsername(username);
+		if (!user.getEditorPics().isEmpty())
+			return user.getEditorPics();
+		return null;
+	}
+	
 	@RequestMapping(value="/profile/username", method = RequestMethod.POST)
 	public boolean editUsername(@Valid @RequestBody Users user, @CookieValue("username") String username) throws NullPointerException{
 		Users check = repository.findByUsername(username);

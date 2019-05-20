@@ -628,7 +628,7 @@ public class ComicSeriesController {
 	}
 	
 	@RequestMapping(value="/upload", method = RequestMethod.POST)
-	public String uploadPic(@RequestParam("pic") MultipartFile imagefile, 
+	public boolean uploadPic(@RequestParam("pic") MultipartFile imagefile, 
 			@CookieValue("username") String username) throws IllegalStateException, IOException {
 		Users user = userrepository.findByUsername(username); 
 		//Optional<ComicSeries> series = seriesrepository.findById(id);
@@ -660,12 +660,12 @@ public class ComicSeriesController {
             message = message + "You successfully uploaded file=" + "image"
                     + "<br />";
         } catch (Exception e) {
-            return "You failed to upload " + "image" + " => " + e.getMessage();
+            return false;
         }
         editorPics.add(filename);
         user.setEditorPics(editorPics);
         userrepository.save(user);
-        return message;
+        return true;
 	}
 	
 	//get chapter object
