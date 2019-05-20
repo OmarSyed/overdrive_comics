@@ -115,15 +115,15 @@ public class UsersController {
 	}
 	
 	@RequestMapping(value="/profile/bio", method = RequestMethod.POST)
-	public String editBio(@Valid @RequestBody Users user, @CookieValue("username") String username) {
+	public boolean editBio(@Valid @RequestBody Users user, @CookieValue("username") String username) {
 		Users change = repository.findByUsername(username);
 		change.setBio(user.getBio());
 		repository.save(change);
-		return "sucess";
+		return true;
 	}
 	
 	@RequestMapping(value="/profile/username", method = RequestMethod.POST)
-	public String editUsername(@Valid @RequestBody Users user, @CookieValue("username") String username) throws NullPointerException{
+	public boolean editUsername(@Valid @RequestBody Users user, @CookieValue("username") String username) throws NullPointerException{
 		Users check = repository.findByUsername(username);
 		List<ComicSeries> series = seriesrepository.findByAuthor(username);
 		if(repository.findByUsername(user.getUsername())==null) {
@@ -134,36 +134,36 @@ public class UsersController {
 				seriesrepository.save(series.get(i));
 			}
 			curUser = user.getUsername();
-			return "success";
+			return true;
 		}else {
-			return "duplicate";
+			return false;
 		}
 	}
 	
 	@RequestMapping(value="/profile/password", method = RequestMethod.POST)
-	public String editPassword(@Valid @RequestBody Users user, @CookieValue("username") String username) {
+	public boolean editPassword(@Valid @RequestBody Users user, @CookieValue("username") String username) {
 		Users check = repository.findByUsername(username);
 		check.setPassword(user.getPassword());
 		repository.save(check);
-		return "success";
+		return true;
 	}
 	
 	@RequestMapping(value="/profile/email", method = RequestMethod.POST)
-	public String editEmail(@Valid @RequestBody Users user, @CookieValue("username") String username) {
+	public boolean editEmail(@Valid @RequestBody Users user, @CookieValue("username") String username) {
 		Users check = repository.findByUsername(username);
 		if(repository.findByEmail(user.getEmail())==null) {
 			//System.out.println(user.getEmail());
 			check.setEmail(user.getEmail());
 			repository.save(check);
-			return "success";
+			return true;
 		}else {
-			return "duplicate";
+			return false;
 		}
 	}
 	
 	@CrossOrigin
 	@RequestMapping(value="/profile/pic", method = RequestMethod.POST)
-	public String editPic(@RequestParam("pic") MultipartFile imagefile, @CookieValue("username") String username) throws IllegalStateException, IOException {
+	public boolean editPic(@RequestParam("pic") MultipartFile imagefile, @CookieValue("username") String username) throws IllegalStateException, IOException {
 		Users user = repository.findByUsername(username); 
 		System.out.println(username);
 		String message = "";
@@ -192,12 +192,12 @@ public class UsersController {
             message = message + "You successfully uploaded file=" + "image"
                     + "<br />";
         } catch (Exception e) {
-            return "You failed to upload " + "image" + " => " + e.getMessage();
+            return false;
         }
         System.out.println(filename);
         user.setProfilePic(filename);
         repository.save(user);
-        return "success";
+        return true;
 	}
 	
 
