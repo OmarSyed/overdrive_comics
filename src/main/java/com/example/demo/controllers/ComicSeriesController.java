@@ -93,6 +93,7 @@ public class ComicSeriesController {
 		}
 		HashMap<String, Double> rating = new HashMap<>();
 		series.setRating(rating);
+		series.setThumbnail("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOEAAADhCAMAAAAJbSJIAAAAMFBMVEX////j4+Py8vLk5OTi4uL29vbu7u76+vrq6urm5ub+/v7l5eXn5+f9/f3h4eHr6+uo6oKiAAADM0lEQVR4nO3Yy67jIBREUY4PfuBH/P9/2zhOrrDUE6S+UkFvBiFJMYkVF3iFkCwOIYSXxTmEMdorf5iiLXnqIgrpONYh7Us41jOlaT3CtqdxXee09xEFO0IY3Pf8c0/3KU+22RjCnKc+orjmd+Ypp4vZtSj6e1H0TqKh95HvSLf8uuZffd2s5vG6We2+WXuIQtjd87sj/3Pfiza7FrmfoZMo/4H3NKzHkdtnXtcx7VsupimlMxdTF1G4dpAh2n2zxuneXN43q3US3a26PQrXy8JtPnq36vcy2OMydBLN57kM8zwv5zLO85in/GFYlilPXUQ/rWpuReG6F4XbdlRsKeUi88du03IUxmmahnG8pvw6/Eyf79qPPudSexztYnm0az6SK/d/Hn12xu26DLHcNF/WS7R9H5Nf5WNyXHqJ8gl1Kw+v/ji89hBdnlE+gMTHA0gPUdCo9F+MHorhJQSYdxJZucgfizqJ7rPqeeZpWv52jG09+srpGh+oagWqNh7Jlfuv7BZSCI/qo/qofodDDuFRfVQf1RdgFVS/OlJDeFQf1Uf1BRAe1a+O9BAe1Uf1UX25tkf1UX1Uv/1IrtxRfVQf1RdAeFS/dsghPKqP6qP6AqyC6ldHagiP6qP6qL4AwqP61ZEewqP6qD6qL9f2qD6qj+q3H8mVO6qP6qP6AgiP6tcOOYRH9VF9VF+AVVD96kgN4VF9VB/VF0B4VL860kN4VB/VR/Xl2h7VR/VR/fYjuXJH9VF9VF8A4VH92iGH8Kg+qo/qC7AKql8dqSE8qo/qo/oCCI/qV0d6CI/qo/qovlzbo/qoPqrffiRX7qg+qo/qCyA8ql875BAe1Uf1UX0BVkH1qyM1hEf1UX1UXwDhUf3qSA/hUX1UH9WXa3tUH9VH9duP5Mod1Uf1UX0BhEf1a4ccwqP6qD6qL8AqqH51pIbwqD6qj+oLIDyqXx3pITyqj+qj+nJtj+qj+qh++5FcuaP6qD6qL4DwqH7tkEN4VB/VR/UFWAXVr47UEB7VR/VRfQGER/WrIz2ER/VRfVRfru1RfVQf1W8/kit3VB/VR/UFEB7Vrx1yCI/qo/r/oer/AfStKxKIUGaSAAAAAElFTkSuQmCC");
 		LocalDate today = LocalDate.now();
 		series.setDate(today);
 		String id = seriesrepository.save(series).getSeriesId();
