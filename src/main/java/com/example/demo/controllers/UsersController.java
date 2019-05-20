@@ -91,9 +91,11 @@ public class UsersController {
 			List<String> followed = new ArrayList<String>();
 			List<String> produced = new ArrayList<String>();
 			List<String> liked = new ArrayList<String>();
+			List<String> editorPics = new ArrayList<String>();
 			user.setFollowedSeries(followed);
 			user.setProducedSeries(produced);
 			user.setLikedChapters(liked);
+			user.setEditorPics(editorPics);;
 			repository.save(user);
 			//service.save(user);
 			System.out.println("sucess");
@@ -198,6 +200,7 @@ public class UsersController {
         return "success";
 	}
 	
+
 	
 	
 	

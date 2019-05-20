@@ -24,6 +24,7 @@ public class Users {
 	private List<String> followedSeries;
 	private List<String> likedChapters;
 	private List<String> producedSeries;
+	private List<String> editorPics;
 	
 	
 	
@@ -114,7 +115,15 @@ public class Users {
 		this.likedChapters = likedChapters;
 	}
 
+	public List<String> getEditorPics() {
+		return editorPics;
+	}
+
+	public void setEditorPics(List<String> editorPics) {
+		this.editorPics = editorPics;
+	}
 	
 	
+
 	
 }
