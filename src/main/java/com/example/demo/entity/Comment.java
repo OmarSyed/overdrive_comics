@@ -1,5 +1,7 @@
 package com.example.demo.entity;
 
+import java.util.Date;
+
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 
@@ -10,6 +12,7 @@ public class Comment {
 	private String chapterId;
 	private String username;
 	private String comment;
+	private Date date;
 	
 	
 	public String get_id() {
@@ -35,6 +38,12 @@ public class Comment {
 	}
 	public void setComment(String comment) {
 		this.comment = comment;
+	}
+	public Date getDate() {
+		return date;
+	}
+	public void setDate(Date date) {
+		this.date = date;
 	}
 	
 	

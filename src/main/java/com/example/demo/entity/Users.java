@@ -24,6 +24,7 @@ public class Users {
 	private List<String> likedChapters;
 	private List<String> producedSeries;
 	private String securityAnswer; 
+	private List<String> editorPics;
 	
 	
 	
@@ -123,7 +124,15 @@ public class Users {
 		this.securityAnswer = securityAnswer;
 	}
 
+	public List<String> getEditorPics() {
+		return editorPics;
+	}
+
+	public void setEditorPics(List<String> editorPics) {
+		this.editorPics = editorPics;
+	}
 	
 	
+
 	
 }
