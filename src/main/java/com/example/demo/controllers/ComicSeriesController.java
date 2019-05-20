@@ -489,7 +489,7 @@ public class ComicSeriesController {
 		chapterrepository.save(chap.get());
 		return chapter.getImages();
 	}
-
+	
 	// return chapters of a series
 	// seriesid
 	@RequestMapping(value = "chapter/{id}", method = RequestMethod.GET)

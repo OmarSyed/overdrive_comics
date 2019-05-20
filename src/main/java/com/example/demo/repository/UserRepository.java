@@ -7,5 +7,5 @@ import com.example.demo.entity.Users;
 
 public interface UserRepository extends MongoRepository<Users, String> {
 	Users findByUsername(String username);
-	Users findByEmail(String email);
+	Users findByEmail(String email); 
 }
