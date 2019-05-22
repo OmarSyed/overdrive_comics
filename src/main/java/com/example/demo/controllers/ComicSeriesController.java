@@ -571,12 +571,9 @@ public class ComicSeriesController {
 	}
 
 	//change series settings
-	@RequestMapping(value="/settings", method=RequestMethod.POST)
-	public ComicSeries changeSettings(@Valid @RequestBody ComicSeries series) {
-		Optional<ComicSeries> comic = seriesrepository.findById(series.getSeriesId());
-		if(!series.getDay().isEmpty()) {
-			comic.get().setDay(series.getDay());
-		}
+	@RequestMapping(value="/settings/{id}", method=RequestMethod.POST)
+	public ComicSeries changeSettings(@Valid @RequestBody ComicSeries series, @PathVariable String id) {
+		Optional<ComicSeries> comic = seriesrepository.findById(id);
 		if(!series.getGenre().isEmpty()) {
 			comic.get().setGenre(series.getGenre());
 		}
