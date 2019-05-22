@@ -211,7 +211,6 @@ public class ComicSeriesController {
 					System.out.println(check.get(i).getFollowers());
 					followed.remove(check.get(i).getSeriesId());
 					user.setFollowedSeries(followed);
-					check.get(i).setFollowed(false);
 					seriesrepository.save(check.get(i));
 					userrepository.save(user);
 					return check.get(i);
@@ -220,10 +219,9 @@ public class ComicSeriesController {
 					System.out.println(check.get(i).getFollowers());
 					followed.add(check.get(i).getSeriesId());
 					user.setFollowedSeries(followed);
-					check.get(i).setFollowed(false);
 					seriesrepository.save(check.get(i));
 					userrepository.save(user);
-					check.get(i).setFollowed(true);
+					//check.get(i).setFollowed(true);
 					return check.get(i);
 				}
 			}
@@ -804,6 +802,19 @@ public class ComicSeriesController {
 			}
 		}
 		return series;
+	}
+	
+	@RequestMapping(value="/checkfollow/{id}", method=RequestMethod.GET)
+	public ComicSeries checkFollowed(@PathVariable String id, @CookieValue("username") String username) {
+		Users user = userrepository.findByUsername(username);
+		List<String> followed = user.getFollowedSeries();
+		Optional<ComicSeries> series = seriesrepository.findById(id);
+		if(followed.contains(id)) {
+			series.get().setFollowed(true);
+		}else {
+			series.get().setFollowed(false);
+		}
+		return series.get();
 	}
 }
 
